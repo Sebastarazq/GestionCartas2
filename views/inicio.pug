@@ -1,0 +1,42 @@
+doctype html
+html(lang='es')
+  head
+    meta(charset='UTF-8')
+    meta(name='viewport', content='width=device-width,initial-scale=1')
+    link(rel='stylesheet', href='/css/inicio.css')
+    
+    style.
+    title Gestión de Cartas
+  body(style='background-color: black;')
+    .banner
+      main
+        img(src='/img/banner.png', alt='banner')
+        h1 GESTIÓN DE CARTAS
+    .seleccionar
+      h2 ¿A que sección te diriges?
+      .opciones
+        a(href='/admin/heroes')
+          .image-item
+            img(src='/img/Warrior_Berserk_4.jpg', alt='Héroe')
+            p
+              span.button Heroes
+        a(href='/admin/armas')
+          .image-item
+            img(src='/img/Sword_one_hand_3.jpeg', alt='Armas')
+            p
+              span.button Armas
+        a(href='/admin/armaduras')
+          .image-item
+            img(src='/img/Amadura_Pesada_1.jpg', alt='Armaduras')
+            p
+              span.button Armaduras
+        a(href='/admin/items')
+          .image-item
+            img(src='/img/Empuñadura_Furia.jpeg', alt='Objetos')
+            p
+              span.button Items
+        a(href='/admin/epicas')
+          .image-item
+            img(src='/img/Segundo_Impulso.png', alt='Épicas')
+            p
+              span.button Epicas

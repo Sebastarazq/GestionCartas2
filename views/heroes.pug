@@ -1,0 +1,54 @@
+doctype html
+html(lang='en')
+  head
+    meta(charset='UTF-8')
+    meta(name='viewport', content='width=device-width,initial-scale=1')
+    title Gestion Heroes
+    link(rel='stylesheet', type='text/css', href='/css/GestionCartas.css')
+    link(href='https://fonts.googleapis.com/css2?family=Barlow:wght@500;600;800&family=Irish+Grover&family=Playfair+Display:wght@700&family=Raleway:wght@400;700;900&display=swap', rel='stylesheet')
+  body
+    header.header
+      nav.nav
+        a(href='#') Subasta
+        a(href='#') Intercambio
+        a(href='#') Torneos
+      nav.nav
+        a(href='#') Mi banco
+        a(href='#') Jugar online
+        a(href='#') Perfil
+    br
+    center
+      .button-container
+        .add-card-button
+          a(href = '/admin/crearcarta').link Añadir Heroe
+        .add-card-button
+          a(href = '/').link Inicio
+
+    br
+    .caja
+      each hero in heroes
+        .columna
+          .carta
+            .carta-contenedor
+              .imagen_carta
+                img(src=hero.urlImagen, alt='Imagen de la carta')
+              .info_carta
+              .carta_padding
+                .nombre_carta
+                  h2= hero.clase
+                .descripcion_carta
+                  p= `Tipo: ${hero.tipo}`
+                  p= `Poder: ${hero.poder}`
+                  p= `Vida: ${hero.vida}`
+                  p= `Defensa: ${hero.defensa}`
+                .botones_carta
+                  a.modificar(href=`/admin/actualizarcarta/${hero._id}`, class="link") Modificar
+                  button.suspender(class="link", type='button', data-hero-id=hero._id, data-is-active=hero.activo, onclick="cambiarEstadoHeroe(event)")
+                    | #{hero.activo ? 'Suspender' : 'Activar'}
+        br
+    center
+      ul.pagination
+        each pageNum in Array(totalPages).fill().map((_, i) => i + 1)
+          li
+            a(href=`/admin/heroes?page=${pageNum}`, class=pageNum === currentPage ? 'current' : '')= pageNum
+  script(src='/js/scriptCartas.js')

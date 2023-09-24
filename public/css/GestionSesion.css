@@ -1,0 +1,151 @@
+body{
+    background-color: #CCBEA3;
+    margin: 0px;
+    padding: 0px;
+    font-family: 'Irish Grover';
+}
+
+.header {
+    background-image: url('../img/header.jpeg');
+    background-size: cover;
+    background-position: center;
+    height: 88px; 
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 22px;
+}
+
+.nav {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.nav a {
+    text-decoration: none;
+    color: white;
+    padding: 10px 20px;
+    transition: background-color 0.3s ease;
+}
+
+.nav a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.link {
+    position: relative;
+    text-decoration: none;
+    color: black;
+    font-family: Arial, Helvetica, sans-serif;
+    top: 25%;
+}
+
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 80%;
+    margin: 0 auto;
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 30px;
+    justify-content: flex-end;
+    text-align: center;
+}
+
+td, th {
+    text-align: left;
+    padding: 8px;
+    background-color: #CCBEA3;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+
+.add_user {
+    border-collapse: collapse;
+    width: 98%;
+    height: 50px;
+    margin: 10px;
+    background-color: rgba(255, 255, 255, 0.6);
+    border-radius: 30px;
+    justify-content: center;
+    align-items: center;
+    border: rgba(0, 0, 0, 0.5) solid 2px;
+}
+
+input{
+    border: none;
+    width: 80%;
+    height: 60%;
+    background-color: transparent;
+    align-items: center;
+    border-radius: 20px;
+    margin-left: 10px;
+}
+
+.add_user,
+.tbody {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+table button{
+    border-radius: 20px;
+    height: 60%;
+    width: 8%;
+    background-color: #CCBEA3;
+}
+
+table button:hover{
+    background-color: #d1c8b7;
+}
+
+.add_user > button,
+.add_user > input {
+    margin-right: 10px;
+}
+
+.users {
+    border-collapse: collapse;
+    width: 98%;
+    height: 50px;
+    margin: 10px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 30px;
+    justify-content: center;
+    align-items: center;
+    border: rgba(0, 0, 0, 0.5) solid 2px;
+    display: flex;
+}
+
+.input_user {
+    width: 90%;
+}
+
+.list_users {
+    border-collapse: collapse;
+    width: 98%;
+    height: auto;
+    margin: 10px;
+    background-color: #ccbea357;
+    border-radius: 30px;
+    justify-content: center;
+    align-items: center;
+    border: rgba(0, 0, 0, 0.5) solid 2px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.sesion{
+    background-color: #CCBEA3;
+    border-collapse: collapse;
+    margin: 0 auto;
+    justify-content: center;
+    align-items: center;
+    display: block;
+    width: 100px;
+    height: 40px;
+}

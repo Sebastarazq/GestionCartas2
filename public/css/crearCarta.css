@@ -1,0 +1,123 @@
+body {
+  margin: 0;
+  padding: 0;
+  background-image: url('/img/fondo.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  font-family: "Roboto", sans-serif;
+}
+.banner {
+  position: absolute;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  text-align: center;
+}
+.banner img {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  height: auto;
+}  
+.banner h1 {
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: "Irish Grover", "Roboto";
+  font-size: 2.5rem;
+  color: white;
+  width: 100%;
+  margin: 0;
+}
+
+
+
+
+
+.container {
+  position: absolute;
+  top: 22%;
+  left: 35%;
+  background-color: #818181d2;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  width: 100%;
+}
+header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+h1 {
+  font-size: 24px;
+}
+.card-form label {
+  display: block;
+  margin-top: 10px;
+  font-weight: bold;
+}
+.card-form input[type="text"],
+.card-form input[type="number"],
+.card-form select,
+.card-form textarea {
+  width: 94%;
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+.card-form button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-top: 20px;
+  background-color: #c0a776;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.card-form button:hover {
+  background-color: #bd9c5a;
+}
+/* Estilos para el botón de subir imagen */
+.card-form label[for="urlImagen"] {
+  display: block;
+  margin-top: 10px;
+  font-weight: bold;
+  color: #333; /* Cambia el color del texto */
+}
+
+.card-form input[type="file"] {
+  display: none; /* Oculta el campo de entrada de archivo real */
+}
+
+.card-form .custom-upload-button {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #c0a776;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: center;
+  transition: background-color 0.3s ease; /* Agrega una transición de color de fondo */
+}
+
+.card-form .custom-upload-button:hover {
+  background-color: #bd9c5a;
+}
+
+
+/* Estilos para mostrar el nombre del archivo seleccionado */
+.card-form .file-name {
+  margin-top: 5px;
+  font-size: 14px;
+  color: #000000; /* Cambia el color del texto aquí */
+}
+

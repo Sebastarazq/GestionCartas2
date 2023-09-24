@@ -1,0 +1,313 @@
+body{
+    background-color: #CCBEA3;
+    margin: 0px;
+    padding: 0px;
+    font-family: 'Irish Grover';
+}
+
+.header {
+    background-image: url('../img/header.jpeg');
+    background-size: cover;
+    background-position: center;
+    height: 88px; 
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 22px;
+}
+
+.nav {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.nav a {
+    text-decoration: none;
+    color: white;
+    padding: 10px 20px;
+    transition: background-color 0.3s ease;
+}
+
+.nav a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.button-container {
+    display: flex;
+    justify-content: center; /* Centra los elementos horizontalmente */
+}
+
+.add-card-button {
+    width: 150px;
+    height: 40px;
+    background-color: #c0a776;
+    border: 12px solid #bd9c5a;
+    opacity: 90%;
+    border-radius: 50px;
+    margin-right: 10px; /* Espacio entre los botones */
+}
+
+.add-card-button:last-child {
+    margin-right: 0; /* Elimina el margen derecho del último botón */
+}
+
+.add-card-button:hover {
+    cursor: pointer;
+}
+
+.caja {
+    display: flex;
+    flex-wrap: wrap; /* Permite que las cartas se envuelvan a la siguiente fila si no caben horizontalmente */
+    flex-direction: row;
+    margin: 0 auto;
+    width: 80%;
+    background-color: hsl(208, 100%, 97%,.4);
+    border-radius: 5px;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+
+.botones_carta {
+    margin-top: 10px;
+}
+
+.columna {
+    width: 33.33%;
+    max-width: 400px;
+    padding: 1em;
+    overflow: auto;
+    box-sizing: border-box;
+    float: left;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+}
+
+@media screen and (max-width: 900px) {
+    .columna  {
+        width: 50%;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .columna  {
+        width: 100%;
+    }
+}
+
+.modificar {
+    background-color: #bea064;
+    border: 2px solid #b89d68;
+    opacity: 90%;
+    border-radius: 5px;
+    margin-right: 20px;
+    align-items: center;
+}
+
+.modificar:hover {
+    cursor: pointer;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center; /* Centra los botones horizontalmente */
+}
+
+.no-underline {
+    text-decoration: none;
+    color: black;
+    display: block;
+    width: 100%;
+}
+
+.cartalink {
+
+    position: relative;
+    text-decoration: none; /* Elimina el subrayado */
+    top: 25%;
+    transition: background-color 0.3s ease;
+  }
+
+.cartalink:hover {
+    cursor: pointer;
+    background-color: #ceb178;
+}
+
+
+.link,
+.suspender {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    color: black;
+    font-family: Arial, Helvetica, sans-serif;
+    border: 2px solid #b89d68;
+    border-radius: 10px;
+    cursor: pointer;
+    margin: 15px;
+    height: 40px; /* Altura fija para ambos botones */
+    width: 150px; /* Ancho fijo para ambos botones */
+    margin-right: 10px; /* Espacio entre los botones */
+    font-size: 16px; /* Tamaño de fuente fijo para ambos botones */
+}
+
+.link {
+    background-color: #bea064; /* Color para el botón "Modificar" */
+}
+.link:hover {
+    cursor: pointer;
+    background-color: #ceb178;
+}
+
+.suspender {
+    background-color: #bea064; /* Color para el botón "Suspender" */
+}
+
+.suspender:hover {
+    cursor: pointer;
+    background-color: #ceb178;
+}
+
+.carta{
+    position: relative;
+    height: 500px;
+    width: 65%;
+    border: 1px solid black;
+    background: aliceblue;
+    justify-content: center;
+    text-align: center;
+}
+
+.save_button {
+    width: 150px;
+    height: 50px;
+    background-color: #c0a776;
+    border: 5px solid #bd9c5a;
+    opacity: 90%;
+    border-radius: 50px;
+}
+
+.save_button:hover {
+    cursor: pointer;
+}
+.descripcion_carta{
+    line-height: 6px;
+}
+
+.carta_padding{
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
+}
+
+.imagen_carta img{
+    width: 100%;
+    height: 100%;
+    max-height: 300px;
+    max-width: 250px;
+}
+/* Estilos de la paginación */
+.pagination {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    padding: 0;
+    margin-top: 20px;
+  }
+  
+.pagination li {
+    margin: 0 5px;
+}
+  
+.pagination a {
+    text-decoration: none;
+    padding: 5px 10px;
+    background-color: #c0a776;
+    border: 1px solid #bd9c5a;
+    border-radius: 5px;
+    color: white;
+    transition: background-color 0.3s ease;
+}
+  
+.pagination a:hover {
+    background-color: #bd9c5a;
+}
+  
+.pagination .current {
+    background-color: #bd9c5a;
+}
+
+.carta2{
+    margin: 3.5%;
+    padding: 15px;
+    border-radius: 10px;
+    position: relative;
+    width: 23%;
+}
+  
+.carta2 .titulo{
+    font-weight: bold;
+    padding:5px;
+    background:rgba(57,57,15,1);
+    opacity:1;
+    border:1px solid rgba(255,244,0,1);
+    border-radius:5px;
+    margin-bottom:10px;
+    text-align: center;
+}
+
+ 
+  
+.carta2 img{
+    border:1px solid rgba(255,244,0,1);
+    border-radius:5px;
+    display: block;
+    width: 100%;
+    height: 100%;
+    max-height: 300px;
+    max-width: 500px;
+}
+
+.img {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+    width: 275px; /* Ajusta el ancho deseado */
+    height: 305px; /* Ajusta el alto deseado */
+  }
+  
+.carta2:hover img{
+    filter: brightness(1.1);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+  
+  
+.carta2 .contenido{
+    display: flex;
+    justify-content: space-between;
+    border:1px solid rgba(255,244,0,1);
+    border-radius:5px;
+    background:rgba(57,57,15,1);
+    padding: 10px;
+}
+
+ 
+  
+[data-tilt] button{
+    text-align: center;
+    margin: 5px;
+    padding: 2px;
+    color: rgb(0, 0, 0);
+    border-radius: 10px;
+    color: white;
+}
+  
+[data-tilt] mat-icon{
+    width: 30px;
+    height: 30px;
+}
+

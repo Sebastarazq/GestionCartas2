@@ -1,0 +1,34 @@
+doctype html
+html(lang='en')
+  head
+    meta(charset='UTF-8')
+    meta(name='viewport', content='width=device-width,initial-scale=1')
+    title Gestion Cartas
+    link(rel='stylesheet', type='text/css', href='/css/GestionSesion.css')
+    link(href='https://fonts.googleapis.com/css2?family=Barlow:wght@500;600;800&family=Irish+Grover&family=Playfair+Display:wght@700&family=Raleway:wght@400;700;900&display=swap', rel='stylesheet')
+  body
+    header.header
+      nav.nav
+        a(href='#') Subasta
+        a(href='#') Intercambio
+        a(href='#') Torneos
+      nav.nav
+        a(href='#') Mi banco
+        a(href='#') Jugar online
+        a(href='PerfilUsuario.html') Perfil
+    br
+    h2(style='text-align: center;') Ingreso de Usuarios Autorizados
+    br
+    form(action='/auth/iniciosesion', method='POST')
+      table.table
+        tbody
+          tr
+            td
+              .add_user
+                input(type='text', name='usuario', placeholder='Usuario')
+            td
+              .add_user
+                input(type='password', name='contrasena', placeholder='Contraseña')
+          tr
+            td(colspan='2')
+              button.sesion(type='submit') Iniciar Sesion

@@ -1,0 +1,58 @@
+doctype html
+html(lang='es')
+  head
+    meta(charset='UTF-8')
+    meta(name='viewport', content='width=device-width,initial-scale=1')
+    title Formulario Épica
+    link(rel='stylesheet', href='/css/crearCarta.css')
+  body
+    .banner
+      main
+        img(src='/img/banner.png', alt='banner')
+        h1 CREACIÓN DE ÉPICA
+    .container
+      header
+        h1 Crear nueva Épica
+      form.card-form(action='/admin/crearepica', method='post', enctype='multipart/form-data')
+        label(for='urlImagen')
+          span.custom-upload-button Subir imagen:
+          input(type='file', name='urlImagen', id='urlImagen', accept='image/*', required, style='position: absolute; opacity: 0;')
+          span.file-name(id='file-name-span')
+        label(for='heroe') Héroe:
+        select(name='heroe', id='heroe', required)
+          option(value='Guerrero Tanque') Guerrero Tanque
+          option(value='Guerrero Armas') Guerrero Armas
+          option(value='Mago Fuego') Mago Fuego
+          option(value='Mago Hielo') Mago Hielo
+          option(value='Pícaro Veneno') Pícaro Veneno
+          option(value='Pícaro Machete') Pícaro Machete
+        label(for='nombre') Nombre:
+        input(type='text', name='nombre', id='nombre', required)
+        label(for='efectoGlobal.case') Efecto Global - Case:
+        input(type='number', name='efectoGlobal.case', id='efectoGlobal.case', required)
+        label(for='efectoGlobal.statEffect') Efecto Global - Stat Effect:
+        input(type='number', name='efectoGlobal.statEffect', id='efectoGlobal.statEffect', required)
+        label(for='efectoGlobal.stat') Efecto Global - Stat:
+        input(type='text', name='efectoGlobal.stat', id='efectoGlobal.stat', required)
+        label(for='efectoGlobal.target') Efecto Global - Target:
+        input(type='text', name='efectoGlobal.target', id='efectoGlobal.target', required)
+        label(for='efectoGlobal.turnCount') Efecto Global - Turn Count:
+        input(type='number', name='efectoGlobal.turnCount', id='efectoGlobal.turnCount', required)
+        label(for='efectoHeroe.case') Efecto Héroe - Case:
+        input(type='number', name='efectoHeroe.case', id='efectoHeroe.case', required)
+        label(for='efectoHeroe.statEffect') Efecto Héroe - Stat Effect:
+        input(type='number', name='efectoHeroe.statEffect', id='efectoHeroe.statEffect', required)
+        label(for='efectoHeroe.stat') Efecto Héroe - Stat:
+        input(type='text', name='efectoHeroe.stat', id='efectoHeroe.stat', required)
+        label(for='efectoHeroe.target') Efecto Héroe - Target:
+        input(type='text', name='efectoHeroe.target', id='efectoHeroe.target', required)
+        label(for='efectoHeroe.turnCount') Efecto Héroe - Turn Count:
+        input(type='number', name='efectoHeroe.turnCount', id='efectoHeroe.turnCount', required)
+        label(for='activo') Activo:
+        select(name='activo', id='activo', required)
+          option(value='true') Activo
+          option(value='false') Inactivo
+        label(for='desc') Descripción:
+        textarea(name='desc', id='desc', required)
+        button(type='submit') Crear Épica
+  script(src="/js/scriptImagen.js")

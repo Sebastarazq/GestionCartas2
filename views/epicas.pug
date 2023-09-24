@@ -1,0 +1,49 @@
+doctype html
+html(lang='en')
+  head
+    meta(charset='UTF-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+    title Gestion de Cartas Épicas
+    link(rel='stylesheet', type='text/css', href='/css/GestionCartas.css')
+    link(href='https://fonts.googleapis.com/css2?family=Barlow:wght@500;600;800&family=Irish+Grover&family=Playfair+Display:wght@700&family=Raleway:wght@400;700;900&display=swap', rel='stylesheet')
+  body
+    header.header
+      nav.nav
+        a(href='#') Subasta
+        a(href='#') Intercambio
+        a(href='#') Torneos
+      nav.nav
+        a(href='#') Mi banco
+        a(href='#') Jugar online
+        a(href='#') Perfil
+    br
+    center
+      .button-container
+        .cartalink.link
+          a(href='/admin/crearepica', class='no-underline') Añadir Epica
+        .cartalink.link
+          a(href='/', class='no-underline') Inicio
+    br
+    .caja
+      each epica in epicas
+        #bordeCarta.carta2(style='background:rgba(17,18,18,1); color:white; border:1px solid rgba(255,244,0,1);')
+          .titulo
+            p(class='2xl:text-[18px] md:text-[14px]') #{epica.nombre}
+          .img
+            img(src=epica.urlImagen, alt=`imagen de ${epica.nombre}`)
+            .overlay
+          .contenido(class='2xl:w-[220px] 2xl:h-[75px] md:sm:w-[165px] md:sm:h-[50px]')
+            .propiedad
+              p(class='2xl:text-[16px] md:text-[11px]') Héroe: #{epica.heroe}
+              p(class='2xl:text-[16px] md:text-[11px]') Efecto Global: #{epica.efectoGlobal.statEffect} #{epica.efectoGlobal.stat}
+              p(class='2xl:text-[16px] md:text-[11px]') Efecto Héroe: #{epica.efectoHeroe.statEffect} #{epica.efectoHeroe.stat}
+          .button-container
+            a.modificar(href=`/admin/actualizarepica/${epica._id}`, class="link") Modificar
+            button.link.suspender(class="link", type='button', data-epica-id=epica._id, data-is-active=epica.activo, onclick="cambiarEstadoEpica(event)")
+                    | #{epica.activo ? 'Suspender' : 'Activar'}
+    center
+      ul.pagination
+        each pageNum in Array(totalPages).fill().map((_, i) => i + 1)
+          li
+            a(href=`/admin/epicas?page=${pageNum}`, class=pageNum === currentPage ? 'current' : '')= pageNum
+  script(src='/js/scriptEpicas.js')

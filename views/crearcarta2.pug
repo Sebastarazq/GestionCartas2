@@ -1,0 +1,35 @@
+doctype html
+html(lang='es')
+  head
+    meta(charset='UTF-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+    title Crear Nueva Carta
+    link(rel='stylesheet', href='/css/crearCarta.css')
+  body
+    h1 Crear Nueva Carta
+    form(action='/admin/crearcarta', method='post')
+      label(for='urlImagen') URL de Imagen
+      input(type='text', name='urlImagen', id='urlImagen', required)
+      label(for='clase') Clase
+      input(type='text', name='clase', id='clase', required)
+      label(for='tipo') Tipo
+      input(type='text', name='tipo', id='tipo', required)
+      label(for='poder') Poder
+      input(type='number', name='poder', id='poder', required)
+      label(for='vida') Vida
+      input(type='number', name='vida', id='vida', required)
+      label(for='defensa') Defensa
+      input(type='number', name='defensa', id='defensa', required)
+      label(for='ataqueBase') Ataque Base
+      input(type='number', name='ataqueBase', id='ataqueBase', required)
+      label(for='ataqueDado') Ataque Dado
+      input(type='number', name='ataqueDado', id='ataqueDado', required)
+      label(for='danoMax') Daño Máximo
+      input(type='number', name='danoMax', id='danoMax', required)
+      label(for='activo') Activo
+      select(name='activo', id='activo', required)
+        option(value='true') Activo
+        option(value='false') Inactivo
+      label(for='desc') Descripción
+      input(type='text', name='desc', id='desc')
+      button(type='submit') Crear Carta
