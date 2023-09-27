@@ -87,7 +87,7 @@ const mostrarHeroes = async (req, res) => {
     const totalHeroes = allHeroes.length;
     const totalPages = Math.ceil(totalHeroes / ITEMS_PER_PAGE);
 
-    console.log(currentHeroes)
+    //console.log(currentHeroes)
 
     res.render('heroes2', {
       pagina: 'Gestion cartas',
