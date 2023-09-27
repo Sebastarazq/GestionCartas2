@@ -103,10 +103,6 @@ const mostrarHeroes = async (req, res) => {
 
 
 
-
-
-
-
 const mostrarArmaduras = async (req, res) => {
   try {
     const page = req.query.page || 1; // Obtén el número de página de la consulta
@@ -138,23 +134,39 @@ const mostrarArmaduras = async (req, res) => {
 
 const mostrarArmas = async (req, res) => {
   try {
-    const page = req.query.page || 1; // Obtén el número de página de la consulta
+    const page = parseInt(req.query.page) || 1; // Obtén el número de página de la consulta
     const ITEMS_PER_PAGE = 3; // Define la cantidad de armas por página
 
-    // Realiza una consulta a la base de datos para obtener las armas
-    const allArmas = await ArmaModel.find({});
+    // Realiza una solicitud al API para obtener todas las armas
+    const apiUrl = `https://cards.thenexusbattles2.cloud/api/cartas/?size=1000&page=1&coleccion=Armas`;
+    const response = await fetch(apiUrl, {
+      method: 'GET',
+      headers: {
+        'accept': 'application/json',
+      },
+    });
 
+    if (!response.ok) {
+      throw new Error('Error al consultar el API');
+    }
+
+    const data = await response.json();
+    const allArmas = data;
+
+    // Divide las armas en páginas en el servidor
     const startIndex = (page - 1) * ITEMS_PER_PAGE;
     const endIndex = startIndex + ITEMS_PER_PAGE;
     const currentArmas = allArmas.slice(startIndex, endIndex);
 
-    const totalPages = Math.ceil(allArmas.length / ITEMS_PER_PAGE);
+    // Calcula el número total de páginas en función de la cantidad total de armas
+    const totalArmas = allArmas.length;
+    const totalPages = Math.ceil(totalArmas / ITEMS_PER_PAGE);
 
     res.render('armas', {
       pagina: 'Gestión de Armas',
-      armas: currentArmas, // Pasa los datos de la página actual a la vista
-      currentPage: parseInt(page),
-      totalPages: totalPages
+      armas: currentArmas,
+      currentPage: page,
+      totalPages: totalPages,
     });
   } catch (error) {
     console.error(error);

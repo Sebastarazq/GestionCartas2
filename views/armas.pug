@@ -30,16 +30,16 @@ html(lang='en')
           .titulo
             p(class='2xl:text-[18px] md:text-[14px]') #{arma.nombre}
           .img
-            img(src=arma.urlImagen, alt=`imagen de ${arma.nombre}`)
+            img(src=arma.imagen, alt=`imagen de ${arma.nombre}`)
             .overlay
           .contenido(class='2xl:w-[220px] 2xl:h-[75px] md:sm:w-[165px] md:sm:h-[50px]')
             .propiedad
-              p(class='2xl:text-[16px] md:text-[11px]') Tipo de Héroe: #{arma.tipoHeroe}
-              p(class='2xl:text-[16px] md:text-[11px]') Descripción: #{arma.desc}
+              p(class='2xl:text-[16px] md:text-[11px]') Descripción: #{arma.descripcion}
+              p(class='2xl:text-[16px] md:text-[11px]') Tipo de Héroe: #{arma.clase} #{arma.tipo}
           .button-container
             a.modificar(href=`/admin/actualizararma/${arma._id}`, class="link") Modificar
-            button.link.suspender(class="link", type='button', data-arma-id=arma._id, data-is-active=arma.activo, onclick="cambiarEstadoArma(event)")
-                    | #{arma.activo ? 'Suspender' : 'Activar'}
+            button.link.suspender(class="link", type='button', data-arma-id=arma._id, data-is-active=arma.estado, onclick="cambiarEstadoArma(event)")
+              | #{arma.estado ? 'Suspender' : 'Activar'}
                 
     center
       ul.pagination
