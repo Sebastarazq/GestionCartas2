@@ -30,4 +30,4 @@ app.listen(port, () =>{
     console.log(`El servidor esta funcionando en http://localhost:${port}`)
 });
  //conexion db
-connect()
+//connect()

@@ -4,6 +4,7 @@ import ArmaModel from '../models/Arma.js';
 import ItemModel from '../models/Item.js';
 import EpicaModel from '../models/Epica.js';
 import axios from 'axios';
+import fetch from 'node-fetch';
 import {ObjectId } from 'mongoose';
 import jwt from 'jsonwebtoken';
 
@@ -57,31 +58,53 @@ const autenticarUsuario = (req, res) => {
 
 const mostrarHeroes = async (req, res) => {
   try {
-    const page = req.query.page || 1; // Obtén el número de página de la consulta
+    const page = parseInt(req.query.page) || 1; // Obtén el número de página de la consulta
     const ITEMS_PER_PAGE = 3; // Define la cantidad de héroes por página
 
-    // Realiza una consulta a la base de datos para obtener los héroes
-    const allHeroes = await HeroModel.find({});
+    // Realiza una solicitud al API para obtener todos los héroes
+    const apiUrl = `https://cards.thenexusbattles2.cloud/api/cartas/?size=1000&page=1&coleccion=Heroes`; // Suponemos que hay menos de 1000 héroes en total
+    const response = await fetch(apiUrl, {
+      method: 'GET',
+      headers: {
+        'accept': 'application/json',
+      },
+    });
 
-    //console.log('Héroes recuperados de la base de datos:', allHeroes); // console.logv para verificar que me trae la consulta
+    if (!response.ok) {
+      throw new Error('Error al consultar el API');
+    }
 
+    const data = await response.json();
+    const allHeroes = data;
+    //console.log(data)
+
+    // Divide los héroes en páginas en el servidor
     const startIndex = (page - 1) * ITEMS_PER_PAGE;
     const endIndex = startIndex + ITEMS_PER_PAGE;
     const currentHeroes = allHeroes.slice(startIndex, endIndex);
 
-    const totalPages = Math.ceil(allHeroes.length / ITEMS_PER_PAGE);
+    // Calcula el número total de páginas en función de la cantidad total de héroes
+    const totalHeroes = allHeroes.length;
+    const totalPages = Math.ceil(totalHeroes / ITEMS_PER_PAGE);
+
+    console.log(currentHeroes)
 
     res.render('heroes2', {
       pagina: 'Gestion cartas',
-      heroes: currentHeroes, // Pasa los datos de la página actual a la vista
-      currentPage: parseInt(page),
-      totalPages: totalPages
+      heroes: currentHeroes,
+      currentPage: page,
+      totalPages: totalPages,
     });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 };
+
+
+
+
+
 
 
 const mostrarArmaduras = async (req, res) => {

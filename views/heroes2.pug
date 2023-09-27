@@ -25,37 +25,40 @@ html(lang='en')
           a(href='/', class='no-underline') Inicio
     br
     .caja
-      //- Aquí comienza el bucle "each hero in heroes"
       each hero in heroes
         #bordeCarta.carta2(style='background:rgba(17,18,18,1); color:white; border:1px solid rgba(255,244,0,1);')
           .titulo
             a(href=`https://store.thenexusbattles2.cloud/carta/${hero._id}`, style='text-decoration: none; color: white;')
-              p(class='2xl:text-[18px] md:text-[14px]') #{hero.clase}
+              p(class='2xl:text-[18px] md:text-[14px]') #{hero.nombre}
           .img
-            img(src=hero.urlImagen, alt=`imagen de ${hero.clase} ${hero.tipo}`)
+            img(src=hero.imagen, alt=`imagen de ${hero.nombre}`)
             .overlay
           .contenido(class='2xl:w-[220px] 2xl:h-[75px] md:sm:w-[165px] md:sm:h-[50px]')
             .propiedad
               p(class='2xl:text-[16px] md:text-[11px]') Poder: #{hero.poder}
               p(class='2xl:text-[16px] md:text-[11px]') Tipo: #{hero.tipo}
+              p(class='2xl:text-[16px] md:text-[11px]') Precio: #{hero.precio}
             .propiedad
               p(class='2xl:text-[16px] md:text-[11px]') Vida: #{hero.vida}
               p(class='2xl:text-[16px] md:text-[11px]') Ataque: #{hero.ataqueBase}
+              p(class='2xl:text-[16px] md:text-[11px]') Stock: #{hero.stock}
             .propiedad
               p(class='2xl:text-[16px] md:text-[11px]') Defensa: #{hero.defensa}
-              p(class='2xl:text-[16px] md:text-[11px]') Daño: #{hero.danoMax}
+              p(class='2xl:text-[16px] md:text-[11px]') Daño: #{hero.daño}
           .button-container
             a.link.suspender(href=`/admin/actualizarcarta/${hero._id}`, class="link") Modificar
-            button.link.suspender(class="link", type='button', data-hero-id=hero._id, data-is-active=hero.activo, onclick="cambiarEstadoHeroe(event)")
-              | #{hero.activo ? 'Suspender' : 'Activar'}
-      //- Fin del bucle "each hero in heroes"
+            button.link.suspender(class="link", type='button', data-hero-id=hero._id, data-is-active=hero.estado, onclick="cambiarEstadoHeroe(event)")
+              | #{hero.estado ? 'Suspender' : 'Activar'}
       br
     center
       ul.pagination
-        //- Aquí comienza el bucle "each pageNum in Array(totalPages).fill().map((_, i) => i + 1)"
-        //- Asegúrate de que esta sección se repita dinámicamente con tus datos
+        if currentPage > 1
+          li
+            a(href=`/admin/heroes?page=${currentPage - 1}`) Anterior
         each pageNum in Array(totalPages).fill().map((_, i) => i + 1)
           li
-            a(href='/admin/heroes?page=' + pageNum, class=pageNum === currentPage ? 'current' : '')= pageNum
-        //- Fin del bucle "each pageNum in Array(totalPages).fill().map((_, i) => i + 1)"
+            a(href=`/admin/heroes?page=${pageNum}`, class=pageNum === currentPage ? 'current' : '')= pageNum
+        if currentPage < totalPages
+          li
+            a(href=`/admin/heroes?page=${currentPage + 1}`) Siguiente
   script(src='/js/scriptCartas.js')
