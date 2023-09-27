@@ -62,7 +62,7 @@ const mostrarHeroes = async (req, res) => {
     const ITEMS_PER_PAGE = 3; // Define la cantidad de héroes por página
 
     // Realiza una solicitud al API para obtener todos los héroes
-    const apiUrl = `https://cards.thenexusbattles2.cloud/api/cartas/?size=1000&page=1&coleccion=Heroes`; // Suponemos que hay menos de 1000 héroes en total
+    const apiUrl = `https://cards.thenexusbattles2.cloud/api/cartas/?size=1000&page=1&coleccion=Heroes&onlyActives=false`; // Suponemos que hay menos de 1000 héroes en total
     const response = await fetch(apiUrl, {
       method: 'GET',
       headers: {
@@ -109,7 +109,7 @@ const mostrarArmaduras = async (req, res) => {
     const ITEMS_PER_PAGE = 3; // Define la cantidad de armaduras por página
 
     // Realiza una solicitud al API para obtener todos los armaduras
-    const apiUrl = `https://cards.thenexusbattles2.cloud/api/cartas/?size=1000&page=1&coleccion=Armaduras`; // Suponemos que hay menos de 1000 armaduras en total
+    const apiUrl = `https://cards.thenexusbattles2.cloud/api/cartas/?size=1000&page=1&coleccion=Armaduras&onlyActives=false`; // Suponemos que hay menos de 1000 armaduras en total
     const response = await fetch(apiUrl, {
       method: 'GET',
       headers: {
@@ -151,7 +151,7 @@ const mostrarArmas = async (req, res) => {
     const ITEMS_PER_PAGE = 3; // Define la cantidad de armas por página
 
     // Realiza una solicitud al API para obtener todas las armas
-    const apiUrl = `https://cards.thenexusbattles2.cloud/api/cartas/?size=1000&page=1&coleccion=Armas`;
+    const apiUrl = `https://cards.thenexusbattles2.cloud/api/cartas/?size=1000&page=1&coleccion=Armas&onlyActives=false`;
     const response = await fetch(apiUrl, {
       method: 'GET',
       headers: {
@@ -194,7 +194,7 @@ const mostrarItems = async (req, res) => {
     const ITEMS_PER_PAGE = 3; // Define la cantidad de items por página
 
     // Realiza una solicitud al API para obtener todas las armas
-    const apiUrl = `https://cards.thenexusbattles2.cloud/api/cartas/?size=1000&page=1&coleccion=Items`;
+    const apiUrl = `https://cards.thenexusbattles2.cloud/api/cartas/?size=1000&page=1&coleccion=Items&onlyActives=false`;
     const response = await fetch(apiUrl, {
       method: 'GET',
       headers: {
