@@ -30,17 +30,16 @@ html(lang='en')
           .titulo
             p(class='2xl:text-[18px] md:text-[14px]') #{epica.nombre}
           .img
-            img(src=epica.urlImagen, alt=`imagen de ${epica.nombre}`)
+            img(src=epica.imagen, alt=`imagen de ${epica.nombre}`)
             .overlay
           .contenido(class='2xl:w-[220px] 2xl:h-[75px] md:sm:w-[165px] md:sm:h-[50px]')
             .propiedad
-              p(class='2xl:text-[16px] md:text-[11px]') Héroe: #{epica.heroe}
-              p(class='2xl:text-[16px] md:text-[11px]') Efecto Global: #{epica.efectoGlobal.statEffect} #{epica.efectoGlobal.stat}
-              p(class='2xl:text-[16px] md:text-[11px]') Efecto Héroe: #{epica.efectoHeroe.statEffect} #{epica.efectoHeroe.stat}
+              p(class='2xl:text-[16px] md:text-[11px]') Héroe: #{epica.clase}
+              p(class='2xl:text-[16px] md:text-[11px]') Efecto Global: #{epica.descripcion}
           .button-container
             a.modificar(href=`/admin/actualizarepica/${epica._id}`, class="link") Modificar
-            button.link.suspender(class="link", type='button', data-epica-id=epica._id, data-is-active=epica.activo, onclick="cambiarEstadoEpica(event)")
-                    | #{epica.activo ? 'Suspender' : 'Activar'}
+            button.link.suspender(class="link", type='button', data-epica-id=epica._id, data-is-active=epica.estado, onclick="cambiarEstadoEpica(event)")
+                    | #{epica.estado ? 'Suspender' : 'Activar'}
     center
       ul.pagination
         each pageNum in Array(totalPages).fill().map((_, i) => i + 1)

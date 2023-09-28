@@ -232,22 +232,37 @@ const mostrarItems = async (req, res) => {
 
 const mostrarEpicas = async (req, res) => {
   try {
-    const page = req.query.page || 1; // Obtén el número de página de la consulta
+    const page = parseInt(req.query.page) || 1; // Obtén el número de página de la consulta
     const ITEMS_PER_PAGE = 3; // Define la cantidad de cartas épicas por página
 
-    // Realiza una consulta a la base de datos para obtener las cartas épicas
-    const allEpicas = await EpicaModel.find({});
+    // Realiza una solicitud al API para obtener todas las cartas épicas
+    const apiUrl = `https://cards.thenexusbattles2.cloud/api/cartas/?size=1000&page=1&coleccion=Epicas&onlyActives=false`;
+    const response = await fetch(apiUrl, {
+      method: 'GET',
+      headers: {
+        'accept': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Error al consultar el API');
+    }
+
+    const data = await response.json();
+    const allEpicas = data;
 
     const startIndex = (page - 1) * ITEMS_PER_PAGE;
     const endIndex = startIndex + ITEMS_PER_PAGE;
     const currentEpicas = allEpicas.slice(startIndex, endIndex);
 
-    const totalPages = Math.ceil(allEpicas.length / ITEMS_PER_PAGE);
+    // Calcula el número total de páginas en función de la cantidad total de cartas épicas
+    const totalEpicas = allEpicas.length;
+    const totalPages = Math.ceil(totalEpicas / ITEMS_PER_PAGE);
 
     res.render('epicas', {
       pagina: 'Gestion cartas épicas',
       epicas: currentEpicas, // Pasa los datos de la página actual a la vista
-      currentPage: parseInt(page),
+      currentPage: page,
       totalPages: totalPages
     });
   } catch (error) {
