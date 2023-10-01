@@ -2,41 +2,48 @@ doctype html
 html(lang='es')
   head
     meta(charset='UTF-8')
-    meta(name='viewport', content='width=device-width,initial-scale=1')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
     link(rel='stylesheet', href='/css/inicio.css')
-    
+    link(href='https://fonts.googleapis.com/css2?family=Barlow:wght@500;600;800&family=Irish+Grover&family=Playfair+Display:wght@700&family=Raleway:wght@400;700;900&display=swap', rel='stylesheet')
+    link(rel='stylesheet', href='/css/bootstrap.css')
     style.
+      /* Estilos CSS adicionales aquí */
+      .rounded-corners {
+        border-radius: 10px; /* Ajusta el radio según tu preferencia */
+        border: 2px solid var(--main-border-color); /* Borde personalizado */
+      }
     title Gestión de Cartas
   body(style='background-color: black;')
-    .banner
+    .banner.text-center
       main
-        img(src='/img/banner.png', alt='banner')
         h1 GESTIÓN DE CARTAS
-    .seleccionar
-      h2 ¿A que sección te diriges?
-      .opciones
-        a(href='/admin/heroes')
-          .image-item
-            img(src='/img/Warrior_Berserk_4.jpg', alt='Héroe')
+    br
+    .container.text-center
+      h2 ¿A qué sección te diriges?
+      .row
+        .col
+          a(href="/admin/heroes") 
+            img.img-fluid.rounded-corners(src='/img/Warrior_Berserk_4.jpg', alt='Héroe', style='width: 250px; height: 310px;')
             p
-              span.button Heroes
-        a(href='/admin/armas')
-          .image-item
-            img(src='/img/Sword_one_hand_3.jpeg', alt='Armas')
+              span.button Héroes
+        .col
+          a(href="/admin/armas") 
+            img.img-fluid.rounded-corners(src='/img/Sword_one_hand_3.jpeg', alt='Armas', style='width: 250px; height: 310px;')
             p
-              span.button Armas
-        a(href='/admin/armaduras')
-          .image-item
-            img(src='/img/Amadura_Pesada_1.jpg', alt='Armaduras')
+              span.button Armas 
+        .col
+          a(href="/admin/armaduras")
+            img.img-fluid.rounded-corners(src='/img/Amadura_Pesada_1.jpg', alt='Armaduras', style='width: 250px; height: 310px;')
             p
               span.button Armaduras
-        a(href='/admin/items')
-          .image-item
-            img(src='/img/Empuñadura_Furia.jpeg', alt='Objetos')
+        .col
+          a(href="/admin/items")
+            img.img-fluid.rounded-corners(src='/img/Empuñadura_Furia.jpeg', alt='Items', style='width: 250px; height: 310px;')
             p
-              span.button Items
-        a(href='/admin/epicas')
-          .image-item
-            img(src='/img/Segundo_Impulso.png', alt='Épicas')
+              span.button Ítems
+        .col
+          a(href="/admin/epicas")
+            img.img-fluid.rounded-corners(src='/img/Segundo_Impulso.png', alt='Épicas', style='width: 250px; height: 310px;')
             p
-              span.button Epicas
+              span.button Épicas
+    script(src='js/bootstrap.js')

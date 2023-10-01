@@ -17,8 +17,7 @@ app.set('views','./views') // aca estaran los archivos
 // Carpeta publica
 app.use(express.static('public'))
 
-
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 
 //Routing

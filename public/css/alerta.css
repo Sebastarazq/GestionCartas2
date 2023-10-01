@@ -1,0 +1,86 @@
+body{
+    background-color: #CCBEA3;
+    margin: 0px;
+    padding: 0px;
+    font-family: 'Irish Grover';
+    background-image: url('/img/fondo-inicio.jpg');
+}
+
+.header {
+    background-image: url('/img/header.jpeg');
+    background-size: cover;
+    background-position: center;
+    height: 88px; 
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 22px;
+}
+
+.nav {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.nav a {
+    text-decoration: none;
+    color: white;
+    padding: 10px 20px;
+    transition: background-color 0.3s ease;
+}
+
+.container{
+    display: flex;
+    flex-wrap: wrap; 
+    flex-direction: row;
+    margin: 200px auto 0 auto;
+    width: 50%;
+    background-color: rgb(255, 255, 255, 0.5);
+    backdrop-filter: blur(5px);
+    border-radius: 5px;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    border-radius: 0.3px;
+    border-color: black;
+    height: 30vh; /* Ajusta la altura como desees */
+}
+
+h1.mb-3{
+    font-weight: bold; /* Establece el texto en negrita */
+    color: rgb(97, 37, 37); /* Establece el color marrón */
+    font-size: 48px;
+}
+
+p.mb-3{
+    font-size: 32px;
+}
+
+.alert {
+    text-align: center; /* Centrar el texto en la carta */
+}
+
+a.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 40px 15px;
+    background-color: rgb(90, 37, 37); /* Color de fondo marrón */
+    color: white; /* Color del texto blanco */
+    text-decoration: none; /* Elimina la decoración de subrayado del enlace */
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.alert-success{
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.btn{
+    background-image: url(/img/Rectangle.png);
+}

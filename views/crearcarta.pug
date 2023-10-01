@@ -14,10 +14,8 @@ html(lang='es')
       header
         h1 Crear nuevo Héroe
       form.card-form(action='/admin/crearcarta', method='post', enctype='multipart/form-data')
-        label(for='urlImagen')
-          span.custom-upload-button Subir imagen:
-          input(type='file', name='urlImagen', id='urlImagen', accept='image/*', required, style='position: absolute; opacity: 0;')
-          span.file-name(id='file-name-span')
+        label(for='nombre') Nombre:
+        input(type='text', name='nombre', id='nombre', required)
         label(for='clase') Clase:
         select(name='clase', id='clase', required)
           option(value='Guerrero') Guerrero
@@ -39,11 +37,25 @@ html(lang='es')
         input(type='number', name='defensa', id='defensa', required)
         label(for='ataqueBase') Ataque Base:
         input(type='number', name='ataqueBase', id='ataqueBase', required)
-        label(for='activo') Estado:
-        select(name='activo', id='activo', required)
+        label(for='ataqueRnd') Ataque Rnd:
+        input(type='number', name='ataqueRnd', id='ataqueRnd', required)
+        label(for='dano') Daño:
+        input(type='number', name='dano', id='dano', required)
+        label(for='estado') Estado:
+        select(name='estado', id='estado', required)
           option(value='true') Activo
           option(value='false') Inactivo
-        label(for='desc') Descripción:
-        textarea(name='desc', id='desc', required)
+        label(for='descripcion') Descripción:
+        textarea(name='descripcion', id='descripcion', required)
+        label(for='precio') Precio:
+        input(type='number', name='precio', id='precio', required)
+        label(for='stock') Stock:
+        input(type='number', name='stock', id='stock', required)
+        label(for='descuento') Descuento:
+        input(type='number', name='descuento', id='descuento', required)
+        label(for='imagen')
+          span.custom-upload-button Subir imagen:
+          input(type='file', name='imagen', id='imagen', accept='image/*', required)
+          span.file-name(id='file-name-span')
         button(type='submit') Crear carta
   script(src="/js/scriptImagen.js")

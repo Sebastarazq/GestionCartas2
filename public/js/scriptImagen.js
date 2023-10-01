@@ -1,5 +1,5 @@
 // Obtén una referencia al input de tipo archivo y al span para mostrar el nombre del archivo
-const inputFile = document.getElementById('urlImagen');
+const inputFile = document.getElementById('imagen');
 const fileNameSpan = document.getElementById('file-name-span');
 
 // Agrega un evento change al input de tipo archivo

@@ -5,6 +5,8 @@ import ItemModel from '../models/Item.js';
 import EpicaModel from '../models/Epica.js';
 import axios from 'axios';
 import fetch from 'node-fetch';
+import FormData from 'form-data';
+import fs from 'fs';
 import {ObjectId } from 'mongoose';
 import jwt from 'jsonwebtoken';
 
@@ -567,68 +569,73 @@ const cambiarEstadoArma = async (req, res) => {
 };
 
 
-
 const mostrarFormularioCreacion = (req, res) => {
     res.render('crearcarta', {
       pagina: 'Crear Carta'
     });
-  };
+};
 
+const crearHeroe = async (req, res) => {
+  try {
+    const formData = req.body;
+    const file = req.file;
 
-  const crearHeroe = async (req, res) => {
-    try {
-      // Obtén los datos del formulario
-      const formData = req.body;
-      const file = req.file; // El archivo subido
-  
-      // Construye la URL de la imagen
-      const urlImagen = `https://store.thenexusbattles2.cloud/imgcards/img/${file.filename}`;
-  
-      // Genera valores aleatorios para Ataque Dado y Ataque Máximo (entre 1 y 10)
-      const ataqueDado = Math.floor(Math.random() * 10) + 1; // Número aleatorio entre 1 y 10
-      const danoMax = Math.floor(Math.random() * 10) + 1; // Número aleatorio entre 1 y 10
-  
-      // Crea un nuevo héroe utilizando el modelo
-      const newHero = new HeroModel({
-        urlImagen,
-        clase: formData.clase,
-        tipo: formData.tipo,
-        poder: parseInt(formData.poder),
-        vida: parseInt(formData.vida),
-        defensa: parseInt(formData.defensa),
-        ataqueBase: parseInt(formData.ataqueBase),
-        ataqueDado,
-        danoMax,
-        activo: formData.activo === 'true', // Convierte el valor a booleano
-        desc: formData.desc,
-      });
-  
-      // Guarda el nuevo héroe en la base de datos
-      await newHero.save();
-  
-      // Extrae el _id del nuevo héroe
-      const nuevoHeroeId = newHero._id.toHexString();
-  
-      console.log('Héroe creado:', newHero);
-      console.log('ID del nuevo héroe:', nuevoHeroeId);
-  
-      // Realiza la solicitud POST para crear la carta utilizando axios
-      const cartEndpoint ='https://store.thenexusbattles2.cloud/webserver/crear-carta';
-      const requestData = { id_carta: nuevoHeroeId };
-  
-      await axios.post(cartEndpoint, requestData, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-  
-      // Redirige al usuario a otra página o muestra un mensaje de éxito
-      res.send('<script>alert("Héroe creado exitosamente!"); window.location.href = "/admin/heroes";</script>');
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Error al crear el héroe' });
+    // Antes de agregar 'daño' al objeto FormData, codifica el carácter 'ñ'
+    const danioCodificado = encodeURIComponent(formData.dano);
+
+    // Construir el objeto de datos
+    const data = new FormData();
+    data.append('icono', 'https://www.youtube.com/');
+    data.append('nombre', formData.nombre);
+    data.append('clase', formData.clase);
+    data.append('tipo', formData.tipo);
+    data.append('poder', formData.poder);
+    data.append('vida', formData.vida);
+    data.append('defensa', formData.defensa);
+    data.append('ataqueBase', formData.ataqueBase);
+    data.append('ataqueRnd', formData.ataqueRnd);
+    data.append('daño', danioCodificado); // Usar el valor codificado
+    data.append('estado', formData.estado);
+    data.append('descripcion', formData.descripcion);
+    data.append('precio', formData.precio);
+    data.append('stock', formData.stock);
+    data.append('descuento', formData.descuento);
+
+    // Agregar la imagen al objeto de datos
+    data.append('imagen', fs.createReadStream(file.path));
+
+    console.log('formData:', formData);
+    console.log('file:', file);
+
+    if (!req.file) {
+      return res.status(400).json({ error: 'Archivo no recibido' });
     }
-  };
+
+    // Realizar la solicitud POST utilizando node-fetch
+    const cartEndpoint = 'https://cards.thenexusbattles2.cloud/api/heroes/';
+    const response = await fetch(cartEndpoint, {
+      method: 'POST',
+      body: data,
+      headers: {
+        ...data.getHeaders(), // Añadir encabezados del formulario
+      },
+    });
+
+    if (response.ok) {
+      // La solicitud fue exitosa (código de estado HTTP 2xx), redirigir al usuario a la vista "anuncioheroe"
+      return res.render('anuncioheroe', { cartaCreada: true });
+    } else {
+      // Hubo un error en la creación del héroe
+      return res.render('anuncioheroe', { cartaCreada: false, errorMessage: 'Error al crear el héroe' });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al crear el héroe' });
+  }
+};
+
+
+
 
 const mostrarFormularioActualizacion = async (req, res) => {
   try {

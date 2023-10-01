@@ -1,3 +1,8 @@
+:root {
+    --main-bg-color: brown;
+    --main-border-color: 1px solid rgba(255,244,0,1);
+}
+
 body{
     background-color: #CCBEA3;
     margin: 0px;
@@ -6,7 +11,7 @@ body{
 }
 
 .header {
-    background-image: url('../img/header.jpeg');
+    background-image: url('/img/header.jpeg');
     background-size: cover;
     background-position: center;
     height: 88px; 
@@ -108,11 +113,6 @@ body{
 
 .modificar:hover {
     cursor: pointer;
-}
-
-.button-container {
-    display: flex;
-    justify-content: center; /* Centra los botones horizontalmente */
 }
 
 .no-underline {
@@ -311,3 +311,64 @@ body{
     height: 30px;
 }
 
+.container{
+    margin: 0 auto;
+    width: 70%;
+    background-color: hsl(208, 100%, 97%,.4);
+    border-radius: 5px;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    padding: 10px;
+}
+
+.card-img-top {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border: var(--main-border-color);
+    width: 100%; /* El 100% hace que la imagen ocupe todo el ancho del contenedor */
+    max-width: 100%; /* Esto evita que la imagen se estire más allá de su tamaño original */
+    max-height: 290px; /* Establece una altura máxima común */
+    height: 290px;
+}
+
+
+
+.card{
+    background-color: black;
+    color: white;
+    border: var(--main-border-color);
+    padding: 15px;
+}
+
+.card-body{
+    background-color: rgba(57,57,15,1);
+    border-width: thin;
+    border: var(--main-border-color);
+    border-radius: 5px;
+}
+
+.botones_carta{
+    color: white;
+}
+
+.button{
+    background-image: url(/img/Rectangle.png);
+    background-size: cover;
+    width: 100%;
+    height: 40px;
+    border-radius: 40px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: 200;
+    color: #fff;
+}
+
+.add-card-button2 {
+    width: 150px;
+    height: 40px;
+    border-radius: 50px;
+    margin-right: 10px; /* Espacio entre los botones */
+}

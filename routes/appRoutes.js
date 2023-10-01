@@ -24,7 +24,7 @@ router.get('/admin/heroes',jwttoken,mostrarHeroes);
 
 // Ruta para mostrar el formulario de creación de carta y enviarlo
 router.get('/admin/crearcarta', jwttoken,mostrarFormularioCreacion);
-router.post('/admin/crearcarta',jwttoken, multerMiddleware.single('urlImagen'), crearHeroe); // Utiliza el middleware Multer
+router.post('/admin/crearcarta',jwttoken, multerMiddleware.single('imagen'), crearHeroe); // Utiliza el middleware Multer
 
 // Ruta para mostrar el formulario de actualizar carta y enviarlo
 router.get('/admin/actualizarcarta/:Id',jwttoken, mostrarFormularioActualizacion);

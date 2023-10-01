@@ -1,18 +1,22 @@
 body {
     margin: 0;
     padding: 0;
-    background-image: url("../img/fondo.png");
+    background-image: url("/img/fondo.png");
     background-size: cover;
     background-repeat: no-repeat;
     background-attachment: fixed;
+    font-family: 'Irish Grover';
   }
 
 .banner {
-    position: absolute;
-    width: 100%;
-    height: 100vh;
-    overflow: hidden;
-    text-align: center;
+    background-image: url('/img/header.jpeg');
+    background-size: cover;
+    background-position: center;
+    height: 120px; 
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 22px;
 }
 
 .banner img {
@@ -33,8 +37,9 @@ body {
 
 .seleccionar {
     position: absolute;
-    width: 1350px;
-    height: 500px;
+    display: flex;
+    width: 90%;
+    height: 70%;
     background-color: rgba(191, 191, 221, 0.705);
     border-radius: 15px;
     top: 25%;
@@ -54,22 +59,35 @@ body {
 }
 
 .opciones {
-    position: absolute;
-    display: flex;
+    position: relative;
+    display: grid;
+    width: 100%;
+    height: 100%;
     justify-content: center;
     align-items: center;
-    top: 15%;
-    left: 3%;
+    top: 10%;
+    padding: 20px;
+    grid-template-columns: repeat(5,1fr);
 }
 
 .image-item {
     text-align: center;
-    margin: 10px;    
+    margin: 10px;
+}
+
+@media (width:1360){
+    .image-item img {
+        max-width: 230px; /* Ancho deseado */
+        max-height: 280px; /* Alto deseado */
+        display: block;
+        margin: 0 auto;
+        border-radius: 15px;
+    }
 }
 
 .image-item img {
-    width: 230px; /* Ancho deseado */
-    height: 280px; /* Alto deseado */
+    max-width: 230px; /* Ancho deseado */
+    max-height: 280px; /* Alto deseado */
     display: block;
     margin: 0 auto;
     border-radius: 15px;
@@ -83,8 +101,8 @@ body {
 }
 
 .button {
-    background-color: #d1b67e;
-    color: rgb(0, 0, 0);
+    background-image: url(/img/Rectangle.png);
+    color: white;
     padding: 5px 10px;
     border-radius: 8px;
     text-align: center;
@@ -94,4 +112,26 @@ body {
 }
 span.button:hover {
     background-color: #c6b791;
+}
+
+.item_menu{
+    flex-grow: 1;
+    flex-basis: 230px;
+}
+
+.container{
+    width: 90%;
+    height: 70%;
+    background-color: rgba(191, 191, 221, 0.705);
+    border-radius: 15px;
+    top: 25%;
+    left: 72px;
+    overflow: hidden;
+    padding: 10px;
+    margin: 10px;
+    font-family: 'Irish Grover';
+}
+
+.container h2{
+    font-style: bold;
 }
