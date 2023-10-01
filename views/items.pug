@@ -30,16 +30,16 @@ html(lang='en')
           .titulo
             p(class='2xl:text-[18px] md:text-[14px]') #{item.nombre}
           .img
-            img(src=item.urlImagen, alt=`imagen de ${item.nombre}`)
+            img(src=item.Imagen, alt=`imagen de ${item.nombre}`)
             .overlay
           .contenido(class='2xl:w-[220px] 2xl:h-[75px] md:sm:w-[165px] md:sm:h-[50px]')
             .propiedad
-              p(class='2xl:text-[16px] md:text-[11px]') Héroe: #{item.heroe}
-              p(class='2xl:text-[16px] md:text-[11px]') Descripción: #{item.desc}
+              p(class='2xl:text-[16px] md:text-[11px]') Héroe: #{item.clase}
+              p(class='2xl:text-[16px] md:text-[11px]') Descripción: #{item.descripcion}
           .button-container
             a.modificar(href=`/admin/actualizaritem/${item._id}`, class="link") Modificar
-            button.link.suspender(type='button', data-item-id=item._id, data-is-active=item.activo, onclick='cambiarEstadoItem(event)')
-              | #{item.activo ? 'Suspender' : 'Activar'}
+            button.link.suspender(type='button', data-item-id=item._id, data-is-active=item.estado, onclick='cambiarEstadoItem(event)')
+              | #{item.estado ? 'Suspender' : 'Activar'}
     center
       ul.pagination
         each pageNum in Array(totalPages).fill().map((_, i) => i + 1)
