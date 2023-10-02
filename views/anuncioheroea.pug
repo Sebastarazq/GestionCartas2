@@ -1,0 +1,23 @@
+doctype html
+html(lang='en')
+  head
+    meta(charset='UTF-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    title Alerta
+    link(href='https://fonts.googleapis.com/css2?family=Barlow:wght@500;600;800&family=Irish+Grover&family=Playfair+Display:wght@700&family=Raleway:wght@400;700;900&display=swap', rel='stylesheet')
+    link(rel='stylesheet', type='text/CSS', href='/css/alerta.css')
+  body
+    .container
+      .row.justify-content-center.align-items-center(style='height: 70vh;')
+        .col-md-6.text-center
+          if cartaCreada
+            .alert.alert-success(role='alert')
+              h1.mb-3 Actualizacion de Heroe
+              p.mb-3 Actualizado correctamente.
+          else
+            .alert.alert-danger(role='alert')
+              h1.mb-3 Error al crear el héroe
+              p.mb-3 #{errorMessage}
+        .col-12.text-center 
+          a.btn(href='/admin/heroes') Ver Gestión de Heroes
+          a.btn(href='/') Volver al Inicio

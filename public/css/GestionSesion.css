@@ -3,6 +3,9 @@ body{
     margin: 0px;
     padding: 0px;
     font-family: 'Irish Grover';
+    background-image: url('../img/fondo-inicio.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
 }
 
 .header {
@@ -34,118 +37,84 @@ body{
     background-color: rgba(255, 255, 255, 0.1);
 }
 
-.link {
-    position: relative;
-    text-decoration: none;
-    color: black;
-    font-family: Arial, Helvetica, sans-serif;
-    top: 25%;
+*{
+    margin: 0;
+    padding: 0;
+    top: auto;
+
+}
+.loginb{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    width: 100%;
 }
 
-table {
-    font-family: arial, sans-serif;
-    border-collapse: collapse;
-    width: 80%;
-    margin: 0 auto;
-    background-color: rgba(255, 255, 255, 0.3);
-    border-radius: 30px;
-    justify-content: flex-end;
+.login{
+    position: relative;
+    width: 600px;
+    height: 650px;
+    background: transparent;
+    border: 2px solid rgba(0, 0, 0, 0.349);
+    border-radius: 20px;
+    background-color: rgb(255, 255, 255, 0.5);
+    /*background-color: rgba(222, 184, 135,0.75);*/
+    backdrop-filter: blur(5px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Irish Grover';
+}
+
+.login h1{
+    font-size: 2em;
+    color: black;
     text-align: center;
 }
 
-td, th {
-    text-align: left;
-    padding: 8px;
-    background-color: #CCBEA3;
+.inputbox{
+    position: relative;
+    margin: 30px 0;
+    width: 510px;
+    border-bottom: 2px solid #000000;
 }
 
-tr:nth-child(even) {
-    background-color: #dddddd;
+.inputbox label{
+    position: absolute;
+    top: 50%;
+    left: 5px;
+    transform: translateY(-50%);
+    color: #050505;
+    font-size: 1em;
+    pointer-events: none;
 }
-
-.add_user {
-    border-collapse: collapse;
-    width: 98%;
+input:focus  ~ label,
+input:valid ~ label{
+    top: -5px
+}
+.inputbox input{
+    width: 100%;
     height: 50px;
-    margin: 10px;
-    background-color: rgba(255, 255, 255, 0.6);
-    border-radius: 30px;
-    justify-content: center;
-    align-items: center;
-    border: rgba(0, 0, 0, 0.5) solid 2px;
-}
-
-input{
+    background: transparent;
     border: none;
-    width: 80%;
-    height: 60%;
-    background-color: transparent;
-    align-items: center;
-    border-radius: 20px;
-    margin-left: 10px;
+    outline: none;
+    font-size: 1em;
+    padding: 0 35px 0 5px;
+    color: #000000;
 }
 
-.add_user,
-.tbody {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-table button{
-    border-radius: 20px;
-    height: 60%;
-    width: 8%;
-    background-color: #CCBEA3;
-}
-
-table button:hover{
-    background-color: #d1c8b7;
-}
-
-.add_user > button,
-.add_user > input {
-    margin-right: 10px;
-}
-
-.users {
-    border-collapse: collapse;
-    width: 98%;
-    height: 50px;
-    margin: 10px;
-    background-color: rgba(255, 255, 255, 0.2);
-    border-radius: 30px;
-    justify-content: center;
-    align-items: center;
-    border: rgba(0, 0, 0, 0.5) solid 2px;
-    display: flex;
-}
-
-.input_user {
-    width: 90%;
-}
-
-.list_users {
-    border-collapse: collapse;
-    width: 98%;
-    height: auto;
-    margin: 10px;
-    background-color: #ccbea357;
-    border-radius: 30px;
-    justify-content: center;
-    align-items: center;
-    border: rgba(0, 0, 0, 0.5) solid 2px;
-    padding-top: 10px;
-    padding-bottom: 10px;
-}
-
-.sesion{
-    background-color: #CCBEA3;
-    border-collapse: collapse;
-    margin: 0 auto;
-    justify-content: center;
-    align-items: center;
-    display: block;
-    width: 100px;
+button{
+    background-image: url(../img/Rectangle.png);
+    background-size: cover;
+    width: 100%;
     height: 40px;
+    border-radius: 40px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: 600;
+    color: #fff;
 }
+ 

@@ -30,7 +30,18 @@ const mostrarFormularioInicioSesion = (req, res) => {
 
 // Controlador para autenticar al usuario
 const autenticarUsuario = (req, res) => {
+  // Obtiene el usuario y contraseña del cuerpo de la solicitud
   const { usuario, contrasena } = req.body;
+
+  // Verifica si los campos están vacíos
+  if (!usuario || !contrasena) {
+    // Los campos están vacíos, asigna un mensaje de error
+    const error = 'Por favor, completa todos los campos.';
+    return res.render('iniciarsesion', {
+      pagina: 'Iniciar Sesion',
+      error: error, // Pasa el mensaje de error a la vista
+    });
+  }
 
   // Verificar si las credenciales coinciden con el usuario y contraseña de administrador
   if (usuario === usuarioAdmin && contrasena === contrasenaAdmin) {
@@ -50,12 +61,14 @@ const autenticarUsuario = (req, res) => {
     res.redirect('/');
   } else {
     // Las credenciales son inválidas, muestra un mensaje de error o redirige a la página de inicio de sesión nuevamente
+    const error = 'Credenciales inválidas';
     res.render('iniciarsesion', {
       pagina: 'Iniciar Sesion',
-      error: 'Credenciales inválidas',
+      error: error, // Pasa el mensaje de error a la vista
     });
   }
 };
+
 
 
 const mostrarHeroes = async (req, res) => {
@@ -637,24 +650,36 @@ const crearHeroe = async (req, res) => {
 
 
 
+// Controlador para mostrar el formulario de actualización de un héroe
 const mostrarFormularioActualizacion = async (req, res) => {
   try {
-    const idHero = req.params.Id; // Obtener el valor del parámetro :id
+    const idHero = req.params.Id; // Obtener el valor del parámetro :Id
+    console.log(idHero)
 
-    console.log('ID del héroe a actualizar:', idHero); // Agregar este registro para verificar el ID
+    // Realizar una solicitud al API para obtener los datos del héroe específico por su ID
+    const apiUrl = `https://cards.thenexusbattles2.cloud/api/cartas/${idHero}`;
+    const response = await fetch(apiUrl, {
+      method: 'GET',
+      headers: {
+        'accept': 'application/json',
+      },
+    });
 
-    const hero = await HeroModel.findById(idHero); // Obtener un héroe por su ID
+    if (!response.ok) {
+      throw new Error('Error al consultar el API');
+    }
 
-    console.log('Héroe encontrado:', hero); // Agregar este registro para verificar el héroe
+    const heroData = await response.json();
 
-    if (!hero) {
+    if (!heroData) {
       // Si no se encontró el héroe, puedes manejarlo adecuadamente aquí
       return res.status(404).render('error', { error: 'Héroe no encontrado' });
     }
 
+    // Pasar los datos del héroe a la vista
     res.render('actualizarcarta', {
       pagina: 'Actualizar Carta',
-      hero: hero, // Enviar el héroe específico a la vista
+      hero: heroData, // Enviar los datos del héroe a la vista
     });
   } catch (error) {
     console.error(error);
@@ -662,46 +687,63 @@ const mostrarFormularioActualizacion = async (req, res) => {
   }
 };
 
+
 const actualizarCarta = async (req, res) => {
   try {
-    const idHeroe = req.params.Id; // Obtener el valor del parámetro :id
+    const idCarta = req.params.Id; // Obtener el valor del parámetro :id
     const formData = req.body; // Obtener los datos del formulario
+    const file = req.file; // Obtener el archivo de imagen
 
-    // Obtener la URL de la imagen existente (por defecto)
-    let urlImagen = formData.urlImagen;
+    // Construir un objeto FormData con los datos actualizados
+    const data = new FormData();
+    data.append('_id', formData._id);
+    data.append('nombre', formData.nombre);
+    data.append('clase', formData.clase);
+    data.append('tipo', formData.tipo);
+    data.append('poder', formData.poder);
+    data.append('vida', formData.vida);
+    data.append('defensa', formData.defensa);
+    data.append('ataqueBase', formData.ataqueBase);
+    data.append('ataqueRnd', formData.ataqueRnd);
+    data.append('dano', formData.dano);
+    data.append('activo', formData.activo === 'true');
+    data.append('descripcion', formData.descripcion);
+    data.append('precio', formData.precio);
+    data.append('stock', formData.stock);
+    data.append('descuento', formData.descuento);
 
-    // Si se proporciona una nueva imagen, guarda la URL de la nueva imagen
-    if (req.file) {
-      // Construye la URL de la imagen actualizada
-      const baseUrl = 'https://store.thenexusbattles2.cloud/imgcards'; // Cambia esto según la configuración de tu servidor
-      urlImagen = `${baseUrl}/img/${req.file.filename}`;
+    // Agregar la imagen al objeto FormData si se proporciona un archivo
+    if (file) {
+      data.append('imagen', fs.createReadStream(file.path), {
+        filename: file.originalname,
+        contentType: file.mimetype,
+      });
     }
 
-    // Construye un objeto con los datos actualizados
-    const updatedData = {
-      urlImagen, // Actualiza la URL de la imagen
-      clase: formData.clase,
-      tipo: formData.tipo,
-      poder: parseInt(formData.poder),
-      vida: parseInt(formData.vida),
-      defensa: parseInt(formData.defensa),
-      ataqueBase: parseInt(formData.ataqueBase),
-      ataqueDado: parseInt(formData.ataqueDado),
-      danoMax: parseInt(formData.danoMax),
-      activo: formData.activo === 'true',
-      desc: formData.desc,
-    };
+    // Construir la URL del API de acuerdo a tu configuración
+    const apiUrl = `https://cards.thenexusbattles2.cloud/api/heroes/`;
 
-    // Actualiza los datos del héroe en la base de datos
-    await HeroModel.findByIdAndUpdate(idHeroe, updatedData);
+    // Realizar la solicitud PATCH al API para actualizar la carta
+    const response = await fetch(apiUrl, {
+      method: 'PATCH',
+      body: data,
+      headers: {
+        ...data.getHeaders(), // Añadir encabezados del formulario
+      },
+    });
 
-    console.log('Héroe actualizado con éxito.');
-
-    // Agregar un script de alert después de la redirección
-    res.send('<script>alert("Héroe actualizado con éxito."); window.location.href = "/admin/heroes/";</script>');
+    if (response.ok) {
+      // Actualización exitosa
+      console.log('Carta actualizada con éxito.');
+      return res.render('anuncioheroea', { cartaActualizada: true });
+    } else {
+      // Error en la actualización
+      console.error('Error al actualizar la carta.');
+      return res.render('anuncioheroea', { cartaActualizada: false });
+    }
   } catch (error) {
     console.error(error);
-    res.render('error'); // Renderiza una vista de error en caso de problemas
+    return res.render('error'); // Renderiza una vista de error en caso de problemas
   }
 };
 

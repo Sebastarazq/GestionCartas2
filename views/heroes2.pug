@@ -52,7 +52,7 @@ html(lang='en')
                     div.col
                       p Defensa: #{hero.defensa}
                     div.col
-                      p Tipo: #{hero.tipo}
+                     p Stock: #{hero.stock}
                   div.row
                     div.col
                       p Ataque: #{hero.ataqueBase}
@@ -62,7 +62,7 @@ html(lang='en')
                     div.col
                       p Precio: #{hero.precio.toLocaleString('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0, maximumFractionDigits: 0 })}
                     div.col
-                      p Stock: #{hero.stock}
+                      p Tipo: #{hero.tipo}
                 div.row.botones_carta
                   div.col
                     a(href=`/admin/actualizarcarta/${hero._id}`)

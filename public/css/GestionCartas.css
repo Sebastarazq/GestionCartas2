@@ -329,7 +329,7 @@ body{
     width: 100%; /* El 100% hace que la imagen ocupe todo el ancho del contenedor */
     max-width: 100%; /* Esto evita que la imagen se estire más allá de su tamaño original */
     max-height: 290px; /* Establece una altura máxima común */
-    height: 290px;
+    height: 285px;
 }
 
 
