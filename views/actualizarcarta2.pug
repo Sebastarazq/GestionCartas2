@@ -1,0 +1,65 @@
+doctype html
+html(lang='es')
+  head
+    meta(charset='UTF-8')
+    meta(name='viewport', content='width=device-width,initial-scale=1')
+    title #{pagina}
+    link(rel='stylesheet', href='/css/crearCarta.css')
+  body
+    .banner
+      main
+        img(src='/img/banner.png', alt='banner')
+        h1 #{pagina}
+    .container
+      header
+        h1 #{pagina}
+      form.card-form(action='/admin/actualizarheroe', method='POST', enctype='multipart/form-data')
+        label(for='heroeId') Seleccionar Héroe:
+        select(name='heroeId', id='heroeId')
+          // Options se llenarán dinámicamente con JavaScript
+        label(for='nombre') Nombre:
+        input(type='text', name='nombre', id='nombre')
+        label(for='clase') Clase:
+        select(name='clase', id='clase')
+          option(value='Guerrero', selected='') Guerrero
+          option(value='Mago', selected='') Mago
+          option(value='Pícaro', selected='') Pícaro
+        label(for='tipo') Tipo:
+        select(name='tipo', id='tipo')
+          option(value='Tanque', selected='') Tanque
+          option(value='Armas', selected='') Armas
+          option(value='Fuego', selected='') Fuego
+          option(value='Hielo', selected='') Hielo
+          option(value='Veneno', selected='') Veneno
+          option(value='Machete', selected='') Machete
+        label(for='poder') Poder:
+        input(type='number', name='poder', id='poder', value='')
+        label(for='vida') Vida:
+        input(type='number', name='vida', id='vida', value='')
+        label(for='defensa') Defensa:
+        input(type='number', name='defensa', id='defensa', value='')
+        label(for='ataqueBase') Ataque Base:
+        input(type='number', name='ataqueBase', id='ataqueBase', value='')
+        label(for='ataqueRnd') Ataque Rnd:
+        input(type='number', name='ataqueRnd', id='ataqueRnd', value='')
+        label(for='dano') Daño:
+        input(type='number', name='dano', id='dano', value='')
+        label(for='estado') Estado:
+        select(name='estado', id='estado')
+          option(value='true', selected='') Activo
+          option(value='false', selected='') Inactivo
+        label(for='descripcion') Descripción:
+        textarea(name='descripcion', id='descripcion')= ''
+        label(for='precio') Precio:
+        input(type='number', name='precio', id='precio', value='')
+        label(for='stock') Stock:
+        input(type='number', name='stock', id='stock')
+        label(for='descuento') Descuento:
+        input(type='number', name='descuento', id='descuento', value='')
+        label(for='imagen')
+          span.custom-upload-button Subir imagen:
+          input(type='file', name='imagen', id='imagen', accept='image/*',)
+          span.file-name(id='file-name-span')
+        button(type='submit') Actualizar #{hero ? hero.nombre : 'Héroe'}
+  script(src='/js/heroeconsulta.js')
+  script(src='/js/scriptImagen.js')

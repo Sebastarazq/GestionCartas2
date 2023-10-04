@@ -26,9 +26,13 @@ router.get('/admin/heroes',jwttoken,mostrarHeroes);
 router.get('/admin/crearcarta', jwttoken,mostrarFormularioCreacion);
 router.post('/admin/crearcarta',jwttoken, multerMiddleware.single('imagen'), crearHeroe); // Utiliza el middleware Multer
 
+// prueba patch sin conusltar heroe por ID
+// router.get('/admin/actualizarheroe/', mostrarFormularioActualizacion2);
+// router.post('/admin/actualizarheroe/',multerMiddleware.single('imagen'), actualizarCarta2);
+
 // Ruta para mostrar el formulario de actualizar carta y enviarlo
 router.get('/admin/actualizarcarta/:Id',jwttoken, mostrarFormularioActualizacion);
-router.patch('/admin/actualizarcarta/:Id',jwttoken,multerMiddleware.single('imagen'), actualizarCarta);
+router.post('/admin/actualizarcarta/:Id',jwttoken,multerMiddleware.single('imagen'), actualizarCarta);
 
 // Ruta para cambiar el estado del héroe
 router.put('/admin/cambiarestadoheroe/:Id',jwttoken, cambiarEstadoHeroe);

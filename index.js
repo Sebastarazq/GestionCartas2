@@ -2,6 +2,7 @@ import express  from "express";
 import appRoutes from './routes/appRoutes.js'
 import connect from './config/db.js'
 import cookieParser from 'cookie-parser';
+import bodyParser from 'body-parser'; 
 
 //Crear la app
 
@@ -17,7 +18,8 @@ app.set('views','./views') // aca estaran los archivos
 // Carpeta publica
 app.use(express.static('public'))
 
-app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+// Configura body-parser para analizar datos de formulario
+app.use(bodyParser.urlencoded({ extended: false }));
 
 
 //Routing

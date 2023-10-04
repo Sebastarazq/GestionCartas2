@@ -8,6 +8,9 @@ body{
     margin: 0px;
     padding: 0px;
     font-family: 'Irish Grover';
+    background-image: url("/img/fondo-inicio.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
 }
 
 .header {
@@ -230,6 +233,7 @@ body{
     border-radius: 5px;
     color: white;
     transition: background-color 0.3s ease;
+    background-image: url("/img/Rectangle.png");
 }
   
 .pagination a:hover {

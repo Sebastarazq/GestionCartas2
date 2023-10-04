@@ -13,18 +13,18 @@ html(lang='es')
     .container
       header
         h1 #{pagina}
-      form.card-form(action=`/admin/actualizarcarta/${hero._id}`, method='patch', enctype='multipart/form-data')
-        label(for='_id') ID Heroe:
-        input(type='text', name='_id', id='_id', required, value=hero ? hero._id : '')
+      form.card-form(action=`/admin/actualizarcarta/${hero._id}`,method="POST")
+        label(for='id') ID Heroe:
+        input(type='text', name='id', id='id', required, value=hero ? hero._id : '')
         label(for='nombre') Nombre:
-        input(type='text', name='nombre', id='nombre', required, value=hero ? hero.nombre : '')
+        input(type='text', name='nombre', id='nombre', value=hero ? hero.nombre : '')
         label(for='clase') Clase:
-        select(name='clase', id='clase', required)
+        select(name='clase', id='clase')
           option(value='Guerrero', selected=hero ? hero.clase === 'Guerrero' : '') Guerrero
           option(value='Mago', selected=hero ? hero.clase === 'Mago' : '') Mago
           option(value='Pícaro', selected=hero ? hero.clase === 'Pícaro' : '') Pícaro
         label(for='tipo') Tipo:
-        select(name='tipo', id='tipo', required)
+        select(name='tipo', id='tipo')
           option(value='Tanque', selected=hero ? hero.tipo === 'Tanque' : '') Tanque
           option(value='Armas', selected=hero ? hero.tipo === 'Armas' : '') Armas
           option(value='Fuego', selected=hero ? hero.tipo === 'Fuego' : '') Fuego
@@ -32,32 +32,32 @@ html(lang='es')
           option(value='Veneno', selected=hero ? hero.tipo === 'Veneno' : '') Veneno
           option(value='Machete', selected=hero ? hero.tipo === 'Machete' : '') Machete
         label(for='poder') Poder:
-        input(type='number', name='poder', id='poder', required, value=hero ? hero.poder : '')
+        input(type='number', name='poder', id='poder', value=hero ? hero.poder : '')
         label(for='vida') Vida:
-        input(type='number', name='vida', id='vida', required, value=hero ? hero.vida : '')
+        input(type='number', name='vida', id='vida', value=hero ? hero.vida : '')
         label(for='defensa') Defensa:
-        input(type='number', name='defensa', id='defensa', required, value=hero ? hero.defensa : '')
+        input(type='number', name='defensa', id='defensa', value=hero ? hero.defensa : '')
         label(for='ataqueBase') Ataque Base:
-        input(type='number', name='ataqueBase', id='ataqueBase', required, value=hero ? hero.ataqueBase : '')
+        input(type='number', name='ataqueBase', id='ataqueBase', value=hero ? hero.ataqueBase : '')
         label(for='ataqueRnd') Ataque Rnd:
-        input(type='number', name='ataqueRnd', id='ataqueRnd', required, value=hero ? hero.ataqueRnd : '')
+        input(type='number', name='ataqueRnd', id='ataqueRnd', value=hero ? hero.ataqueRnd : '')
         label(for='dano') Daño:
-        input(type='number', name='dano', id='dano', required, value=hero ? hero.daño : '')
+        input(type='number', name='dano', id='dano', value=hero ? hero.daño : '')
         label(for='estado') Estado:
-        select(name='estado', id='estado', required)
+        select(name='estado', id='estado')
           option(value='true', selected=hero ? hero.estado : '') Activo
           option(value='false', selected=hero ? !hero.estado : '') Inactivo
         label(for='descripcion') Descripción:
         textarea(name='descripcion', id='descripcion')= hero ? hero.descripcion : ''
         label(for='precio') Precio:
-        input(type='number', name='precio', id='precio', required, value=hero ? hero.precio : '')
+        input(type='number', name='precio', id='precio', value=hero ? hero.precio : '')
         label(for='stock') Stock:
-        input(type='number', name='stock', id='stock', required, value=hero ? hero.stock : '')
+        input(type='number', name='stock', id='stock', value=hero ? hero.stock : '')
         label(for='descuento') Descuento:
-        input(type='number', name='descuento', id='descuento', required, value=hero ? hero.descuento : '')
+        input(type='number', name='descuento', id='descuento', value=hero ? hero.descuento : '')
         label(for='imagen')
           span.custom-upload-button Subir imagen:
           input(type='file', name='imagen', id='imagen', accept='image/*',)
           span.file-name(id='file-name-span')
         button(type='submit') Actualizar #{hero ? hero.nombre : 'Héroe'}
-  script(src="/js/scriptImagen.js")
+  script(src='/js/scriptImagen.js')

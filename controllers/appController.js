@@ -583,7 +583,7 @@ const cambiarEstadoArma = async (req, res) => {
 
 
 const mostrarFormularioCreacion = (req, res) => {
-    res.render('crearcarta', {
+    res.render('crearcarta2', {
       pagina: 'Crear Carta'
     });
 };
@@ -593,6 +593,7 @@ const crearHeroe = async (req, res) => {
     const formData = req.body;
     const file = req.file;
 
+    console.log(formData)
     // Antes de agregar 'daño' al objeto FormData, codifica el carácter 'ñ'
     const danioCodificado = encodeURIComponent(formData.dano);
 
@@ -687,40 +688,93 @@ const mostrarFormularioActualizacion = async (req, res) => {
   }
 };
 
+/* const mostrarFormularioActualizacion2 = async (req, res) => {
+  try {
+    // Pasar los datos del héroe a la vista
+    res.render('actualizarcarta2', {
+      pagina: 'Actualizar Carta',
+    });
+  } catch (error) {
+    console.error(error);
+    res.render('error'); // Renderizar una vista de error en caso de problemas
+  }
+}; */
+
 
 const actualizarCarta = async (req, res) => {
   try {
-    const idCarta = req.params.Id; // Obtener el valor del parámetro :id
-    const formData = req.body; // Obtener los datos del formulario
-    const file = req.file; // Obtener el archivo de imagen
+    // Extraer cada campo del formulario individualmente desde req.body
+    const id = req.body.id;
+    const nombre = req.body.nombre;
+    const clase = req.body.clase;
+    const tipo = req.body.tipo;
+    const poder = req.body.poder;
+    const vida = req.body.vida;
+    const defensa = req.body.defensa;
+    const ataqueBase = req.body.ataqueBase;
+    const ataqueRnd = req.body.ataqueRnd;
+    const dano = req.body.dano;
+    const estado = req.body.estado;
+    const descripcion = req.body.descripcion;
+    const precio = req.body.precio;
+    const stock = req.body.stock;
+    const descuento = req.body.descuento;
+    const file = req.file; // Obtener el archivo del formulario
 
-    // Construir un objeto FormData con los datos actualizados
+    // Agregar console.log para mostrar lo que se extrajo de req.body
+    console.log('Datos extraídos de req.body:');
+    console.log('id:', id);
+    console.log('nombre:', nombre);
+    console.log('clase:', clase);
+    console.log('tipo:', tipo);
+    console.log('poder:', poder);
+    console.log('vida:', vida);
+    console.log('defensa:', defensa);
+    console.log('ataqueBase:', ataqueBase);
+    console.log('ataqueRnd:', ataqueRnd);
+    console.log('dano:', dano);
+    console.log('estado:', estado);
+    console.log('descripcion:', descripcion);
+    console.log('precio:', precio);
+    console.log('stock:', stock);
+    console.log('descuento:', descuento);
+
+    // Construir un objeto FormData y agregar los campos no vacíos al mismo
     const data = new FormData();
-    data.append('_id', formData._id);
-    data.append('nombre', formData.nombre);
-    data.append('clase', formData.clase);
-    data.append('tipo', formData.tipo);
-    data.append('poder', formData.poder);
-    data.append('vida', formData.vida);
-    data.append('defensa', formData.defensa);
-    data.append('ataqueBase', formData.ataqueBase);
-    data.append('ataqueRnd', formData.ataqueRnd);
-    data.append('dano', formData.dano);
-    data.append('activo', formData.activo === 'true');
-    data.append('descripcion', formData.descripcion);
-    data.append('precio', formData.precio);
-    data.append('stock', formData.stock);
-    data.append('descuento', formData.descuento);
+    if (id) data.append('id', id);
+    if (nombre) data.append('nombre', nombre);
+    if (clase) data.append('clase', clase);
+    if (tipo) data.append('tipo', tipo);
+    if (poder) data.append('poder', poder);
+    if (vida) data.append('vida', vida);
+    if (defensa) data.append('defensa', defensa);
+    if (ataqueBase) data.append('ataqueBase', ataqueBase);
+    if (ataqueRnd) data.append('ataqueRnd', ataqueRnd);
+    
+    // Antes de agregar 'daño' al objeto FormData, codifica el carácter 'ñ'
+    if (dano) {
+      const danioCodificado = encodeURIComponent(dano);
+      data.append('daño', danioCodificado);
+    }
 
-    // Agregar la imagen al objeto FormData si se proporciona un archivo
+    if (estado) data.append('estado', estado);
+    if (descripcion) data.append('descripcion', descripcion);
+    if (precio) data.append('precio', precio);
+    if (stock) data.append('stock', stock);
+    if (descuento) data.append('descuento', descuento);
+
+    // Agregar la imagen al objeto de datos si se proporcionó
     if (file) {
       data.append('imagen', fs.createReadStream(file.path), {
         filename: file.originalname,
-        contentType: file.mimetype,
+        contentType: file.mimetype
       });
     }
 
-    // Construir la URL del API de acuerdo a tu configuración
+    // Agregar el console.log para mostrar los datos de FormData y la solicitud HTTP
+    console.log('Datos del FormData:', data);
+
+    // Construir la URL del API
     const apiUrl = `https://cards.thenexusbattles2.cloud/api/heroes/`;
 
     // Realizar la solicitud PATCH al API para actualizar la carta
@@ -728,7 +782,7 @@ const actualizarCarta = async (req, res) => {
       method: 'PATCH',
       body: data,
       headers: {
-        ...data.getHeaders(), // Añadir encabezados del formulario
+        ...data.getHeaders(),
       },
     });
 
@@ -743,9 +797,111 @@ const actualizarCarta = async (req, res) => {
     }
   } catch (error) {
     console.error(error);
-    return res.render('error'); // Renderiza una vista de error en caso de problemas
+    res.status(500).json({ error: 'Error al actualizar el héroe' });
   }
 };
+
+/* const actualizarCarta2 = async (req, res) => {
+  try {
+    // Extraer cada campo del formulario individualmente desde req.body
+    const id = req.body.heroeId;
+    const nombre = req.body.nombre;
+    const clase = req.body.clase;
+    const tipo = req.body.tipo;
+    const poder = req.body.poder;
+    const vida = req.body.vida;
+    const defensa = req.body.defensa;
+    const ataqueBase = req.body.ataqueBase;
+    const ataqueRnd = req.body.ataqueRnd;
+    const dano = req.body.daño;
+    const estado = req.body.estado;
+    const descripcion = req.body.descripcion;
+    const precio = req.body.precio;
+    const stock = req.body.stock;
+    const descuento = req.body.descuento;
+    const file = req.file; // Obtener el archivo del formulario
+
+    // Agregar console.log para mostrar lo que se extrajo de req.body
+    console.log('Datos extraídos de req.body:');
+    console.log('id:', id);
+    console.log('nombre:', nombre);
+    console.log('clase:', clase);
+    console.log('tipo:', tipo);
+    console.log('poder:', poder);
+    console.log('vida:', vida);
+    console.log('defensa:', defensa);
+    console.log('ataqueBase:', ataqueBase);
+    console.log('ataqueRnd:', ataqueRnd);
+    console.log('dano:', dano);
+    console.log('estado:', estado);
+    console.log('descripcion:', descripcion);
+    console.log('precio:', precio);
+    console.log('stock:', stock);
+    console.log('descuento:', descuento);
+
+    // Construir un objeto FormData y agregar los campos no vacíos al mismo
+    const data = new FormData();
+    if (id) data.append('id', id);
+    if (nombre) data.append('nombre', nombre);
+    if (clase) data.append('clase', clase);
+    if (tipo) data.append('tipo', tipo);
+    if (poder) data.append('poder', poder);
+    if (vida) data.append('vida', vida);
+    if (defensa) data.append('defensa', defensa);
+    if (ataqueBase) data.append('ataqueBase', ataqueBase);
+    if (ataqueRnd) data.append('ataqueRnd', ataqueRnd);
+    
+    // Antes de agregar 'daño' al objeto FormData, codifica el carácter 'ñ'
+    if (dano) {
+      const danioCodificado = encodeURIComponent(dano);
+      data.append('daño', danioCodificado);
+    }
+
+    if (estado) data.append('estado', estado);
+    if (descripcion) data.append('descripcion', descripcion);
+    if (precio) data.append('precio', precio);
+    if (stock) data.append('stock', stock);
+    if (descuento) data.append('descuento', descuento);
+
+    // Agregar la imagen al objeto de datos si se proporcionó
+    if (file) {
+      data.append('imagen', fs.createReadStream(file.path), {
+        filename: file.originalname,
+        contentType: file.mimetype
+      });
+    }
+
+    // Agregar el console.log para mostrar los datos de FormData y la solicitud HTTP
+    console.log('Datos del FormData:', data);
+
+    // Construir la URL del API
+    const apiUrl = `https://cards.thenexusbattles2.cloud/api/heroes/`;
+
+    // Realizar la solicitud PATCH al API para actualizar la carta
+    const response = await fetch(apiUrl, {
+      method: 'PATCH',
+      body: data,
+      headers: {
+        ...data.getHeaders(),
+      },
+    });
+
+    if (response.ok) {
+      // Actualización exitosa
+      console.log('Carta actualizada con éxito.');
+      return res.render('anuncioheroea', { cartaActualizada: true });
+    } else {
+      // Error en la actualización
+      console.error('Error al actualizar la carta.');
+      return res.render('anuncioheroea', { cartaActualizada: false });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al actualizar el héroe' });
+  }
+}; */
+
+
 
 
 // Controlador para cambiar el estado activo del héroe

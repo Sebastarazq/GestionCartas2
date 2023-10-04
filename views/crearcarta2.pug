@@ -2,34 +2,119 @@ doctype html
 html(lang='es')
   head
     meta(charset='UTF-8')
-    meta(name='viewport', content='width=device-width, initial-scale=1')
-    title Crear Nueva Carta
-    link(rel='stylesheet', href='/css/crearCarta.css')
+    meta(name='viewport', content='width=device-width,initial-scale=1')
+    title Crear Héroe
+    link(rel='stylesheet', href='/css/formularios.css')
+    link(rel='stylesheet', href='https://unpkg.com/boxicons@latest/css/boxicons.min.css')
+    link(href='https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css', rel='stylesheet')
   body
-    h1 Crear Nueva Carta
-    form(action='/admin/crearcarta', method='post')
-      label(for='urlImagen') URL de Imagen
-      input(type='text', name='urlImagen', id='urlImagen', required)
-      label(for='clase') Clase
-      input(type='text', name='clase', id='clase', required)
-      label(for='tipo') Tipo
-      input(type='text', name='tipo', id='tipo', required)
-      label(for='poder') Poder
-      input(type='number', name='poder', id='poder', required)
-      label(for='vida') Vida
-      input(type='number', name='vida', id='vida', required)
-      label(for='defensa') Defensa
-      input(type='number', name='defensa', id='defensa', required)
-      label(for='ataqueBase') Ataque Base
-      input(type='number', name='ataqueBase', id='ataqueBase', required)
-      label(for='ataqueDado') Ataque Dado
-      input(type='number', name='ataqueDado', id='ataqueDado', required)
-      label(for='danoMax') Daño Máximo
-      input(type='number', name='danoMax', id='danoMax', required)
-      label(for='activo') Activo
-      select(name='activo', id='activo', required)
-        option(value='true') Activo
-        option(value='false') Inactivo
-      label(for='desc') Descripción
-      input(type='text', name='desc', id='desc')
-      button(type='submit') Crear Carta
+    // navbar
+    nav.navbar.navbar-expand-lg.navbar-dark.bg-dark.navbar-background
+      .container
+        a.navbar-brand(href='#')
+          img(src='/img/back.png', alt='Volver', class='back')
+        button.navbar-toggler(type='button', data-bs-toggle='collapse', data-bs-target='#navbarNav', aria-controls='navbarNav', aria-expanded='false', aria-label='Toggle navigation')
+          span
+            img.menu(src='/img/menu.png', alt='')
+        .collapse.navbar-collapse#navbarNav
+          ul.navbar-nav
+            li.nav-item
+              a.nav-link.text-white(href='#') Héroe
+            li.nav-item
+              a.nav-link.text-white(href='#') Arma
+            li.nav-item
+              a.nav-link.text-white(href='#') Armadura
+            li.nav-item
+              a.nav-link.text-white(href='#') Ítem
+            li.nav-item
+              a.nav-link.text-white(href='#') Épica
+          a.nav-link(href='#', id='toggle-collapse')
+            i.bi.bi-list
+    // form-container
+    .container.form-container
+      h1.mt-5.text-lg-center Formulario de Héroe
+      form.card-form(action='/admin/crearcarta', method='post', enctype='multipart/form-data')
+        // Fila 1
+        .row.mb-3
+          .col-md-6
+            label.form-label(for='nombre') Nombre:
+            input.form-control(type='text', id='nombre', name='nombre', required)
+        // Fila 2
+        .row.mb-3
+          .col-md-6
+            label.form-label(for='descripcion') Descripción:
+            input.form-control(type='text', id='descripcion', name='descripcion', required)
+          .col-md-6
+            label.form-label(for='poder') Poder:
+            input.form-control(type='text', id='poder', name='poder', required)
+        // Fila 3
+        .row.mb-3
+          .col-md-6
+            label.form-label(for='tipo') Tipo:
+            select.form-select(name='tipo', id='tipo', required)
+              option(value='Tanque') Tanque
+              option(value='Armas') Armas
+              option(value='Fuego') Fuego
+              option(value='Hielo') Hielo
+              option(value='Veneno') Veneno
+              option(value='Machete') Machete
+          .col-md-6
+            label.form-label(for='clase') Clase:
+            select.form-select(id='clase', name='clase', required)
+              option(value='Guerrero') Guerrero
+              option(value='Mago') Mago
+              option(value='Pícaro') Pícaro
+        // Fila 4
+        .row.mb-3
+          .col-md-6
+            label.form-label(for='estado') Estado:
+            select.form-select(name='estado', id='estado', required)
+              option(value='true') Activo
+              option(value='false') Inactivo
+          .col-md-6
+            label.form-label(for='precio') Precio:
+            input.form-control(type='number', id='precio', name='precio', required)
+        // Fila 5
+        .row.mb-3
+          .col-md-6
+            label.form-label(for='vida') Vida:
+            input.form-control(type='number', id='vida', name='vida', required)
+          .col-md-6
+            label.form-label(for='defensa') Defensa:
+            input.form-control(type='number', id='defensa', name='defensa', required)
+        // Fila 6
+        .row.mb-3
+          .col-md-6
+            label.form-label(for='ataqueBase') Ataque Base:
+            input.form-control(type='number', id='ataqueBase', name='ataqueBase', required)
+          .col-md-6
+            label.form-label(for='ataqueRnd') Ataque Rnd:
+            input.form-control(type='number', id='ataqueRnd', name='ataqueRnd', required)
+        // Fila 7
+        .row.mb-3
+          .col-md-6
+            label.form-label(for='dano') Daño:
+            input.form-control(type='number', id='dano', name='dano', required)
+          .col-md-6
+            label.form-label(for='stock') Stock:
+            input.form-control(type='number', id='stock', name='stock', required)
+        // Fila 8
+        .row.mb-3
+          .col-md-6
+            label.form-label(for='descuento') Descuento:
+            input.form-control(type='number', id='descuento', name='descuento', required)
+          .col-md-6
+            label.form-label(for='imagen') Imagen:
+            input.form-control(type='file', id='imagen', name='imagen', accept='image/*')
+        // Botón de envío y cancelar
+        .row.mt-3(style="justify-content: center;")
+          .col-md-6
+            div.d-flex.justify-content-between.align-items-center
+              button.btn.btn-secondary(type='button') Cancelar
+              button.btn.btn-primary.ml-auto.top-0(type='submit') Enviar formulario
+
+    // custom js link
+    //script(src='/JS/scripts.js')
+
+    // bootstrap js link
+    script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js')
