@@ -902,31 +902,38 @@ const actualizarCarta = async (req, res) => {
 }; */
 
 
-
-
-// Controlador para cambiar el estado activo del héroe
+// Controlador para cambiar el estado activo del héroe en la API externa
 const cambiarEstadoHeroe = async (req, res) => {
   try {
     const heroId = req.params.Id; // Obtener el ID del héroe de los parámetros
-    console.log('Hero ID:', heroId); // Agregar un console.log para verificar el ID
 
-    const hero = await HeroModel.findById(heroId);
+    // Crear un objeto FormData con el nuevo estado
+    const data = new FormData();
+    data.append('id', heroId); // Agregar el ID del héroe al FormData
+    data.append('estado', req.body.estado === 'true' ? 'false' : 'true'); // Cambiar el estado
 
-    if (!hero) {
-      return res.status(404).json({ error: 'Héroe no encontrado' });
+    // Construir la URL de la API externa de acuerdo a tu configuración
+    const apiUrl = `https://cards.thenexusbattles2.cloud/api/heroes/`;
+
+    // Realizar la solicitud PATCH a la API externa para cambiar el estado del héroe
+    const response = await fetch(apiUrl, {
+      method: 'PATCH',
+      body: data,
+    });
+
+    if (response.ok) {
+      // Cambio de estado exitoso en la API externa
+      return res.status(200).json({ message: 'Estado del héroe actualizado exitosamente en la API externa' });
+    } else {
+      // Error en el cambio de estado en la API externa
+      return res.status(500).json({ error: 'Error al cambiar el estado del héroe en la API externa' });
     }
-
-    // Cambiar el estado activo del héroe
-    hero.activo = !hero.activo;
-    console.log('Nuevo estado activo:', hero.activo); // Agregar un console.log para verificar el nuevo estado
-    await hero.save();
-
-    res.status(200).json({ message: 'Estado del héroe actualizado exitosamente' });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Error al cambiar el estado del héroe' });
   }
 };
+
 
 //mostrar formulario creción de armaduras
 const mostrarFormularioCreacionArmadura = (req, res) => {

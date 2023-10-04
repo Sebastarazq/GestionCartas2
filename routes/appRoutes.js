@@ -35,7 +35,7 @@ router.get('/admin/actualizarcarta/:Id',jwttoken, mostrarFormularioActualizacion
 router.post('/admin/actualizarcarta/:Id',jwttoken,multerMiddleware.single('imagen'), actualizarCarta);
 
 // Ruta para cambiar el estado del héroe
-router.put('/admin/cambiarestadoheroe/:Id',jwttoken, cambiarEstadoHeroe);
+router.post('/admin/cambiarestadoheroe/:Id',jwttoken, cambiarEstadoHeroe);
 
 
 // Mostrar Armaduras

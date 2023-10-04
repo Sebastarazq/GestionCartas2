@@ -1,5 +1,5 @@
 async function cambiarEstadoHeroe(e) {
-  console.log('Clic en el botón de suspender');
+  console.log('Clic en el botón de cambiar estado');
   const heroId = e.target.dataset.heroId; // Obtener el ID del héroe
   const isActive = e.target.dataset.isActive === 'true'; // Obtener el estado activo/inactivo del héroe
 
@@ -7,23 +7,23 @@ async function cambiarEstadoHeroe(e) {
     const url = `/admin/cambiarestadoheroe/${heroId}`;
     const nuevoEstado = !isActive; // Cambiar el estado
 
+    const bodyData = { estado: nuevoEstado }; // Crear un objeto con el nuevo estado
+
     const respuesta = await fetch(url, {
-      method: 'PUT', // Usa el método PUT para cambiar el estado del héroe
+      method: 'POST', // Usa el método POST para cambiar el estado del héroe
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json', // Establecer el tipo de contenido como JSON
       },
-      body: JSON.stringify({ activo: nuevoEstado }), // Envía el nuevo estado en el cuerpo
+      body: JSON.stringify(bodyData), // Convertir el objeto en JSON y enviarlo en el cuerpo
     });
 
     const { message } = await respuesta.json();
 
     if (respuesta.ok) {
-      // Cambiar el estado del botón y la clase de la carta
-      e.target.dataset.isActive = nuevoEstado;
-      e.target.textContent = nuevoEstado ? 'Activar' : 'Suspender';
+      // Puedes agregar lógica adicional aquí, como cambiar la clase CSS de la carta si lo deseas
 
-      const carta2 = e.target.closest('.carta2');
-      carta2.classList.toggle('suspended'); // Cambiar la clase para cambiar el color
+      e.target.dataset.isActive = nuevoEstado; // Actualizar el estado en el botón
+      e.target.textContent = nuevoEstado ? 'Suspender' : 'Activar'; // Actualizar el texto en el botón
 
       alert(message); // Muestra un mensaje de éxito
     } else {
