@@ -738,6 +738,7 @@ const actualizarCarta = async (req, res) => {
     console.log('precio:', precio);
     console.log('stock:', stock);
     console.log('descuento:', descuento);
+    console.log('file:', file);
 
     // Construir un objeto FormData y agregar los campos no vacíos al mismo
     const data = new FormData();
@@ -902,24 +903,33 @@ const actualizarCarta = async (req, res) => {
 }; */
 
 
-// Controlador para cambiar el estado activo del héroe en la API externa
 const cambiarEstadoHeroe = async (req, res) => {
   try {
     const heroId = req.params.Id; // Obtener el ID del héroe de los parámetros
+    console.log('ID del héroe:', heroId);
 
-    // Crear un objeto FormData con el nuevo estado
-    const data = new FormData();
-    data.append('id', heroId); // Agregar el ID del héroe al FormData
-    data.append('estado', req.body.estado === 'true' ? 'false' : 'true'); // Cambiar el estado
+    const nuevoEstado = req.query.estado; // Obtener el estado de la consulta
+    console.log('Estado recibido:', nuevoEstado);
+
+    // Crear un objeto FormData y agregar los datos a él
+    const formData = new FormData();
+    formData.append('id', heroId); // Agregar el ID al FormData
+    formData.append('estado', nuevoEstado); // Agregar el estado al FormData
+
+    console.log('Datos en FormData:', formData);
 
     // Construir la URL de la API externa de acuerdo a tu configuración
     const apiUrl = `https://cards.thenexusbattles2.cloud/api/heroes/`;
 
+    console.log('URL de la API externa:', apiUrl);
+
     // Realizar la solicitud PATCH a la API externa para cambiar el estado del héroe
     const response = await fetch(apiUrl, {
       method: 'PATCH',
-      body: data,
+      body: formData,
     });
+
+    console.log('Respuesta del fetch:', response);
 
     if (response.ok) {
       // Cambio de estado exitoso en la API externa
@@ -933,6 +943,9 @@ const cambiarEstadoHeroe = async (req, res) => {
     res.status(500).json({ error: 'Error al cambiar el estado del héroe' });
   }
 };
+
+
+
 
 
 //mostrar formulario creción de armaduras
