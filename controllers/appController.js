@@ -1,4 +1,4 @@
-import HeroModel from '../models/Heroe.js';
+import { obtenerHeroesApi,crearHeroeEnAPI,actualizarCartaEnAPI } from '../models/Heroe.js';
 import ArmaduraModel from '../models/Armadura.js';
 import ArmaModel from '../models/Arma.js';
 import ItemModel from '../models/Item.js';
@@ -73,47 +73,22 @@ const autenticarUsuario = (req, res) => {
 
 const mostrarHeroes = async (req, res) => {
   try {
-    const page = parseInt(req.query.page) || 1; // Obtén el número de página de la consulta
-    const ITEMS_PER_PAGE = 3; // Define la cantidad de héroes por página
+    const page = parseInt(req.query.page) || 1;
+    const ITEMS_PER_PAGE = 3;
 
-    // Realiza una solicitud al API para obtener todos los héroes
-    const apiUrl = `https://cards.thenexusbattles2.cloud/api/cartas/?size=1000&page=1&coleccion=Heroes&onlyActives=false`; // Suponemos que hay menos de 1000 héroes en total
-    const response = await fetch(apiUrl, {
-      method: 'GET',
-      headers: {
-        'accept': 'application/json',
-      },
-    });
+    // Obtener los héroes desde el API utilizando la función del modelo
+    const allHeroes = await obtenerHeroesApi();
 
-    if (!response.ok) {
-      throw new Error('Error al consultar el API');
-    }
-
-    const data = await response.json();
-    const allHeroes = data;
-    //console.log(data)
-
-    // Divide los héroes en páginas en el servidor
     const startIndex = (page - 1) * ITEMS_PER_PAGE;
     const endIndex = startIndex + ITEMS_PER_PAGE;
     const currentHeroes = allHeroes.slice(startIndex, endIndex);
 
-    // Calcula el número total de páginas en función de la cantidad total de héroes
     const totalHeroes = allHeroes.length;
     const totalPages = Math.ceil(totalHeroes / ITEMS_PER_PAGE);
-
-    // Añade solo el estado de la armadura al objeto allHeroes
-    const heroesWithState = allHeroes.map((hero) => ({
-      _id: hero._id,
-      estado: hero.estado,
-    }));
-
-    //console.log(currentHeroes)
 
     res.render('heroes2', {
       pagina: 'Gestion cartas',
       heroes: currentHeroes,
-      estadoapi: heroesWithState,
       currentPage: page,
       totalPages: totalPages,
     });
@@ -600,47 +575,10 @@ const crearHeroe = async (req, res) => {
     const formData = req.body;
     const file = req.file;
 
-    console.log(formData)
-    // Antes de agregar 'daño' al objeto FormData, codifica el carácter 'ñ'
-    const danioCodificado = encodeURIComponent(formData.dano);
+    console.log('formData:',formData);
+    console.log('file:',file)
 
-    // Construir el objeto de datos
-    const data = new FormData();
-    data.append('icono', 'https://www.youtube.com/');
-    data.append('nombre', formData.nombre);
-    data.append('clase', formData.clase);
-    data.append('tipo', formData.tipo);
-    data.append('poder', formData.poder);
-    data.append('vida', formData.vida);
-    data.append('defensa', formData.defensa);
-    data.append('ataqueBase', formData.ataqueBase);
-    data.append('ataqueRnd', formData.ataqueRnd);
-    data.append('daño', danioCodificado); // Usar el valor codificado
-    data.append('estado', formData.estado);
-    data.append('descripcion', formData.descripcion);
-    data.append('precio', formData.precio);
-    data.append('stock', formData.stock);
-    data.append('descuento', formData.descuento);
-
-    // Agregar la imagen al objeto de datos
-    data.append('imagen', fs.createReadStream(file.path));
-
-    console.log('formData:', formData);
-    console.log('file:', file);
-
-    if (!req.file) {
-      return res.status(400).json({ error: 'Archivo no recibido' });
-    }
-
-    // Realizar la solicitud POST utilizando node-fetch
-    const cartEndpoint = 'https://cards.thenexusbattles2.cloud/api/heroes/';
-    const response = await fetch(cartEndpoint, {
-      method: 'POST',
-      body: data,
-      headers: {
-        ...data.getHeaders(), // Añadir encabezados del formulario
-      },
-    });
+    const response = await crearHeroeEnAPI(formData, file);
 
     if (response.ok) {
       // La solicitud fue exitosa (código de estado HTTP 2xx), redirigir al usuario a la vista "anuncioheroe"
@@ -654,7 +592,6 @@ const crearHeroe = async (req, res) => {
     res.status(500).json({ error: 'Error al crear el héroe' });
   }
 };
-
 
 
 
@@ -695,104 +632,15 @@ const mostrarFormularioActualizacion = async (req, res) => {
   }
 };
 
-/* const mostrarFormularioActualizacion2 = async (req, res) => {
-  try {
-    // Pasar los datos del héroe a la vista
-    res.render('actualizarcarta2', {
-      pagina: 'Actualizar Carta',
-    });
-  } catch (error) {
-    console.error(error);
-    res.render('error'); // Renderizar una vista de error en caso de problemas
-  }
-}; */
 
-
+// Controlador para actualizar una carta en el API
 const actualizarCarta = async (req, res) => {
   try {
-    // Extraer cada campo del formulario individualmente desde req.body
-    const id = req.body.id;
-    const nombre = req.body.nombre;
-    const clase = req.body.clase;
-    const tipo = req.body.tipo;
-    const poder = req.body.poder;
-    const vida = req.body.vida;
-    const defensa = req.body.defensa;
-    const ataqueBase = req.body.ataqueBase;
-    const ataqueRnd = req.body.ataqueRnd;
-    const dano = req.body.dano;
-    const estado = req.body.estado;
-    const descripcion = req.body.descripcion;
-    const precio = req.body.precio;
-    const stock = req.body.stock;
-    const descuento = req.body.descuento;
+    const formData = req.body;
     const file = req.file; // Obtener el archivo del formulario
 
-    // Agregar console.log para mostrar lo que se extrajo de req.body
-    console.log('Datos extraídos de req.body:');
-    console.log('id:', id);
-    console.log('nombre:', nombre);
-    console.log('clase:', clase);
-    console.log('tipo:', tipo);
-    console.log('poder:', poder);
-    console.log('vida:', vida);
-    console.log('defensa:', defensa);
-    console.log('ataqueBase:', ataqueBase);
-    console.log('ataqueRnd:', ataqueRnd);
-    console.log('dano:', dano);
-    console.log('estado:', estado);
-    console.log('descripcion:', descripcion);
-    console.log('precio:', precio);
-    console.log('stock:', stock);
-    console.log('descuento:', descuento);
-    console.log('file:', file);
-
-    // Construir un objeto FormData y agregar los campos no vacíos al mismo
-    const data = new FormData();
-    if (id) data.append('id', id);
-    if (nombre) data.append('nombre', nombre);
-    if (clase) data.append('clase', clase);
-    if (tipo) data.append('tipo', tipo);
-    if (poder) data.append('poder', poder);
-    if (vida) data.append('vida', vida);
-    if (defensa) data.append('defensa', defensa);
-    if (ataqueBase) data.append('ataqueBase', ataqueBase);
-    if (ataqueRnd) data.append('ataqueRnd', ataqueRnd);
-    
-    // Antes de agregar 'daño' al objeto FormData, codifica el carácter 'ñ'
-    if (dano) {
-      const danioCodificado = encodeURIComponent(dano);
-      data.append('daño', danioCodificado);
-    }
-
-    if (estado) data.append('estado', estado);
-    if (descripcion) data.append('descripcion', descripcion);
-    if (precio) data.append('precio', precio);
-    if (stock) data.append('stock', stock);
-    if (descuento) data.append('descuento', descuento);
-
-    // Agregar la imagen al objeto de datos si se proporcionó
-    if (file) {
-      data.append('imagen', fs.createReadStream(file.path), {
-        filename: file.originalname,
-        contentType: file.mimetype
-      });
-    }
-
-    // Agregar el console.log para mostrar los datos de FormData y la solicitud HTTP
-    console.log('Datos del FormData:', data);
-
-    // Construir la URL del API
-    const apiUrl = `https://cards.thenexusbattles2.cloud/api/heroes/`;
-
-    // Realizar la solicitud PATCH al API para actualizar la carta
-    const response = await fetch(apiUrl, {
-      method: 'PATCH',
-      body: data,
-      headers: {
-        ...data.getHeaders(),
-      },
-    });
+    // Llama a la función del modelo para actualizar la carta en el API
+    const response = await actualizarCartaEnAPI(formData, file);
 
     if (response.ok) {
       // Actualización exitosa
@@ -805,109 +653,9 @@ const actualizarCarta = async (req, res) => {
     }
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Error al actualizar el héroe' });
+    res.status(500).json({ error: 'Error al actualizar la carta' });
   }
 };
-
-/* const actualizarCarta2 = async (req, res) => {
-  try {
-    // Extraer cada campo del formulario individualmente desde req.body
-    const id = req.body.heroeId;
-    const nombre = req.body.nombre;
-    const clase = req.body.clase;
-    const tipo = req.body.tipo;
-    const poder = req.body.poder;
-    const vida = req.body.vida;
-    const defensa = req.body.defensa;
-    const ataqueBase = req.body.ataqueBase;
-    const ataqueRnd = req.body.ataqueRnd;
-    const dano = req.body.daño;
-    const estado = req.body.estado;
-    const descripcion = req.body.descripcion;
-    const precio = req.body.precio;
-    const stock = req.body.stock;
-    const descuento = req.body.descuento;
-    const file = req.file; // Obtener el archivo del formulario
-
-    // Agregar console.log para mostrar lo que se extrajo de req.body
-    console.log('Datos extraídos de req.body:');
-    console.log('id:', id);
-    console.log('nombre:', nombre);
-    console.log('clase:', clase);
-    console.log('tipo:', tipo);
-    console.log('poder:', poder);
-    console.log('vida:', vida);
-    console.log('defensa:', defensa);
-    console.log('ataqueBase:', ataqueBase);
-    console.log('ataqueRnd:', ataqueRnd);
-    console.log('dano:', dano);
-    console.log('estado:', estado);
-    console.log('descripcion:', descripcion);
-    console.log('precio:', precio);
-    console.log('stock:', stock);
-    console.log('descuento:', descuento);
-
-    // Construir un objeto FormData y agregar los campos no vacíos al mismo
-    const data = new FormData();
-    if (id) data.append('id', id);
-    if (nombre) data.append('nombre', nombre);
-    if (clase) data.append('clase', clase);
-    if (tipo) data.append('tipo', tipo);
-    if (poder) data.append('poder', poder);
-    if (vida) data.append('vida', vida);
-    if (defensa) data.append('defensa', defensa);
-    if (ataqueBase) data.append('ataqueBase', ataqueBase);
-    if (ataqueRnd) data.append('ataqueRnd', ataqueRnd);
-    
-    // Antes de agregar 'daño' al objeto FormData, codifica el carácter 'ñ'
-    if (dano) {
-      const danioCodificado = encodeURIComponent(dano);
-      data.append('daño', danioCodificado);
-    }
-
-    if (estado) data.append('estado', estado);
-    if (descripcion) data.append('descripcion', descripcion);
-    if (precio) data.append('precio', precio);
-    if (stock) data.append('stock', stock);
-    if (descuento) data.append('descuento', descuento);
-
-    // Agregar la imagen al objeto de datos si se proporcionó
-    if (file) {
-      data.append('imagen', fs.createReadStream(file.path), {
-        filename: file.originalname,
-        contentType: file.mimetype
-      });
-    }
-
-    // Agregar el console.log para mostrar los datos de FormData y la solicitud HTTP
-    console.log('Datos del FormData:', data);
-
-    // Construir la URL del API
-    const apiUrl = `https://cards.thenexusbattles2.cloud/api/heroes/`;
-
-    // Realizar la solicitud PATCH al API para actualizar la carta
-    const response = await fetch(apiUrl, {
-      method: 'PATCH',
-      body: data,
-      headers: {
-        ...data.getHeaders(),
-      },
-    });
-
-    if (response.ok) {
-      // Actualización exitosa
-      console.log('Carta actualizada con éxito.');
-      return res.render('anuncioheroea', { cartaActualizada: true });
-    } else {
-      // Error en la actualización
-      console.error('Error al actualizar la carta.');
-      return res.render('anuncioheroea', { cartaActualizada: false });
-    }
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Error al actualizar el héroe' });
-  }
-}; */
 
 
 const cambiarEstadoHeroe = async (req, res) => {
