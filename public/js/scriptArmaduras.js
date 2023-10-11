@@ -17,7 +17,6 @@ async function cambiarEstadoArmadura(e) {
     }
 
     const armaduraData = await response.json();
-    console.log('armaduradata:', armaduraData);
     const isActive = armaduraData.estado; // Obtener el estado activo/inactivo de la armadura
     console.log('Estado actual de la armadura:', isActive);
 

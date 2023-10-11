@@ -17,7 +17,6 @@ async function cambiarEstadoHeroe(e) {
     }
 
     const heroeData = await response.json();
-    console.log('heroedata:', heroeData);
     const isActive = heroeData.estado; // Obtener el estado activo/inactivo del héroe
     console.log('Estado actual del héroe:', isActive);
 
