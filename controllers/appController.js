@@ -102,11 +102,18 @@ const mostrarHeroes = async (req, res) => {
     const totalHeroes = allHeroes.length;
     const totalPages = Math.ceil(totalHeroes / ITEMS_PER_PAGE);
 
+    // Añade solo el estado de la armadura al objeto allHeroes
+    const heroesWithState = allHeroes.map((hero) => ({
+      _id: hero._id,
+      estado: hero.estado,
+    }));
+
     //console.log(currentHeroes)
 
     res.render('heroes2', {
       pagina: 'Gestion cartas',
       heroes: currentHeroes,
+      estadoapi: heroesWithState,
       currentPage: page,
       totalPages: totalPages,
     });
@@ -1069,26 +1076,45 @@ const actualizarArmadura = async (req, res) => {
 // Controlador para cambiar el estado activo del héroe
 const cambiarEstadoArmadura = async (req, res) => {
   try {
-    const armaduraId = req.params.Id; // Obtener el ID del héroe de los parámetros
-    console.log('Hero ID:', armaduraId); // Agregar un console.log para verificar el ID
+    const armaduraId = req.params.Id; // Obtener el ID de la armadura de los parámetros
+    console.log('ID de la armadura:', armaduraId);
 
-    const armadura = await ArmaduraModel.findById(armaduraId);
+    const nuevoEstado = req.query.estado; // Obtener el estado de la consulta
+    console.log('Estado recibido:', nuevoEstado);
 
-    if (!armadura) {
-      return res.status(404).json({ error: 'Héroe no encontrado' });
+    // Crear un objeto FormData y agregar los datos a él
+    const formData = new FormData();
+    formData.append('id', armaduraId); // Agregar el ID al FormData
+    formData.append('estado', nuevoEstado); // Agregar el estado al FormData
+
+    console.log('Datos en FormData:', formData);
+
+    // Construir la URL de la API externa de acuerdo a tu configuración
+    const apiUrl = `https://cards.thenexusbattles2.cloud/api/heroes/`;
+
+    console.log('URL de la API externa:', apiUrl);
+
+    // Realizar la solicitud PATCH a la API externa para cambiar el estado de la armadura
+    const response = await fetch(apiUrl, {
+      method: 'PATCH',
+      body: formData,
+    });
+
+    console.log('Respuesta del fetch:', response);
+
+    if (response.ok) {
+      // Cambio de estado exitoso en la API externa
+      return res.status(200).json({ message: 'Estado de la armadura actualizado exitosamente en la API externa' });
+    } else {
+      // Error en el cambio de estado en la API externa
+      return res.status(500).json({ error: 'Error al cambiar el estado de la armadura en la API externa' });
     }
-
-    // Cambiar el estado activo de la armadura
-    armadura.activo = !armadura.activo;
-    console.log('Nuevo estado activo:', armadura.activo); // Agregar un console.log para verificar el nuevo estado
-    await armadura.save();
-
-    res.status(200).json({ message: 'Estado de la armadura actualizado exitosamente' });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Error al cambiar el estado de la armadura' });
   }
 };
+
 
 const mostrarFormularioCreacionItem = (req, res) => {
   res.render('crearitem', {

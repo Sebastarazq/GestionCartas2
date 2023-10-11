@@ -3,14 +3,12 @@ html(lang='en')
   head
     meta(charset='UTF-8')
     meta(name='viewport', content='width=device-width, initial-scale=1')
-    title Gestion Armaduras
-    // Enlaces a las hojas de estilo
+    title Gestión de Armaduras
     link(rel='stylesheet', href='/css/bootstrap.css')
     link(rel='stylesheet', type='text/css', href='/css/GestionCartas.css')
     link(href='https://fonts.googleapis.com/css2?family=Barlow:wght@500;600;800&family=Irish+Grover&family=Playfair+Display:wght@700&family=Raleway:wght@400;700;900&display=swap', rel='stylesheet')
     link(rel='icon', href='/img/favicon/favicon.ico', type='image/x-icon')
   body
-    // Encabezado
     header.header
       nav.nav
         a(href='#') Subasta
@@ -22,50 +20,49 @@ html(lang='en')
         a(href='#') Perfil
     br
     center
-      // Contenedor de botones
       div.button-container
-        // Botón para ver héroes (puedes cambiar el enlace según tu estructura de URL)
-        div.add-card-button2
-          a(href='/')
-            button.button Inicio
-        // Botón para añadir armadura (puedes cambiar el enlace según tu estructura de URL)
         div.add-card-button2
           a(href='/admin/creararmadura')
             button.button Añadir Armadura
+        div.add-card-button2
+          a(href='/')
+            button.button Inicio
     br
-    div.container.text-center.d-flex.justify-content-center
-      // Comienza el bucle para mostrar armaduras
-      // Asegúrate de que esta sección se repita dinámicamente con tus datos
+    div.container.text-center.dflex.justify-content-center
       div.row
         each armadura in armaduras
           div.col
             div.card(style='width: 18rem;')
               div.card-body
                 h5.card-title #{armadura.nombre}
-              img.card-img-top(src=`https://cards.thenexusbattles2.cloud/assets/${armadura.imagen}`, alt=`Imagen de ${armadura.nombre}`)
+              img.card-img-top(src=`https://cards.thenexusbattles2.cloud/${armadura.imagen}`, alt=`Imagen de ${armadura.nombre}`)
               div.card-body
                 div.row
                   div.col
+                    p Clase: #{armadura.clase}
+                  div.col
                     p Stock: #{armadura.stock}
+                div.row
+                  div.col
+                    p Precio: #{armadura.precio}
                   div.col
                     p Tipo: #{armadura.tipo}
                 div.row
                   div.col
-                    p Descuento: #{armadura.descuento}
+                    if armadura.efecto
+                      p Efecto: Aumenta #{armadura.efecto.estadistica} en #{armadura.efecto.valorAfectado}
+                    else
+                      p Efecto: No disponible
                   div.col
-                    p Clase: #{armadura.clase}
-                div.row
-                  div.col
-                    p Descripción: #{armadura.descripcion}
-                  div.col
-                    p Precio: #{armadura.precio.toLocaleString('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0, maximumFractionDigits: 0 })}
+                      p Descuento: #{armadura.descuento}
               div.row.botones_carta
-                div.col
-                  a(href=`/admin/actualizararmadura/${armadura._id}`)
-                    button.button(href=`/admin/actualizararmadura/${armadura._id}`) Modificar
-                div.col
-                  button.button(type='button', data-armadura-id=armadura._id, data-is-active=armadura.estado, onclick='cambiarEstadoArmadura(event)') #{armadura.estado ? 'Suspender' : 'Activar'}
-      // Fin del bucle para mostrar armaduras
+                  div.col
+                    a(href=`/admin/actualizarcarta/${armadura._id}`)
+                      button.button(href=`/admin/actualizarcarta/${armadura._id}`) Modificar
+                  div.col
+                    button.button(type='button', data-armadura-id=armadura._id, onclick='cambiarEstadoArmadura(event)') #{armadura.estado ? 'Suspender' : 'Activar'}
+
+        //- Fin del bucle para mostrar armaduras
     center
       ul.pagination
         if currentPage > 1
@@ -79,3 +76,4 @@ html(lang='en')
             a(href=`/admin/armaduras?page=${currentPage + 1}`) Siguiente
     // Scripts
     script(src='/js/bootstrap.js')
+    script(src='/js/scriptArmaduras.js')

@@ -1,30 +1,41 @@
-// Script en el cliente
 async function cambiarEstadoHeroe(e) {
   console.log('Clic en el botón de cambiar estado');
-  const heroId = e.target.dataset.heroId; // Obtener el ID del héroe
-  const isActive = e.target.dataset.isActive === 'true'; // Obtener el estado activo/inactivo del héroe
-  console.log('Estado actual del héroe:', isActive);
-
-  // Invertir el estado en el cliente
-  const nuevoEstado = !isActive;
-  //console.log('Nuevo estado:', nuevoEstado);
-  e.target.dataset.isActive = nuevoEstado;
-  e.target.textContent = nuevoEstado ? 'Suspender' : 'Activar';
+  const heroeId = e.target.dataset.heroId; // Obtener el ID del héroe
 
   try {
-    const url = `/admin/cambiarestadoheroe/${heroId}?estado=${nuevoEstado}`;
-    console.log('URL de la solicitud:', url);
+    // Realizar una solicitud al API para obtener el estado actual del héroe
+    const url = `https://cards.thenexusbattles2.cloud/api/cartas/${heroeId}`;
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'accept': 'application/json',
+      },
+    });
 
-    const respuesta = await fetch(url, {
+    if (!response.ok) {
+      throw new Error('Error al consultar el API');
+    }
+
+    const heroeData = await response.json();
+    console.log('heroedata:', heroeData);
+    const isActive = heroeData.estado; // Obtener el estado activo/inactivo del héroe
+    console.log('Estado actual del héroe:', isActive);
+
+    // Actualizar el estado en el servidor
+    const updateUrl = `/admin/cambiarEstadoHeroe/${heroeId}?estado=${!isActive}`;
+    const updateResponse = await fetch(updateUrl, {
       method: 'POST',
     });
 
-    console.log('Respuesta del servidor:', respuesta);
+    console.log('Respuesta del servidor:', updateResponse);
 
-    const { message } = await respuesta.json();
+    const { message } = await updateResponse.json();
 
-    if (respuesta.ok) {
+    if (updateResponse.ok) {
       alert(message); // Muestra un mensaje de éxito
+
+      // Actualiza el texto del botón según el nuevo estado
+      e.target.textContent = !isActive ? 'Suspender' : 'Activar';
     } else {
       console.error('Error al cambiar el estado del héroe.');
     }

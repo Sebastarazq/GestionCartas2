@@ -50,7 +50,7 @@ router.get('/admin/actualizararmadura/:Id',jwttoken, mostrarFormularioActualizac
 router.post('/admin/actualizararmadura/:Id',jwttoken,multerMiddleware.single('urlImagen'), actualizarArmadura);
 
 // Ruta para cambiar el estado de la armadura
-router.put('/admin/cambiarestadoarmadura/:Id',jwttoken, cambiarEstadoArmadura);
+router.post('/admin/cambiarestadoarmadura/:Id',jwttoken, cambiarEstadoArmadura);
 
 // Mostrar armas
 router.get('/admin/armas',jwttoken,mostrarArmas);
