@@ -3,9 +3,11 @@ html(lang='en')
   head
     meta(charset='UTF-8')
     meta(name='viewport', content='width=device-width, initial-scale=1')
-    title Gestion Armas
+    title Gestión de Armas
+    link(rel='stylesheet', href='/css/bootstrap.css')
     link(rel='stylesheet', type='text/css', href='/css/GestionCartas.css')
     link(href='https://fonts.googleapis.com/css2?family=Barlow:wght@500;600;800&family=Irish+Grover&family=Playfair+Display:wght@700&family=Raleway:wght@400;700;900&display=swap', rel='stylesheet')
+    link(rel='icon', href='/img/favicon/favicon.ico', type='image/x-icon')
   body
     header.header
       nav.nav
@@ -18,32 +20,59 @@ html(lang='en')
         a(href='#') Perfil
     br
     center
-      .button-container
-        .cartalink.link
-          a(href='/admin/creararma', class='no-underline') Añadir Armas
-        .cartalink.link
-          a(href='/', class='no-underline') Inicio
+      div.button-container
+        div.add-card-button2
+          a(href='/admin/creararma')
+            button.button Añadir Arma
+        div.add-card-button2
+          a(href='/')
+            button.button Inicio
     br
-    .caja
-      each arma in armas
-        #bordeCarta.carta2(style='background:rgba(17,18,18,1); color:white; border:1px solid rgba(255,244,0,1);')
-          .titulo
-            p(class='2xl:text-[18px] md:text-[14px]') #{arma.nombre}
-          .img
-            img(src=arma.imagen, alt=`imagen de ${arma.nombre}`)
-            .overlay
-          .contenido(class='2xl:w-[220px] 2xl:h-[75px] md:sm:w-[165px] md:sm:h-[50px]')
-            .propiedad
-              p(class='2xl:text-[16px] md:text-[11px]') Descripción: #{arma.descripcion}
-              p(class='2xl:text-[16px] md:text-[11px]') Tipo de Héroe: #{arma.clase} #{arma.tipo}
-          .button-container
-            a.modificar(href=`/admin/actualizararma/${arma._id}`, class="link") Modificar
-            button.link.suspender(class="link", type='button', data-arma-id=arma._id, data-is-active=arma.estado, onclick="cambiarEstadoArma(event)")
-              | #{arma.estado ? 'Suspender' : 'Activar'}
-                
+    div.container.text-center.dflex.justify-content-center
+      div.row
+        each arma in armas
+          div.col
+            div.card(style='width: 18rem;')
+              div.card-body
+                h5.card-title #{arma.nombre}
+              img.card-img-top(src=`https://cards.thenexusbattles2.cloud/${arma.imagen}`, alt=`Imagen de ${arma.nombre}`)
+              div.card-body
+                div.row
+                  div.col
+                    p Clase: #{arma.clase}
+                  div.col
+                    p Stock: #{arma.stock}
+                div.row
+                  div.col
+                    p Precio: #{arma.precio}
+                  div.col
+                    p Tipo: #{arma.tipo}
+                div.row
+                  div.col
+                    if arma.efecto
+                      p Efecto: Aumenta #{arma.efecto.estadistica} en #{arma.efecto.valorAfectado}
+                    else
+                      p Efecto: No disponible
+                  div.col
+                    p Descuento: #{arma.descuento}
+              div.row.botones_carta
+                  div.col
+                    a(href=`/admin/actualizararma/${arma._id}`)
+                      button.button(href=`/admin/actualizararma/${arma._id}`) Modificar
+                  div.col
+                    button.button(type='button', data-arma-id=arma._id, onclick='cambiarEstadoArma(event)') #{arma.estado ? 'Suspender' : 'Activar'}
+
     center
       ul.pagination
+        if currentPage > 1
+          li
+            a(href=`/admin/armas?page=${currentPage - 1}`) Anterior
         each pageNum in Array(totalPages).fill().map((_, i) => i + 1)
           li
             a(href=`/admin/armas?page=${pageNum}`, class=pageNum === currentPage ? 'current' : '')= pageNum
-  script(src='/js/scriptArmas.js')
+        if currentPage < totalPages
+          li
+            a(href=`/admin/armas?page=${currentPage + 1}`) Siguiente
+    // Scripts
+    script(src='/js/bootstrap.js')
+    script(src='/js/scriptArmas.js')

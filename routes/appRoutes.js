@@ -64,7 +64,7 @@ router.get('/admin/actualizararma/:Id',jwttoken, mostrarFormularioActualizacionA
 router.post('/admin/actualizararma/:Id', jwttoken, multerMiddleware.single('urlImagen'), actualizarArma);
 
 // Ruta para cambiar el estado de la arma
-router.put('/admin/cambiarestadoarma/:Id',jwttoken, cambiarEstadoArma);
+router.post('/admin/cambiarestadoarma/:Id',jwttoken, cambiarEstadoArma);
 
 // Mostrar items
 router.get('/admin/items',jwttoken, mostrarItems);
@@ -78,7 +78,7 @@ router.get('/admin/actualizaritem/:Id',jwttoken, mostrarFormularioActualizacionI
 router.post('/admin/actualizaritem/:Id',jwttoken, multerMiddleware.single('urlImagen'), actualizarItem);
 
 // Ruta para cambiar el estado de la Items
-router.put('/admin/cambiarestadoitem/:Id',jwttoken, cambiarEstadoItem);
+router.post('/admin/cambiarestadoitem/:Id',jwttoken, cambiarEstadoItem);
 
 // Mostrar Epicas
 router.get('/admin/epicas',jwttoken, mostrarEpicas);
@@ -92,7 +92,7 @@ router.get('/admin/actualizarepica/:Id',jwttoken, mostrarFormularioActualizacion
 router.post('/admin/actualizarepica/:Id',jwttoken, multerMiddleware.single('urlImagen'), actualizarEpica); // Utiliza el middleware Multer
 
 // Ruta para cambiar el estado de la epica
-router.put('/admin/cambiarestadoepica/:Id',jwttoken, cambiarEstadoEpica);
+router.post('/admin/cambiarestadoepica/:Id',jwttoken, cambiarEstadoEpica);
 
 
 

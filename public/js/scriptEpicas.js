@@ -1,36 +1,51 @@
 async function cambiarEstadoEpica(e) {
-    console.log('Clic en el botón de suspender');
-    const epicaId = e.target.dataset.epicaId; // Obtener el ID de la épica
-    const isActive = e.target.dataset.isActive === 'true'; // Obtener el estado activo/inactivo de la épica
-  
-    try {
-      const url = `/admin/cambiarestadoepica/${epicaId}`;
-      const nuevoEstado = !isActive; // Cambiar el estado
-  
-      const respuesta = await fetch(url, {
-        method: 'PUT', // Usa el método PUT para cambiar el estado de la épica
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ activo: nuevoEstado }), // Envía el nuevo estado en el cuerpo
-      });
-  
-      const { message } = await respuesta.json();
-  
-      if (respuesta.ok) {
-        // Cambiar el estado del botón y la clase de la carta
-        e.target.dataset.isActive = nuevoEstado;
-        e.target.textContent = nuevoEstado ? 'Activar' : 'Suspender';
-  
-        const carta2 = e.target.closest('.carta2');
-        carta2.classList.toggle('suspended'); // Cambiar la clase para cambiar el color
-  
-        alert(message); // Muestra un mensaje de éxito
-      } else {
-        console.error('Error al cambiar el estado de la épica.');
-      }
-    } catch (error) {
-      console.error(error);
+  console.log('Clic en el botón de cambiar estado');
+  const epicaId = e.target.dataset.epicaId; // Obtener el ID de la épica
+
+  try {
+    // Realizar una solicitud al API para obtener el estado actual de la épica
+    const url = `https://cards.thenexusbattles2.cloud/api/cartas/${epicaId}`;
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'accept': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Error al consultar el API');
     }
+
+    const epicaData = await response.json();
+    const isActive = epicaData.estado; // Obtener el estado activo/inactivo de la épica
+    console.log('Estado actual de la épica:', isActive);
+
+    // Actualizar el estado en el servidor
+    const nuevoEstado = !isActive;
+    const updateUrl = `/admin/cambiarestadoepica/${epicaId}?estado=${nuevoEstado}`;
+    const updateResponse = await fetch(updateUrl, {
+      method: 'POST',
+    });
+
+    console.log('Respuesta del servidor:', updateResponse);
+
+    const { message } = await updateResponse.json();
+
+    if (updateResponse.ok) {
+      alert(message);
+
+      // Actualiza el texto del botón según el nuevo estado
+      e.target.textContent = nuevoEstado ? 'Suspender' : 'Activar';
+    } else {
+      console.error('Error al cambiar el estado de la épica.');
+    }
+  } catch (error) {
+    console.error(error);
   }
-  
+}
+
+// Agregar un evento click a los botones para cambiar el estado
+const epicaButtons = document.querySelectorAll('.cambiar-estado-epica-button');
+epicaButtons.forEach(button => {
+  button.addEventListener('click', cambiarEstadoEpica);
+});

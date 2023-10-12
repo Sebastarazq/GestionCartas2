@@ -3,9 +3,11 @@ html(lang='en')
   head
     meta(charset='UTF-8')
     meta(name='viewport', content='width=device-width, initial-scale=1')
-    title Gestion de Cartas Épicas
+    title Gestión de Epicas
+    link(rel='stylesheet', href='/css/bootstrap.css')
     link(rel='stylesheet', type='text/css', href='/css/GestionCartas.css')
     link(href='https://fonts.googleapis.com/css2?family=Barlow:wght@500;600;800&family=Irish+Grover&family=Playfair+Display:wght@700&family=Raleway:wght@400;700;900&display=swap', rel='stylesheet')
+    link(rel='icon', href='/img/favicon/favicon.ico', type='image/x-icon')
   body
     header.header
       nav.nav
@@ -18,31 +20,62 @@ html(lang='en')
         a(href='#') Perfil
     br
     center
-      .button-container
-        .cartalink.link
-          a(href='/admin/crearepica', class='no-underline') Añadir Epica
-        .cartalink.link
-          a(href='/', class='no-underline') Inicio
+      div.button-container
+        div.add-card-button2
+          a(href='/admin/crearepica')
+            button.button Añadir Épica
+        div.add-card-button2
+          a(href='/')
+            button.button Inicio
     br
-    .caja
-      each epica in epicas
-        #bordeCarta.carta2(style='background:rgba(17,18,18,1); color:white; border:1px solid rgba(255,244,0,1);')
-          .titulo
-            p(class='2xl:text-[18px] md:text-[14px]') #{epica.nombre}
-          .img
-            img(src=epica.imagen, alt=`imagen de ${epica.nombre}`)
-            .overlay
-          .contenido(class='2xl:w-[220px] 2xl:h-[75px] md:sm:w-[165px] md:sm:h-[50px]')
-            .propiedad
-              p(class='2xl:text-[16px] md:text-[11px]') Héroe: #{epica.clase}
-              p(class='2xl:text-[16px] md:text-[11px]') Efecto Global: #{epica.descripcion}
-          .button-container
-            a.modificar(href=`/admin/actualizarepica/${epica._id}`, class="link") Modificar
-            button.link.suspender(class="link", type='button', data-epica-id=epica._id, data-is-active=epica.estado, onclick="cambiarEstadoEpica(event)")
-                    | #{epica.estado ? 'Suspender' : 'Activar'}
+    div.container.text-center.dflex.justify-content-center
+      div.row
+        each epica in epicas
+          div.col
+            div.card(style='width: 18rem;')
+              div.card-body
+                h5.card-title #{epica.nombre}
+              img.card-img-top(src=epica.imagen, alt=`Imagen de ${epica.nombre}`)
+              div.card-body
+                div.row
+                  div.col
+                    p Clase: #{epica.clase}
+                  div.col
+                    p Stock: #{epica.stock}
+                div.row
+                  div.col
+                    p Precio: #{epica.precio}
+                  div.col
+                    p Tipo: #{epica.tipo}
+                div.row
+                  div.col
+                    if epica.efecto
+                      p Efecto Normal: Aumenta #{epica.efecto.estadistica} en #{epica.efecto.valorAfectado}
+                    else
+                      p Efecto Normal: No disponible
+                  div.col
+                    if epica.efectoHeroe
+                      p Efecto Especial: Aumenta #{epica.efectoHeroe.estadistica} en #{epica.efectoHeroe.valorAfectado}
+                    else
+                      p Efecto Especial: No disponible
+              div.row.botones_carta
+                  div.col
+                    a(href=`/admin/actualizarepica/${epica._id}`)
+                      button.button(href=`/admin/actualizarepica/${epica._id}`) Modificar
+                  div.col
+                    button.button(type='button', data-epica-id=epica._id, onclick='cambiarEstadoEpica(event)') #{epica.estado ? 'Suspender' : 'Activar'}
+
     center
       ul.pagination
+        if currentPage > 1
+          li
+            a(href=`/admin/epicas?page=${currentPage - 1}`) Anterior
         each pageNum in Array(totalPages).fill().map((_, i) => i + 1)
           li
             a(href=`/admin/epicas?page=${pageNum}`, class=pageNum === currentPage ? 'current' : '')= pageNum
-  script(src='/js/scriptEpicas.js')
+        if currentPage < totalPages
+          li
+            a(href=`/admin/epicas?page=${currentPage + 1}`) Siguiente
+    // Scripts
+    script(src='/js/bootstrap.js')
+    script(src='/js/scriptEpicas.js')

@@ -22,7 +22,7 @@ async function cambiarEstadoArmadura(e) {
 
     // Actualizar el estado en el servidor
     const nuevoEstado = !isActive;
-    const updateUrl = `/admin/cambiarEstadoArmadura/${armaduraId}?estado=${nuevoEstado}`;
+    const updateUrl = `/admin/cambiarestadoarmadura/${armaduraId}?estado=${nuevoEstado}`;
     const updateResponse = await fetch(updateUrl, {
       method: 'POST',
     });

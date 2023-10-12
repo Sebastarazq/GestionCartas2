@@ -398,32 +398,46 @@ const actualizarEpica = async (req, res) => {
   }
 };
 
-
 const cambiarEstadoEpica = async (req, res) => {
   try {
     const epicaId = req.params.Id; // Obtener el ID de la épica de los parámetros
-    console.log('Épica ID:', epicaId); // Agregar un console.log para verificar el ID
+    console.log('ID de la épica:', epicaId);
 
-    const epica = await EpicaModel.findById(epicaId);
+    const nuevoEstado = req.query.estado; // Obtener el estado de la consulta
+    console.log('Estado recibido:', nuevoEstado);
 
-    if (!epica) {
-      return res.status(404).json({ error: 'Épica no encontrada' });
+    // Crear un objeto FormData y agregar los datos a él
+    const formData = new FormData();
+    formData.append('id', epicaId); // Agregar el ID al FormData
+    formData.append('estado', nuevoEstado); // Agregar el estado al FormData
+
+    console.log('Datos en FormData:', formData);
+
+    // Construir la URL de la API externa de acuerdo a tu configuración
+    const apiUrl = `https://cards.thenexusbattles2.cloud/api/consumible/`; // Ajusta la URL según tus necesidades
+
+    console.log('URL de la API externa:', apiUrl);
+
+    // Realizar la solicitud PATCH a la API externa para cambiar el estado de la épica
+    const response = await fetch(apiUrl, {
+      method: 'PATCH',
+      body: formData,
+    });
+
+    console.log('Respuesta del fetch:', response);
+
+    if (response.ok) {
+      // Cambio de estado exitoso en la API externa
+      return res.status(200).json({ message: 'Estado de la épica actualizado exitosamente en la API externa' });
+    } else {
+      // Error en el cambio de estado en la API externa
+      return res.status(500).json({ error: 'Error al cambiar el estado de la épica en la API externa' });
     }
-
-    // Cambiar el estado activo de la épica
-    epica.activo = !epica.activo;
-    console.log('Nuevo estado activo:', epica.activo); // Agregar un console.log para verificar el nuevo estado
-    await epica.save();
-
-    res.status(200).json({ message: 'Estado de la épica actualizado exitosamente' });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Error al cambiar el estado de la épica' });
   }
 };
-
-
-
 
 const mostrarFormularioCreacionArma = (req, res) => {
   res.render('creararma', {
@@ -539,29 +553,47 @@ const actualizarArma = async (req, res) => {
   }
 };
 
-
 const cambiarEstadoArma = async (req, res) => {
   try {
     const armaId = req.params.Id; // Obtener el ID del arma de los parámetros
-    console.log('Arma ID:', armaId); // Agregar un console.log para verificar el ID
+    console.log('ID del arma:', armaId);
 
-    const arma = await ArmaModel.findById(armaId);
+    const nuevoEstado = req.query.estado; // Obtener el estado de la consulta
+    console.log('Estado recibido:', nuevoEstado);
 
-    if (!arma) {
-      return res.status(404).json({ error: 'Arma no encontrada' });
+    // Crear un objeto FormData y agregar los datos a él
+    const formData = new FormData();
+    formData.append('id', armaId); // Agregar el ID al FormData
+    formData.append('estado', nuevoEstado); // Agregar el estado al FormData
+
+    console.log('Datos en FormData:', formData);
+
+    // Construir la URL de la API externa
+    const apiUrl = `https://cards.thenexusbattles2.cloud/api/consumible/`;
+
+    console.log('URL de la API externa:', apiUrl);
+
+    // Realizar la solicitud PATCH a la API externa para cambiar el estado del arma
+    const response = await fetch(apiUrl, {
+      method: 'PATCH',
+      body: formData,
+    });
+
+    console.log('Respuesta del fetch:', response);
+
+    if (response.ok) {
+      // Cambio de estado exitoso en la API externa
+      return res.status(200).json({ message: 'Estado del arma actualizado exitosamente en la API externa' });
+    } else {
+      // Error en el cambio de estado en la API externa
+      return res.status(500).json({ error: 'Error al cambiar el estado del arma en la API externa' });
     }
-
-    // Cambiar el estado activo del arma
-    arma.activo = !arma.activo;
-    console.log('Nuevo estado activo:', arma.activo); // Agregar un console.log para verificar el nuevo estado
-    await arma.save();
-
-    res.status(200).json({ message: 'Estado del arma actualizado exitosamente' });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Error al cambiar el estado del arma' });
   }
 };
+
 
 
 const mostrarFormularioCreacion = (req, res) => {
@@ -700,9 +732,6 @@ const cambiarEstadoHeroe = async (req, res) => {
 };
 
 
-
-
-
 //mostrar formulario creción de armaduras
 const mostrarFormularioCreacionArmadura = (req, res) => {
   res.render('creararmadura', {
@@ -838,7 +867,7 @@ const cambiarEstadoArmadura = async (req, res) => {
     console.log('Datos en FormData:', formData);
 
     // Construir la URL de la API externa de acuerdo a tu configuración
-    const apiUrl = `https://cards.thenexusbattles2.cloud/api/heroes/`;
+    const apiUrl = `https://cards.thenexusbattles2.cloud/api/consumible/`;
 
     console.log('URL de la API externa:', apiUrl);
 
@@ -977,26 +1006,45 @@ const actualizarItem = async (req, res) => {
 };
 const cambiarEstadoItem = async (req, res) => {
   try {
-    const itemID = req.params.Id; // Obtener el ID del Item de los parámetros
-    console.log('Item ID:', itemID); // Agregar un console.log para verificar el ID
+    const itemId = req.params.Id; // Obtener el ID del item de los parámetros
+    console.log('ID del item:', itemId);
 
-    const item = await ItemModel.findById(itemID);
+    const nuevoEstado = req.query.estado; // Obtener el estado de la consulta
+    console.log('Estado recibido:', nuevoEstado);
 
-    if (!item) {
-      return res.status(404).json({ error: 'Item no encontrada' });
+    // Crear un objeto FormData y agregar los datos a él
+    const formData = new FormData();
+    formData.append('id', itemId); // Agregar el ID al FormData
+    formData.append('estado', nuevoEstado); // Agregar el estado al FormData
+
+    console.log('Datos en FormData:', formData);
+
+    // Construir la URL de la API externa de acuerdo a tu configuración
+    const apiUrl = `https://cards.thenexusbattles2.cloud/api/consumible/`;
+
+    console.log('URL de la API externa:', apiUrl);
+
+    // Realizar la solicitud PATCH a la API externa para cambiar el estado del item
+    const response = await fetch(apiUrl, {
+      method: 'PATCH',
+      body: formData,
+    });
+
+    console.log('Respuesta del fetch:', response);
+
+    if (response.ok) {
+      // Cambio de estado exitoso en la API externa
+      return res.status(200).json({ message: 'Estado del item actualizado exitosamente en la API externa' });
+    } else {
+      // Error en el cambio de estado en la API externa
+      return res.status(500).json({ error: 'Error al cambiar el estado del item en la API externa' });
     }
-
-    // Cambiar el estado activo del item
-    item.activo = !item.activo;
-    console.log('Nuevo estado activo:', item.activo); // Agregar un console.log para verificar el nuevo estado
-    await item.save();
-
-    res.status(200).json({ message: 'Estado del item actualizado exitosamente' });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Error al cambiar el estado del item' });
   }
 };
+
 
 export {
   inicio,
