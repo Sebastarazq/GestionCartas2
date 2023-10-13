@@ -1,5 +1,5 @@
 import { obtenerHeroesApi,crearHeroeEnAPI,actualizarCartaEnAPI } from '../models/Heroe.js';
-import ArmaduraModel from '../models/Armadura.js';
+import { obtenerArmadurasApi,crearArmaduraEnAPI,actualizarArmaduraEnAPI,cambiarEstadoArmaduraEnModelo } from '../models/Armadura.js'
 import ArmaModel from '../models/Arma.js';
 import ItemModel from '../models/Item.js';
 import EpicaModel from '../models/Epica.js';
@@ -102,42 +102,28 @@ const mostrarHeroes = async (req, res) => {
 
 const mostrarArmaduras = async (req, res) => {
   try {
-    const page = parseInt(req.query.page) || 1; // Obtén el número de página de la consulta
-    const ITEMS_PER_PAGE = 3; // Define la cantidad de armaduras por página
+    const page = parseInt(req.query.page) || 1;
+    const ITEMS_PER_PAGE = 3;
 
-    // Realiza una solicitud al API para obtener todos los armaduras
-    const apiUrl = `https://cards.thenexusbattles2.cloud/api/cartas/?size=1000&page=1&coleccion=Armaduras&onlyActives=false`; // Suponemos que hay menos de 1000 armaduras en total
-    const response = await fetch(apiUrl, {
-      method: 'GET',
-      headers: {
-        'accept': 'application/json',
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error('Error al consultar el API');
-    }
-
-    const data = await response.json();
-    const allArmaduras = data;
+    // Obtener las armaduras desde el API utilizando la función del modelo
+    const allArmaduras = await obtenerArmadurasApi(); // Pasa el número de página como argumento
 
     const startIndex = (page - 1) * ITEMS_PER_PAGE;
     const endIndex = startIndex + ITEMS_PER_PAGE;
     const currentArmaduras = allArmaduras.slice(startIndex, endIndex);
 
-    // Calcula el número total de páginas en función de la cantidad total de héroes
     const totalArmaduras = allArmaduras.length;
     const totalPages = Math.ceil(totalArmaduras / ITEMS_PER_PAGE);
 
-    res.render("armaduras", {
-      pagina: "Gestion de armaduras",
+    res.render('armaduras', {
+      pagina: 'Gestión de Armaduras',
       armaduras: currentArmaduras,
       currentPage: page,
       totalPages: totalPages,
     });
   } catch (error) {
     console.error(error);
-    res.render("error");
+    res.status(500).json({ error: 'Error interno del servidor' });
   }
 };
 
@@ -670,6 +656,8 @@ const actualizarCarta = async (req, res) => {
   try {
     const formData = req.body;
     const file = req.file; // Obtener el archivo del formulario
+    console.log('file:',file)
+    console.log('formData:',formData)
 
     // Llama a la función del modelo para actualizar la carta en el API
     const response = await actualizarCartaEnAPI(formData, file);
@@ -741,63 +729,59 @@ const mostrarFormularioCreacionArmadura = (req, res) => {
 
 const crearArmadura = async (req, res) => {
   try {
-    // Obtén los datos del formulario
     const formData = req.body;
-    const file = req.file; // El archivo subido
+    const file = req.file;
 
-    // Construye la URL de la imagen
-    const urlImagen = `https://store.thenexusbattles2.cloud/imgcards/img/${file.filename}`;
+    const response = await crearArmaduraEnAPI(formData, file);
 
-    console.log('formData:', formData);
-    console.log('formData.efecto:', formData.efecto);
-
-    // Crea un nuevo héroe utilizando el modelo
-    const newArmadura = new ArmaduraModel({
-      urlImagen,
-      heroe: formData.heroe,
-      tipo: formData.tipo,
-      efecto: {
-        case: formData['efecto.case'],
-        statEffect: formData['efecto.statEffect'],
-        stat: formData['efecto.stat'],
-        target: formData['efecto.target'],
-        turnCount: formData['efecto.turnCount'],
-      },
-      activo: formData.activo === 'true',
-      desc: formData.desc,
-    });
-    
-    console.log('Armadura creada:', newArmadura);
-    // Guarda la nueva armadura en la base de datos
-    await newArmadura.save();
-
-    // Redirige al usuario a otra página o muestra un mensaje de éxito
-    res.send('<script>alert("Armadura creada exitosamente!"); window.location.href = "/admin/armaduras";</script>');
+    if (response.ok) {
+      const tituloExitoso = 'Creación de Armadura';
+      const mensajeExitoso = 'Creada correctamente.';
+      return res.render('anuncioarmadura', { armaduraCreada: true, tituloExitoso, mensajeExitoso });
+    } else {
+      // Hubo un error en la creación de la armadura
+      const mensajeError = 'Error al crear la armadura';
+      return res.render('anuncioarmadura', { armaduraCreada: false, errorMessage: mensajeError });
+    }
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Error al crear la Armadura' });
+
+    // Renderiza la vista 'anuncioarmadura' con un mensaje de error
+    const mensajeError = 'Hubo un error al procesar la solicitud. Por favor, inténtalo de nuevo más tarde.';
+    return res.render('anuncioarmadura', { armaduraCreada: false, errorMessage: mensajeError });
   }
 };
 
 
+
 const mostrarFormularioActualizacionArmadura = async (req, res) => {
   try {
-    const idArmadura = req.params.Id; // Obtener el valor del parámetro :id
+    const idArmadura = req.params.Id; // Obtener el valor del parámetro :Id
 
-    console.log('ID del héroe a actualizar:', idArmadura); // Agregar este registro para verificar el ID
+    // Realizar una solicitud al API para obtener los datos de la armadura específica por su ID
+    const apiUrl = `https://cards.thenexusbattles2.cloud/api/cartas/${idArmadura}`;
+    const response = await fetch(apiUrl, {
+      method: 'GET',
+      headers: {
+        'accept': 'application/json',
+      },
+    });
 
-    const armadura = await ArmaduraModel.findById(idArmadura); // Obtener un héroe por su ID
+    if (!response.ok) {
+      throw new Error('Error al consultar el API');
+    }
 
-    console.log('Héroe encontrado:', armadura); // Agregar este registro para verificar el héroe
+    const armaduraData = await response.json();
 
-    if (!armadura) {
-      // Si no se encontró el héroe, puedes manejarlo adecuadamente aquí
+    if (!armaduraData) {
+      // Si no se encontró la armadura, puedes manejarlo adecuadamente aquí
       return res.status(404).render('error', { error: 'Armadura no encontrada' });
     }
 
+    // Pasar los datos de la armadura al formulario de actualización
     res.render('actualizararmadura', {
-      pagina: 'Actualizar armadura',
-      armadura: armadura, // Enviar el héroe específico a la vista
+      pagina: 'Actualizar Armadura',
+      armadura: armaduraData, // Enviar los datos de la armadura a la vista
     });
   } catch (error) {
     console.error(error);
@@ -807,50 +791,34 @@ const mostrarFormularioActualizacionArmadura = async (req, res) => {
 
 const actualizarArmadura = async (req, res) => {
   try {
-    const idArmadura = req.params.Id; // Obtener el valor del parámetro :id
-    const formData = req.body; // Obtener los datos del formulario
+    const formData = req.body;
+    const file = req.file; // Obtener el archivo del formulario si se proporcionó
 
-    // Obtener la URL de la imagen existente (por defecto)
-    let urlImagen = formData.urlImagen;
+    // Llama a la función del modelo para actualizar la armadura en el API
+    const response = await actualizarArmaduraEnAPI(formData, file);
 
-    // Si se proporciona una nueva imagen, guarda la URL de la nueva imagen
-    if (req.file) {
-      // Construye la URL de la imagen actualizada
-      const baseUrl = 'https://store.thenexusbattles2.cloud/imgcards'; // Cambia esto según la configuración de tu servidor
-      urlImagen = `${baseUrl}/img/${req.file.filename}`;
+    if (response.ok) {
+      const tituloExitoso = 'Actualización de Armadura';
+      const mensajeExitoso = 'Actualizada correctamente.';
+      return res.render('anuncioarmadura', { armaduraCreada: true, tituloExitoso, mensajeExitoso });
+    } else {
+      // Hubo un error en la actualización de la armadura
+      const mensajeError = 'Error al actualizar la armadura';
+      return res.render('anuncioarmadura', { armaduraCreada: false, errorMessage: mensajeError });
     }
-
-    // Construye un objeto con los datos actualizados
-    const updatedData = {
-      urlImagen, // Actualiza la URL de la imagen
-      heroe: formData.heroe,
-      tipo: formData.tipo,
-      efecto: {
-        case: parseInt(formData['efecto.case']), // Asegúrate de analizar valores numéricos si son números
-        statEffect: parseInt(formData['efecto.statEffect']), // Asegúrate de analizar valores numéricos si son números
-        stat: formData['efecto.stat'],
-        target: formData['efecto.target'],
-        turnCount: parseInt(formData['efecto.turnCount']), // Asegúrate de analizar valores numéricos si son números
-      },
-      activo: formData.activo === 'true',
-      desc: formData.desc,
-    };
-
-    // Actualiza los datos de la armadura en la base de datos
-    await ArmaduraModel.findByIdAndUpdate(idArmadura, updatedData);
-
-    console.log('Armadura actualizada con éxito.');
-
-    // Agregar un script de alert después de la redirección
-    res.send('<script>alert("Armadura actualizada con éxito."); window.location.href = "/admin/armaduras/";</script>');
   } catch (error) {
     console.error(error);
-    res.render('error'); // Renderiza una vista de error en caso de problemas
+
+    // Renderiza la vista 'anuncioarmadura' con un mensaje de error
+    const mensajeError = 'Hubo un error al procesar la solicitud. Por favor, inténtalo de nuevo más tarde.';
+    return res.render('anuncioarmadura', { armaduraCreada: false, errorMessage: mensajeError });
   }
 };
 
 
-// Controlador para cambiar el estado activo del héroe
+
+
+// Controlador para cambiar el estado activo de la armadura
 const cambiarEstadoArmadura = async (req, res) => {
   try {
     const armaduraId = req.params.Id; // Obtener el ID de la armadura de los parámetros
@@ -859,32 +827,12 @@ const cambiarEstadoArmadura = async (req, res) => {
     const nuevoEstado = req.query.estado; // Obtener el estado de la consulta
     console.log('Estado recibido:', nuevoEstado);
 
-    // Crear un objeto FormData y agregar los datos a él
-    const formData = new FormData();
-    formData.append('id', armaduraId); // Agregar el ID al FormData
-    formData.append('estado', nuevoEstado); // Agregar el estado al FormData
+    const cambioExitoso = await cambiarEstadoArmaduraEnModelo(armaduraId, nuevoEstado);
 
-    console.log('Datos en FormData:', formData);
-
-    // Construir la URL de la API externa de acuerdo a tu configuración
-    const apiUrl = `https://cards.thenexusbattles2.cloud/api/consumible/`;
-
-    console.log('URL de la API externa:', apiUrl);
-
-    // Realizar la solicitud PATCH a la API externa para cambiar el estado de la armadura
-    const response = await fetch(apiUrl, {
-      method: 'PATCH',
-      body: formData,
-    });
-
-    console.log('Respuesta del fetch:', response);
-
-    if (response.ok) {
-      // Cambio de estado exitoso en la API externa
-      return res.status(200).json({ message: 'Estado de la armadura actualizado exitosamente en la API externa' });
+    if (cambioExitoso) {
+      return res.status(200).json({ message: 'Estado de la armadura actualizado exitosamente en el modelo' });
     } else {
-      // Error en el cambio de estado en la API externa
-      return res.status(500).json({ error: 'Error al cambiar el estado de la armadura en la API externa' });
+      return res.status(500).json({ error: 'Error al cambiar el estado de la armadura en el modelo' });
     }
   } catch (error) {
     console.error(error);

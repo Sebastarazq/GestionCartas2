@@ -57,8 +57,8 @@ html(lang='en')
                       p Descuento: #{armadura.descuento}
               div.row.botones_carta
                   div.col
-                    a(href=`/admin/actualizarcarta/${armadura._id}`)
-                      button.button(href=`/admin/actualizarcarta/${armadura._id}`) Modificar
+                    a(href=`/admin/actualizararmadura/${armadura._id}`)
+                      button.button(href=`/admin/actualizararmadura/${armadura._id}`) Modificar
                   div.col
                     button.button(type='button', data-armadura-id=armadura._id, onclick='cambiarEstadoArmadura(event)') #{armadura.estado ? 'Suspender' : 'Activar'}
 

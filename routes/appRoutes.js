@@ -26,10 +26,6 @@ router.get('/admin/heroes',jwttoken,mostrarHeroes);
 router.get('/admin/crearcarta', jwttoken,mostrarFormularioCreacion);
 router.post('/admin/crearcarta',jwttoken, multerMiddleware.single('imagen'), crearHeroe); // Utiliza el middleware Multer
 
-// prueba patch sin conusltar heroe por ID
-// router.get('/admin/actualizarheroe/', mostrarFormularioActualizacion2);
-// router.post('/admin/actualizarheroe/',multerMiddleware.single('imagen'), actualizarCarta2);
-
 // Ruta para mostrar el formulario de actualizar carta y enviarlo
 router.get('/admin/actualizarcarta/:Id',jwttoken, mostrarFormularioActualizacion);
 router.post('/admin/actualizarcarta/:Id',jwttoken,multerMiddleware.single('imagen'), actualizarCarta);
@@ -43,11 +39,11 @@ router.get('/admin/armaduras',jwttoken, mostrarArmaduras);
 
 // Ruta para mostrar el formulario de armadura de carta y enviarlo
 router.get('/admin/creararmadura',jwttoken, mostrarFormularioCreacionArmadura);
-router.post('/admin/creararmadura',jwttoken, multerMiddleware.single('urlImagen'), crearArmadura); // Utiliza el middleware Multer
+router.post('/admin/creararmadura',jwttoken, multerMiddleware.single('imagen'), crearArmadura); // Utiliza el middleware Multer
 
 // Ruta para mostrar el formulario de actualizar armadura y enviarlo
 router.get('/admin/actualizararmadura/:Id',jwttoken, mostrarFormularioActualizacionArmadura);
-router.post('/admin/actualizararmadura/:Id',jwttoken,multerMiddleware.single('urlImagen'), actualizarArmadura);
+router.post('/admin/actualizararmadura/:Id',jwttoken,multerMiddleware.single('imagen'), actualizarArmadura);
 
 // Ruta para cambiar el estado de la armadura
 router.post('/admin/cambiarestadoarmadura/:Id',jwttoken, cambiarEstadoArmadura);

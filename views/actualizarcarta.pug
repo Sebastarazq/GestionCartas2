@@ -53,7 +53,7 @@ html(lang='es')
         .row.mb-3
           .col-md-6
             label.form-label(for='tipo') Tipo:
-            select.form-select(name='tipo', id='tipo', required)
+            select.form-select(name='tipo', id='tipo', required, disabled)
               option(value='Tanque', selected=hero ? hero.tipo === 'Tanque' : '') Tanque
               option(value='Armas', selected=hero ? hero.tipo === 'Armas' : '') Armas
               option(value='Fuego', selected=hero ? hero.tipo === 'Fuego' : '') Fuego
@@ -62,7 +62,7 @@ html(lang='es')
               option(value='Machete', selected=hero ? hero.tipo === 'Machete' : '') Machete
           .col-md-6
             label.form-label(for='clase') Clase:
-            select.form-select(id='clase', name='clase', required)
+            select.form-select(id='clase', name='clase', required, disabled)
               option(value='Guerrero', selected=hero ? hero.clase === 'Guerrero' : '') Guerrero
               option(value='Mago', selected=hero ? hero.clase === 'Mago' : '') Mago
               option(value='Pícaro', selected=hero ? hero.clase === 'Pícaro' : '') Pícaro

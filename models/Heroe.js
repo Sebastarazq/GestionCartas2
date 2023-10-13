@@ -83,8 +83,6 @@ const actualizarCartaEnAPI = async (formData, file) => {
     // Extraer los campos del formulario individualmente
     const id = formData.id;
     const nombre = formData.nombre;
-    const clase = formData.clase;
-    const tipo = formData.tipo;
     const poder = formData.poder;
     const vida = formData.vida;
     const defensa = formData.defensa;
@@ -101,8 +99,6 @@ const actualizarCartaEnAPI = async (formData, file) => {
     const data = new FormData();
     if (id) data.append('id', id);
     if (nombre) data.append('nombre', nombre);
-    if (clase) data.append('clase', clase);
-    if (tipo) data.append('tipo', tipo);
     if (poder) data.append('poder', poder);
     if (vida) data.append('vida', vida);
     if (defensa) data.append('defensa', defensa);
@@ -132,19 +128,31 @@ const actualizarCartaEnAPI = async (formData, file) => {
     // Construir la URL del API
     const apiUrl = `https://cards.thenexusbattles2.cloud/api/heroes/`;
 
+    // Verificar si se proporcionó una imagen y configurar el encabezado
+    let headers = {};
+
+    if (file) {
+      headers = {
+        'Content-Type': 'multipart/form-data',
+        ...data.getHeaders(),
+      };
+    } else {
+      headers = data.getHeaders();
+    }
+
     // Realizar la solicitud PATCH al API para actualizar la carta
     const response = await fetch(apiUrl, {
       method: 'PATCH',
       body: data,
-      headers: {
-        ...data.getHeaders(),
-      },
+      headers: headers,
     });
-
+    
+    console.log('response:',response)
     return response;
   } catch (error) {
     throw error;
   }
 };
+
 
 export { obtenerHeroesApi, crearHeroeEnAPI, actualizarCartaEnAPI };

@@ -57,6 +57,9 @@ h1.mb-3{
 p.mb-3{
     font-size: 32px;
 }
+.col-12{
+    
+}
 
 .alert {
     text-align: center; /* Centrar el texto en la carta */
@@ -84,3 +87,10 @@ a.btn {
 .btn{
     background-image: url(/img/Rectangle.png);
 }
+
+.btn-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
