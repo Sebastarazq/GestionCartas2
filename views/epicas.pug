@@ -60,8 +60,8 @@ html(lang='en')
                       p Efecto Especial: No disponible
               div.row.botones_carta
                   div.col
-                    a(href=`/admin/seleccionactualizararmadura/${epica._id}`)
-                      button.button(href=`/admin/seleccionactualizararmadura/${epica._id}`) Modificar
+                    a(href=`/admin/seleccionactualizarepica/${epica._id}`)
+                      button.button(href=`/admin/seleccionactualizarepica/${epica._id}`) Modificar
                   div.col
                     button.button(type='button', data-epica-id=epica._id, onclick='cambiarEstadoEpica(event)') #{epica.estado ? 'Suspender' : 'Activar'}
 

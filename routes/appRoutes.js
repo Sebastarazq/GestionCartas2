@@ -6,7 +6,8 @@ mostrarArmas,mostrarFormularioActualizacionArma,mostrarFormularioCreacionEpica,c
 cambiarEstadoArma,crearHeroe, mostrarFormularioCreacion , mostrarFormularioActualizacion,actualizarCarta,cambiarEstadoEpica,
 cambiarEstadoHeroe, mostrarFormularioCreacionArmadura, crearArmadura, mostrarFormularioActualizacionArmadura, actualizarArmadura, 
 cambiarEstadoArmadura, mostrarItems, mostrarFormularioCreacionItem, crearItem, mostrarFormularioActualizacionItem, actualizarItem, cambiarEstadoItem,
-pasarIdaActualizar,mostrarFormularioActualizacionimg,pasarIdaActualizarArmadura,mostrarFormularioActualizacionimgArmadura} from "../controllers/appController.js";
+pasarIdaActualizar,mostrarFormularioActualizacionimg,pasarIdaActualizarArmadura,mostrarFormularioActualizacionimgArmadura,pasarIdaActualizarEpica,
+mostrarFormularioActualizacionimgEpica} from "../controllers/appController.js";
 
 const router = express.Router()
 
@@ -92,9 +93,14 @@ router.get('/admin/epicas',jwttoken, mostrarEpicas);
 router.get('/admin/crearepica',jwttoken, mostrarFormularioCreacionEpica);
 router.post('/admin/crearepica',jwttoken, multerMiddleware.single('imagen'), crearEpica); // Utiliza el middleware Multer
 
+router.get('/admin/seleccionactualizarepica/:Id',jwttoken,pasarIdaActualizarEpica);
+
+
 // Ruta para mostrar el formulario de epica de carta y enviarlo
+router.get('/admin/actualizarepicaimg/:Id',jwttoken, mostrarFormularioActualizacionimgEpica);
 router.get('/admin/actualizarepica/:Id',jwttoken, mostrarFormularioActualizacionEpica);
 router.post('/admin/actualizarepica/:Id',jwttoken, multerMiddleware.single('imagen'), actualizarEpica); // Utiliza el middleware Multer
+router.post('/admin/actualizarepicaimg/:Id',jwttoken, multerMiddleware.single('imagen'), actualizarEpica); // Utiliza el middleware Multer
 
 // Ruta para cambiar el estado de la epica
 router.post('/admin/cambiarestadoepica/:Id',jwttoken, cambiarEstadoEpica);
