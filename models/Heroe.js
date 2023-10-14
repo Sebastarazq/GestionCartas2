@@ -144,7 +144,9 @@ const actualizarCartaEnAPI = async (formData, file) => {
     const response = await fetch(apiUrl, {
       method: 'PATCH',
       body: data,
-      headers: headers,
+      headers: {
+        ...data.getHeaders()
+      },
     });
     
     console.log('response:',response)

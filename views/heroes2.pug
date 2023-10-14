@@ -66,8 +66,8 @@ html(lang='en')
                       p Tipo: #{hero.tipo}
                 div.row.botones_carta
                   div.col
-                    a(href=`/admin/actualizarcarta/${hero._id}`)
-                      button.button(href=`/admin/actualizarcarta/${hero._id}`) Modificar
+                    a(href=`/admin/actualizar/${hero._id}`)
+                      button.button(href=`/admin/actualizar/${hero._id}`) Modificar
                   div.col
                     button.button(type='button', data-hero-id=hero._id, onclick='cambiarEstadoHeroe(event)') #{hero.estado ? 'Suspender' : 'Activar'}
         // Fin del bucle para mostrar héroes

@@ -155,6 +155,8 @@ const actualizarEpicaEnAPI = async (formData, file) => {
         contentType: file.mimetype
       });
     }
+    console.log('data:',data)
+    //console.log('efecto:',efecto)
 
     // Construir la URL del API (asegúrate de incluir el ID en la URL para identificar la Épica específica)
     const apiUrl = `https://cards.thenexusbattles2.cloud/api/consumible/`;

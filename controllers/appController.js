@@ -587,6 +587,41 @@ const mostrarFormularioActualizacion = async (req, res) => {
     res.render('error'); // Renderizar una vista de error en caso de problemas
   }
 };
+const mostrarFormularioActualizacionimg = async (req, res) => {
+  try {
+    const idHero = req.params.Id; // Obtener el valor del parámetro :Id
+    console.log(idHero)
+
+    // Realizar una solicitud al API para obtener los datos del héroe específico por su ID
+    const apiUrl = `https://cards.thenexusbattles2.cloud/api/cartas/${idHero}`;
+    const response = await fetch(apiUrl, {
+      method: 'GET',
+      headers: {
+        'accept': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Error al consultar el API');
+    }
+
+    const heroData = await response.json();
+
+    if (!heroData) {
+      // Si no se encontró el héroe, puedes manejarlo adecuadamente aquí
+      return res.status(404).render('error', { error: 'Héroe no encontrado' });
+    }
+
+    // Pasar los datos del héroe a la vista
+    res.render('actualizarheroeimg', {
+      pagina: 'Actualizar Img',
+      hero: heroData, // Enviar los datos del héroe a la vista
+    });
+  } catch (error) {
+    console.error(error);
+    res.render('error'); // Renderizar una vista de error en caso de problemas
+  }
+};
 
 
 // Controlador para actualizar una carta en el API
@@ -932,6 +967,16 @@ const cambiarEstadoItem = async (req, res) => {
   }
 };
 
+const pasarIdaActualizar = (req, res) => {
+  const cartaId = req.params.Id; // Obtener el ID de la Épica de los parámetros
+
+  res.render('actualizar', {
+    pagina: 'Seleccion a actualizar',
+    cartaid: cartaId, // Enviar el ID de la Épica a la vista
+  });
+};
+
+
 
 export {
   inicio,
@@ -967,4 +1012,6 @@ export {
   mostrarFormularioActualizacionItem,
   actualizarItem,
   cambiarEstadoItem,
+  pasarIdaActualizar,
+  mostrarFormularioActualizacionimg
 };
