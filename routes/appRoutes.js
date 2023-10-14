@@ -24,7 +24,6 @@ router.get('/admin/heroes',jwttoken,mostrarHeroes);
 
 // Ruta para mostrar el formulario de creación de carta y enviarlo
 router.get('/admin/actualizar/:Id',jwttoken,pasarIdaActualizar);
-router.get('/admin/seleccionactualizararmadura/:Id',jwttoken,pasarIdaActualizarArmadura);
 
 //---
 router.get('/admin/crearcarta', jwttoken,mostrarFormularioCreacion);
@@ -46,6 +45,8 @@ router.get('/admin/armaduras',jwttoken, mostrarArmaduras);
 // Ruta para mostrar el formulario de armadura de carta y enviarlo
 router.get('/admin/creararmadura',jwttoken, mostrarFormularioCreacionArmadura);
 router.post('/admin/creararmadura',jwttoken, multerMiddleware.single('imagen'), crearArmadura); // Utiliza el middleware Multer
+
+router.get('/admin/seleccionactualizararmadura/:Id',jwttoken,pasarIdaActualizarArmadura);
 
 // Ruta para mostrar el formulario de actualizar armadura y enviarlo
 router.get('/admin/actualizararmaduraimg/:Id',jwttoken, mostrarFormularioActualizacionimgArmadura);
