@@ -7,7 +7,7 @@ cambiarEstadoArma,crearHeroe, mostrarFormularioCreacion , mostrarFormularioActua
 cambiarEstadoHeroe, mostrarFormularioCreacionArmadura, crearArmadura, mostrarFormularioActualizacionArmadura, actualizarArmadura, 
 cambiarEstadoArmadura, mostrarItems, mostrarFormularioCreacionItem, crearItem, mostrarFormularioActualizacionItem, actualizarItem, cambiarEstadoItem,
 pasarIdaActualizar,mostrarFormularioActualizacionimg,pasarIdaActualizarArmadura,mostrarFormularioActualizacionimgArmadura,pasarIdaActualizarEpica,
-mostrarFormularioActualizacionimgEpica} from "../controllers/appController.js";
+mostrarFormularioActualizacionimgEpica, pasarIdaActualizarArma, mostrarFormularioActualizacionimgArma, pasarIdaActualizarItem, mostrarFormularioActualizacionimgItem} from "../controllers/appController.js";
 
 const router = express.Router()
 
@@ -25,6 +25,9 @@ router.get('/admin/heroes',jwttoken,mostrarHeroes);
 
 // Ruta para mostrar el formulario de creación de carta y enviarlo
 router.get('/admin/actualizar/:Id',jwttoken,pasarIdaActualizar);
+router.get('/admin/seleccionactualizararmadura/:Id',jwttoken,pasarIdaActualizarArmadura);
+router.get('/admin/seleccionactualizararma/:Id',jwttoken,pasarIdaActualizarArma);
+router.get('/admin/seleccionactualizaritem/:Id',jwttoken,pasarIdaActualizarItem);
 
 //---
 router.get('/admin/crearcarta', jwttoken,mostrarFormularioCreacion);
@@ -67,7 +70,9 @@ router.post('/admin/creararma',jwttoken, multerMiddleware.single('imagen'), crea
 
 // Ruta para mostrar el formulario de actualizar arma y enviarlo
 router.get('/admin/actualizararma/:Id',jwttoken, mostrarFormularioActualizacionArma);
+router.get('/admin/actualizararmaimg/:Id',jwttoken, mostrarFormularioActualizacionimgArma);
 router.post('/admin/actualizararma/:Id', jwttoken, multerMiddleware.single('imagen'), actualizarArma);
+router.post('/admin/actualizararmaimg/:Id', jwttoken, multerMiddleware.single('imagen'), actualizarArma);
 
 // Ruta para cambiar el estado de la arma
 router.post('/admin/cambiarestadoarma/:Id',jwttoken, cambiarEstadoArma);
@@ -81,7 +86,9 @@ router.post('/admin/crearitem',jwttoken, multerMiddleware.single('imagen'), crea
 
 // Ruta para mostrar el formulario de actualizar Items y enviarlo
 router.get('/admin/actualizaritem/:Id',jwttoken, mostrarFormularioActualizacionItem);
+router.get('/admin/actualizaritemimg/:Id',jwttoken, mostrarFormularioActualizacionimgItem);
 router.post('/admin/actualizaritem/:Id',jwttoken, multerMiddleware.single('imagen'), actualizarItem);
+router.post('/admin/actualizaritemimg/:Id',jwttoken, multerMiddleware.single('imagen'), actualizarItem);
 
 // Ruta para cambiar el estado de la Items
 router.post('/admin/cambiarestadoitem/:Id',jwttoken, cambiarEstadoItem);

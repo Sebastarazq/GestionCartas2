@@ -365,6 +365,42 @@ const crearArma = async (req, res) => {
   }
 };
 
+const mostrarFormularioActualizacionimgArma = async (req, res) => {
+  try {
+    const idArma = req.params.Id; // Obtener el valor del parámetro :Id
+    console.log(idArma)
+
+    // Realizar una solicitud al API para obtener los datos del héroe específico por su ID
+    const apiUrl = `https://cards.thenexusbattles2.cloud/api/cartas/${idArma}`;
+    const response = await fetch(apiUrl, {
+      method: 'GET',
+      headers: {
+        'accept': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Error al consultar el API');
+    }
+
+    const armaData = await response.json();
+
+    if (!armaData) {
+      // Si no se encontró el héroe, puedes manejarlo adecuadamente aquí
+      return res.status(404).render('error', { error: 'Arma no encontrada' });
+    }
+
+    // Pasar los datos del héroe a la vista
+    res.render('actualizararmaimg', {
+      pagina: 'Actualizar Img',
+      arma: armaData, // Enviar los datos del héroe a la vista
+    });
+  } catch (error) {
+    console.error(error);
+    res.render('error'); // Renderizar una vista de error en caso de problemas
+  }
+};
+
 const mostrarFormularioActualizacionArma = async (req, res) => {
   try {
     const idArma = req.params.Id; // Obtener el valor del parámetro :Id
@@ -810,6 +846,42 @@ const crearItem = async (req, res) => {
   }
 };
 
+const mostrarFormularioActualizacionimgItem = async (req, res) => {
+  try {
+    const idItem = req.params.Id; // Obtener el valor del parámetro :Id
+    console.log(idItem)
+
+    // Realizar una solicitud al API para obtener los datos del héroe específico por su ID
+    const apiUrl = `https://cards.thenexusbattles2.cloud/api/cartas/${idItem}`;
+    const response = await fetch(apiUrl, {
+      method: 'GET',
+      headers: {
+        'accept': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Error al consultar el API');
+    }
+
+    const itemData = await response.json();
+
+    if (!itemData) {
+      // Si no se encontró el héroe, puedes manejarlo adecuadamente aquí
+      return res.status(404).render('error', { error: 'Item no encontrado' });
+    }
+
+    // Pasar los datos del héroe a la vista
+    res.render('actualizaritemimg', {
+      pagina: 'Actualizar Img',
+      item: itemData, // Enviar los datos del héroe a la vista
+    });
+  } catch (error) {
+    console.error(error);
+    res.render('error'); // Renderizar una vista de error en caso de problemas
+  }
+};
+
 const mostrarFormularioActualizacionItem = async (req, res) => {
   try {
     const idItem = req.params.Id; // Obtener el valor del parámetro :Id
@@ -959,6 +1031,28 @@ const mostrarFormularioActualizacionimgEpica = async (req, res) => {
     res.render('error'); // Renderizar una vista de error en caso de problemas
   }
 };
+const pasarIdaActualizarArma = (req, res) => {
+  const cartaId = req.params.Id; // Obtener el ID de la Épica de los parámetros
+
+
+  res.render('actualizarseleccionarma', {
+    pagina: 'Seleccion a actualizar',
+  
+    cartaid: cartaId, // Enviar el ID de la Épica a la vista
+  });
+};
+
+const pasarIdaActualizarItem = (req, res) => {
+  const cartaId = req.params.Id; // Obtener el ID de la Épica de los parámetros
+
+
+  res.render('actualizarseleccionitem', {
+    pagina: 'Seleccion a actualizar',
+  
+    cartaid: cartaId, // Enviar el ID de la Épica a la vista
+  });
+};
+
 
 
 export {
@@ -1000,5 +1094,9 @@ export {
   pasarIdaActualizarArmadura,
   mostrarFormularioActualizacionimgArmadura,
   pasarIdaActualizarEpica,
-  mostrarFormularioActualizacionimgEpica
+  mostrarFormularioActualizacionimgEpica,
+  pasarIdaActualizarArma,
+  mostrarFormularioActualizacionimgArma,
+  pasarIdaActualizarItem,
+  mostrarFormularioActualizacionimgItem
 };

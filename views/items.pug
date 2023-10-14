@@ -60,8 +60,8 @@ html(lang='en')
                       p Efecto del Héroe: No disponible
               div.row.botones_carta
                   div.col
-                    a(href=`/admin/actualizaritem/${item._id}`)
-                      button.button(href=`/admin/actualizaritem/${item._id}`) Modificar
+                    a(href=`/admin/seleccionactualizaritem/${item._id}`)
+                      button.button(href=`/admin/seleccionactualizaritem/${item._id}`) Modificar
                   div.col
                     button.button(type='button', data-item-id=item._id, onclick='cambiarEstadoItem(event)') #{item.estado ? 'Suspender' : 'Activar'}
 
