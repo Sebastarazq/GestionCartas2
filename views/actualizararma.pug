@@ -33,7 +33,7 @@ html(lang='es')
             i.bi.bi-list
     // form-container
     .container.form-container
-      h1.mt-5.text-lg-center Formulario de Arma
+      h1.mt-5.text-lg-center Formulario de Arma  #{arma ? arma.nombre : 'Héroe'}
       form.card-form(action=`/admin/actualizararma/${arma._id}`, method='post')
         input(type='hidden', name='id', value=arma ? arma._id : '')
         // Fila 1
@@ -74,11 +74,6 @@ html(lang='es')
         // Fila 4
         .row.mb-3
           .col-md-6
-            label.form-label(for='imagen') Imagen:
-            input.form-control(type='file', id='imagen', name='imagen', accept='image/*')
-        // Fila 5
-        .row.mb-3
-          .col-md-6
             label.form-label(for='estadistica') Estadística de Efecto:
             select.form-select(name='estadistica', id='estadistica', required)
               option(value='Defensa' selected=arma.efecto.estadistica === 'Defensa') Defensa
@@ -91,7 +86,7 @@ html(lang='es')
               option(value='2' selected=arma.efecto.valorAfectado === 2) +2
               option(value='3' selected=arma.efecto.valorAfectado === 3) +3
               option(value='4' selected=arma.efecto.valorAfectado === 4) +4
-        // Fila 6
+        // Fila 5
         .row.mb-3
           .col-md-6
             label.form-label(for='efectoIdEstrategia') ID de Estrategia de Efecto:
@@ -106,7 +101,7 @@ html(lang='es')
               option(value='2' selected=arma.efecto.turnosValidos === 2) +2
               option(value='3' selected=arma.efecto.turnosValidos === 3) +3
               option(value='4' selected=arma.efecto.turnosValidos === 4) +4
-        // Fila 7
+        // Fila 6
         .row.mb-3
           .col-md-6
             label.form-label(for='stock') Stock:
