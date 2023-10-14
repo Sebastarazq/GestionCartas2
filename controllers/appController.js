@@ -2,7 +2,7 @@ import { obtenerHeroesApi,crearHeroeEnAPI,actualizarCartaEnAPI } from '../models
 import { obtenerArmadurasApi,crearArmaduraEnAPI,actualizarArmaduraEnAPI,cambiarEstadoArmaduraEnModelo } from '../models/Armadura.js'
 import ArmaModel from '../models/Arma.js';
 import ItemModel from '../models/Item.js';
-import EpicaModel from '../models/Epica.js';
+import {obtenerCartasEpicasApi, crearCartaEpicaEnAPI, actualizarEpicaEnAPI,cambiarEstadoEpicaEnModelo} from '../models/Epica.js';
 import axios from 'axios';
 import fetch from 'node-fetch';
 import FormData from 'form-data';
@@ -215,11 +215,73 @@ const mostrarItems = async (req, res) => {
 
 const mostrarEpicas = async (req, res) => {
   try {
-    const page = parseInt(req.query.page) || 1; // Obtén el número de página de la consulta
-    const ITEMS_PER_PAGE = 3; // Define la cantidad de cartas épicas por página
+    const page = parseInt(req.query.page) || 1;
+    const ITEMS_PER_PAGE = 3;
 
-    // Realiza una solicitud al API para obtener todas las cartas épicas
-    const apiUrl = `https://cards.thenexusbattles2.cloud/api/cartas/?size=1000&page=1&coleccion=Epicas&onlyActives=false`;
+    // Obtener las cartas épicas desde el API utilizando la función del modelo
+    const allCartasEpicas = await obtenerCartasEpicasApi();
+
+    const startIndex = (page - 1) * ITEMS_PER_PAGE;
+    const endIndex = startIndex + ITEMS_PER_PAGE;
+    const currentCartasEpicas = allCartasEpicas.slice(startIndex, endIndex);
+
+    const totalCartasEpicas = allCartasEpicas.length;
+    const totalPages = Math.ceil(totalCartasEpicas / ITEMS_PER_PAGE);
+
+    res.render('epicas', {
+      pagina: 'Gestión de Cartas Épicas',
+      epicas: currentCartasEpicas,
+      currentPage: page,
+      totalPages: totalPages,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+};
+
+
+const mostrarFormularioCreacionEpica = (req, res) => {
+  res.render('crearepica', {
+    pagina: 'Crear Épica',
+  });
+};
+
+const crearEpica = async (req, res) => {
+  try {
+    // Obtener los datos del formulario y el archivo
+    const formData = req.body;
+    const file = req.file;
+
+    // Llama a la función del modelo para crear la carta épica en el API
+    const response = await crearCartaEpicaEnAPI(formData, file);
+
+    if (response.ok) {
+      // Creación exitosa
+      const tituloExitoso = 'Creación de Carta Épica';
+      const mensajeExitoso = 'Carta épica creada correctamente.';
+      return res.render('anuncioepica', { cartaEpica: true, tituloExitoso, mensajeExitoso });
+    } else {
+      // Error en la creación
+      const mensajeError = 'Error al crear la carta épica';
+      return res.render('anuncioepica', { cartaEpica: false, errorMessage: mensajeError });
+    }
+  } catch (error) {
+    console.error(error);
+
+    // Renderiza la vista 'anuncioepica' con un mensaje de error genérico
+    const mensajeError = 'Hubo un error al procesar la solicitud. Por favor, inténtalo de nuevo más tarde.';
+    return res.render('anuncioepica', { cartaEpicaCreada: false, errorMessage: mensajeError });
+  }
+};
+
+
+const mostrarFormularioActualizacionEpica = async (req, res) => {
+  try {
+    const idEpica = req.params.Id; // Obtener el valor del parámetro :Id
+
+    // Realizar una solicitud al API para obtener los datos de la épica específica por su ID
+    const apiUrl = `https://cards.thenexusbattles2.cloud/api/cartas/${idEpica}`;
     const response = await fetch(apiUrl, {
       method: 'GET',
       headers: {
@@ -231,100 +293,17 @@ const mostrarEpicas = async (req, res) => {
       throw new Error('Error al consultar el API');
     }
 
-    const data = await response.json();
-    const allEpicas = data;
+    const epicaData = await response.json();
 
-    const startIndex = (page - 1) * ITEMS_PER_PAGE;
-    const endIndex = startIndex + ITEMS_PER_PAGE;
-    const currentEpicas = allEpicas.slice(startIndex, endIndex);
-
-    // Calcula el número total de páginas en función de la cantidad total de cartas épicas
-    const totalEpicas = allEpicas.length;
-    const totalPages = Math.ceil(totalEpicas / ITEMS_PER_PAGE);
-
-    res.render('epicas', {
-      pagina: 'Gestion cartas épicas',
-      epicas: currentEpicas, // Pasa los datos de la página actual a la vista
-      currentPage: page,
-      totalPages: totalPages
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Error interno del servidor' });
-  }
-};
-
-const mostrarFormularioCreacionEpica = (req, res) => {
-  res.render('crearepica', {
-    pagina: 'Crear Épica',
-  });
-};
-
-const crearEpica = async (req, res) => {
-  try {
-    // Obtén los datos del formulario
-    const formData = req.body;
-    const file = req.file; // El archivo subido
-
-    // Construye la URL de la imagen
-    const urlImagen = `https://store.thenexusbattles2.cloud/imgcards/img/${file.filename}`;
-
-    console.log('formData:', formData);
-
-    // Crea una nueva carta épica utilizando el modelo
-    const nuevaEpica = new EpicaModel({
-      urlImagen,
-      heroe: formData.heroe,
-      nombre: formData.nombre,
-      efectoGlobal: {
-        case: formData['efectoGlobal.case'],
-        statEffect: formData['efectoGlobal.statEffect'],
-        stat: formData['efectoGlobal.stat'],
-        target: formData['efectoGlobal.target'],
-        turnCount: formData['efectoGlobal.turnCount'],
-      },
-      efectoHeroe: {
-        case: formData['efectoHeroe.case'],
-        statEffect: formData['efectoHeroe.statEffect'],
-        stat: formData['efectoHeroe.stat'],
-        target: formData['efectoHeroe.target'],
-        turnCount: formData['efectoHeroe.turnCount'],
-      },
-      activo: formData.activo === 'true',
-      desc: formData.desc,
-    });
-
-    console.log('Épica creada:', nuevaEpica);
-
-    // Guarda la nueva carta épica en la base de datos
-    await nuevaEpica.save();
-
-    // Redirige al usuario a otra página o muestra un mensaje de éxito
-    res.send('<script>alert("Épica creada exitosamente!"); window.location.href = "/admin/epicas";</script>');
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Error al crear la Épica' });
-  }
-};
-
-const mostrarFormularioActualizacionEpica = async (req, res) => {
-  try {
-    const idEpica = req.params.Id; // Obtener el valor del parámetro :id
-
-    console.log('ID de la épica a actualizar:', idEpica); // Agregar este registro para verificar el ID
-
-    const epica = await EpicaModel.findById(idEpica); // Obtener una épica por su ID
-
-    console.log('Épica encontrada:', epica); // Agregar este registro para verificar la épica
-
-    if (!epica) {
+    if (!epicaData) {
       // Si no se encontró la épica, puedes manejarlo adecuadamente aquí
       return res.status(404).render('error', { error: 'Épica no encontrada' });
     }
 
+    // Pasar los datos de la épica al formulario de actualización
     res.render('actualizarepica', {
       pagina: 'Actualizar Épica',
-      epica: epica, // Enviar la épica específica a la vista
+      epica: epicaData, // Enviar los datos de la épica a la vista
     });
   } catch (error) {
     console.error(error);
@@ -333,97 +312,56 @@ const mostrarFormularioActualizacionEpica = async (req, res) => {
 };
 
 
+
 const actualizarEpica = async (req, res) => {
   try {
-    const idEpica = req.params.Id; // Obtener el valor del parámetro :id
-    const formData = req.body; // Obtener los datos del formulario
+    const formData = req.body;
+    const file = req.file; // Obtener el archivo del formulario si se proporcionó
 
-    // Obtener la URL de la imagen existente (por defecto)
-    let urlImagen = formData.urlImagen;
+    // Llama a la función del modelo para actualizar la Épica en el API
+    const response = await actualizarEpicaEnAPI(formData, file);
 
-    // Si se proporciona una nueva imagen, guarda la URL de la nueva imagen
-    if (req.file) {
-      // Construye la URL de la imagen actualizada
-      const baseUrl = 'https://store.thenexusbattles2.cloud/imgcards'; // Cambia esto según la configuración de tu servidor
-      urlImagen = `${baseUrl}/img/${req.file.filename}`;
+    if (response.ok) {
+      console.log('Carta actualizada con éxito.');
+      const tituloExitoso = 'Actualización de Épica';
+      const mensajeExitoso = 'Actualizada correctamente.';
+      return res.render('anuncioepica', { cartaEpica: true, tituloExitoso, mensajeExitoso });
+    } else {
+      // Hubo un error en la actualización de la Épica
+      const mensajeError = 'Error al actualizar la Épica';
+      return res.render('anuncioepica', { cartaEpica: false, errorMessage: mensajeError });
     }
-
-    // Construye un objeto con los datos actualizados
-    const updatedData = {
-      urlImagen,
-      heroe: formData.heroe,
-      nombre: formData.nombre,
-      efectoGlobal: {
-        case: formData['efectoGlobal.case'],
-        statEffect: formData['efectoGlobal.statEffect'],
-        stat: formData['efectoGlobal.stat'],
-        target: formData['efectoGlobal.target'],
-        turnCount: formData['efectoGlobal.turnCount'],
-      },
-      efectoHeroe: {
-        case: formData['efectoHeroe.case'],
-        statEffect: formData['efectoHeroe.statEffect'],
-        stat: formData['efectoHeroe.stat'],
-        target: formData['efectoHeroe.target'],
-        turnCount: formData['efectoHeroe.turnCount'],
-      },
-      activo: formData.activo === 'true',
-      desc: formData.desc,
-    };
-
-    // Actualiza los datos de la épica en la base de datos
-    await EpicaModel.findByIdAndUpdate(idEpica, updatedData);
-
-    console.log('Épica actualizada con éxito.');
-
-    // Agregar un script de alert después de la redirección
-    res.send('<script>alert("Épica actualizada con éxito."); window.location.href = "/admin/epicas/";</script>');
   } catch (error) {
     console.error(error);
-    res.render('error'); // Renderiza una vista de error en caso de problemas
+
+    // Renderiza la vista 'anuncioepica' con un mensaje de error
+    const mensajeError = 'Hubo un error al procesar la solicitud. Por favor, inténtalo de nuevo más tarde.';
+    return res.render('anuncioepica', { cartaEpica: false, errorMessage: mensajeError });
   }
 };
 
+
 const cambiarEstadoEpica = async (req, res) => {
   try {
-    const epicaId = req.params.Id; // Obtener el ID de la épica de los parámetros
-    console.log('ID de la épica:', epicaId);
+    const epicaId = req.params.Id; // Obtener el ID de la Épica de los parámetros
+    console.log('ID de la Épica:', epicaId);
 
     const nuevoEstado = req.query.estado; // Obtener el estado de la consulta
     console.log('Estado recibido:', nuevoEstado);
 
-    // Crear un objeto FormData y agregar los datos a él
-    const formData = new FormData();
-    formData.append('id', epicaId); // Agregar el ID al FormData
-    formData.append('estado', nuevoEstado); // Agregar el estado al FormData
+    const cambioExitoso = await cambiarEstadoEpicaEnModelo(epicaId, nuevoEstado);
 
-    console.log('Datos en FormData:', formData);
-
-    // Construir la URL de la API externa de acuerdo a tu configuración
-    const apiUrl = `https://cards.thenexusbattles2.cloud/api/consumible/`; // Ajusta la URL según tus necesidades
-
-    console.log('URL de la API externa:', apiUrl);
-
-    // Realizar la solicitud PATCH a la API externa para cambiar el estado de la épica
-    const response = await fetch(apiUrl, {
-      method: 'PATCH',
-      body: formData,
-    });
-
-    console.log('Respuesta del fetch:', response);
-
-    if (response.ok) {
-      // Cambio de estado exitoso en la API externa
-      return res.status(200).json({ message: 'Estado de la épica actualizado exitosamente en la API externa' });
+    if (cambioExitoso) {
+      return res.status(200).json({ message: 'Estado de la Épica actualizado exitosamente en el modelo' });
     } else {
-      // Error en el cambio de estado en la API externa
-      return res.status(500).json({ error: 'Error al cambiar el estado de la épica en la API externa' });
+      return res.status(500).json({ error: 'Error al cambiar el estado de la Épica en el modelo' });
     }
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Error al cambiar el estado de la épica' });
+    res.status(500).json({ error: 'Error al cambiar el estado de la Épica' });
   }
 };
+
 
 const mostrarFormularioCreacionArma = (req, res) => {
   res.render('creararma', {
@@ -798,6 +736,7 @@ const actualizarArmadura = async (req, res) => {
     const response = await actualizarArmaduraEnAPI(formData, file);
 
     if (response.ok) {
+      console.log('Carta actualizada con éxito.');
       const tituloExitoso = 'Actualización de Armadura';
       const mensajeExitoso = 'Actualizada correctamente.';
       return res.render('anuncioarmadura', { armaduraCreada: true, tituloExitoso, mensajeExitoso });

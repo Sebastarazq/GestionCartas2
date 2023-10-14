@@ -81,11 +81,11 @@ router.get('/admin/epicas',jwttoken, mostrarEpicas);
 
 // Ruta para mostrar el formulario de epica de carta y enviarlo
 router.get('/admin/crearepica',jwttoken, mostrarFormularioCreacionEpica);
-router.post('/admin/crearepica',jwttoken, multerMiddleware.single('urlImagen'), crearEpica); // Utiliza el middleware Multer
+router.post('/admin/crearepica',jwttoken, multerMiddleware.single('imagen'), crearEpica); // Utiliza el middleware Multer
 
 // Ruta para mostrar el formulario de epica de carta y enviarlo
 router.get('/admin/actualizarepica/:Id',jwttoken, mostrarFormularioActualizacionEpica);
-router.post('/admin/actualizarepica/:Id',jwttoken, multerMiddleware.single('urlImagen'), actualizarEpica); // Utiliza el middleware Multer
+router.post('/admin/actualizarepica/:Id',jwttoken, multerMiddleware.single('imagen'), actualizarEpica); // Utiliza el middleware Multer
 
 // Ruta para cambiar el estado de la epica
 router.post('/admin/cambiarestadoepica/:Id',jwttoken, cambiarEstadoEpica);

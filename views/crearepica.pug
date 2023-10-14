@@ -3,56 +3,146 @@ html(lang='es')
   head
     meta(charset='UTF-8')
     meta(name='viewport', content='width=device-width,initial-scale=1')
-    title Formulario Épica
-    link(rel='stylesheet', href='/css/crearCarta.css')
+    title Crear Épica
+    link(rel='stylesheet', href='/css/formularios.css')
+    link(rel='stylesheet', href='https://unpkg.com/boxicons@latest/css/boxicons.min.css')
+    link(href='https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css', rel='stylesheet')
+    link(rel='icon', href='/img/favicon/favicon.ico', type='image/x-icon')
   body
-    .banner
-      main
-        img(src='/img/banner.png', alt='banner')
-        h1 CREACIÓN DE ÉPICA
-    .container
-      header
-        h1 Crear nueva Épica
+    // navbar
+    nav.navbar.navbar-expand-lg.navbar-dark.bg-dark.navbar-background
+      .container
+        a.navbar-brand(href='/admin/epicas')
+          img(src='/img/back.png', alt='Volver', class='back')
+        button.navbar-toggler(type='button', data-bs-toggle='collapse', data-bs-target='#navbarNav', aria-controls='navbarNav', aria-expanded='false', aria-label='Toggle navigation')
+          span
+            img.menu(src='/img/menu.png', alt='')
+        .collapse.navbar-collapse#navbarNav
+          ul.navbar-nav
+            li.nav-item
+              a.nav-link.text-white(href='/admin/heroes') Héroe
+            li.nav-item
+              a.nav-link.text-white(href='/admin/armas') Arma
+            li.nav-item
+              a.nav-link.text-white(href='/admin/armaduras') Armadura
+            li.nav-item
+              a.nav-link.text-white(href='/admin/items') Ítem
+            li.nav-item
+              a.nav-link.text-white(href='/admin/epicas') Épica
+          a.nav-link(href='#', id='toggle-collapse')
+            i.bi.bi-list
+    // form-container
+    .container.form-container
+      h1.mt-5.text-lg-center Formulario de Épica
       form.card-form(action='/admin/crearepica', method='post', enctype='multipart/form-data')
-        label(for='urlImagen')
-          span.custom-upload-button Subir imagen:
-          input(type='file', name='urlImagen', id='urlImagen', accept='image/*', required, style='position: absolute; opacity: 0;')
-          span.file-name(id='file-name-span')
-        label(for='heroe') Héroe:
-        select(name='heroe', id='heroe', required)
-          option(value='Guerrero Tanque') Guerrero Tanque
-          option(value='Guerrero Armas') Guerrero Armas
-          option(value='Mago Fuego') Mago Fuego
-          option(value='Mago Hielo') Mago Hielo
-          option(value='Pícaro Veneno') Pícaro Veneno
-          option(value='Pícaro Machete') Pícaro Machete
-        label(for='nombre') Nombre:
-        input(type='text', name='nombre', id='nombre', required)
-        label(for='efectoGlobal.case') Efecto Global - Case:
-        input(type='number', name='efectoGlobal.case', id='efectoGlobal.case', required)
-        label(for='efectoGlobal.statEffect') Efecto Global - Stat Effect:
-        input(type='number', name='efectoGlobal.statEffect', id='efectoGlobal.statEffect', required)
-        label(for='efectoGlobal.stat') Efecto Global - Stat:
-        input(type='text', name='efectoGlobal.stat', id='efectoGlobal.stat', required)
-        label(for='efectoGlobal.target') Efecto Global - Target:
-        input(type='text', name='efectoGlobal.target', id='efectoGlobal.target', required)
-        label(for='efectoGlobal.turnCount') Efecto Global - Turn Count:
-        input(type='number', name='efectoGlobal.turnCount', id='efectoGlobal.turnCount', required)
-        label(for='efectoHeroe.case') Efecto Héroe - Case:
-        input(type='number', name='efectoHeroe.case', id='efectoHeroe.case', required)
-        label(for='efectoHeroe.statEffect') Efecto Héroe - Stat Effect:
-        input(type='number', name='efectoHeroe.statEffect', id='efectoHeroe.statEffect', required)
-        label(for='efectoHeroe.stat') Efecto Héroe - Stat:
-        input(type='text', name='efectoHeroe.stat', id='efectoHeroe.stat', required)
-        label(for='efectoHeroe.target') Efecto Héroe - Target:
-        input(type='text', name='efectoHeroe.target', id='efectoHeroe.target', required)
-        label(for='efectoHeroe.turnCount') Efecto Héroe - Turn Count:
-        input(type='number', name='efectoHeroe.turnCount', id='efectoHeroe.turnCount', required)
-        label(for='activo') Activo:
-        select(name='activo', id='activo', required)
-          option(value='true') Activo
-          option(value='false') Inactivo
-        label(for='desc') Descripción:
-        textarea(name='desc', id='desc', required)
-        button(type='submit') Crear Épica
-  script(src="/js/scriptImagen.js")
+        // Fila 1
+        .row.mb-3
+          .col-md-6
+            label.form-label(for='nombre') Nombre:
+            input.form-control(type='text', id='nombre', name='nombre', required)
+          .col-md-6
+            label.form-label(for='descripcion') Descripción:
+            input.form-control(type='text', id='descripcion', name='descripcion', required)
+        // Fila 2
+        .row.mb-3
+          .col-md-6
+            label.form-label(for='precio') Precio:
+            input.form-control(type='number', id='precio', name='precio', required)
+          .col-md-6
+            label.form-label(for='tipo') Tipo:
+            select.form-select(name='tipo', id='tipo', required)
+              option(value='Tanque') Tanque
+              option(value='Armas') Armas
+              option(value='Fuego') Fuego
+              option(value='Hielo') Hielo
+              option(value='Veneno') Veneno
+              option(value='Machete') Machete
+        // Fila 3
+        .row.mb-3
+          .col-md-6
+            label.form-label(for='clase') Clase:
+            select.form-select(id='clase', name='clase', required)
+              option(value='Guerrero') Guerrero
+              option(value='Mago') Mago
+              option(value='Pícaro') Pícaro
+          .col-md-6
+            label.form-label(for='estado') Estado:
+            select.form-select(name='estado', id='estado', required)
+              option(value='true') Activo
+              option(value='false') Inactivo
+        // Fila 4
+        .row.mb-3
+          .col-md-6
+            label.form-label(for='imagen') Imagen:
+            input.form-control(type='file', id='imagen', name='imagen', accept='image/*')
+        // Fila 5
+        .row.mb-3
+          .col-md-6
+            label.form-label(for='estadistica') Estadística de Efecto:
+            select.form-select(name='estadistica', id='estadistica', required)
+              option(value='Ataque') Ataque
+              option(value='Vida') Vida
+              option(value='Poder') Poder
+              option(value='Daño') Daño
+          .col-md-6
+            label.form-label(for='efectoValorAfectado') Valor Afectado de Efecto:
+            select.form-select(id='efectoValorAfectado', name='efectoValorAfectado', required)
+              option(value='-1') -1
+              option(value='1') +1
+        // Fila 6
+        .row.mb-3
+          .col-md-6
+            label.form-label(for='efectoIdEstrategia') ID de Estrategia de Efecto:
+            select.form-select(id='efectoIdEstrategia', name='efectoIdEstrategia', required)
+              option(value='0' selected) AddBuff
+              option(value='1') AddDebuff
+          .col-md-6
+            label.form-label(for='efectoTurnosValidos') Turnos Válidos de Efecto:
+            select.form-select(id='efectoTurnosValidos', name='efectoTurnosValidos', required)
+              option(value='-1') Turno Permanente
+        // Fila 7
+        .row.mb-3
+          .col-md-6
+            label.form-label(for='stock') Stock:
+            input.form-control(type='number', id='stock', name='stock', required)
+          .col-md-6
+            label.form-label(for='descuento') Descuento:
+            input.form-control(type='number', id='descuento', name='descuento', required)
+        // Fila 8 (Campos específicos del Héroe)
+        .row.mb-3
+          .col-md-6
+            label.form-label(for='efectoHeroeEstadistica') Estadística de Efecto para el Héroe:
+            select.form-select(name='efectoHeroeEstadistica', id='efectoHeroeEstadistica', required)
+              option(value='Vida') Vida
+              option(value='Poder') Poder
+              option(value='Daño') Daño
+          .col-md-6
+            label.form-label(for='efectoHeroeIdEstrategia') ID de Estrategia de Efecto para el Héroe:
+            select.form-select(id='efectoHeroeIdEstrategia', name='efectoHeroeIdEstrategia', required)
+              option(value='6' selected) MoreLifeRnd
+              option(value='7') NullDamage
+              option(value='8') ReflectDamage
+        // Fila 9 (Campos adicionales)
+        .row.mb-3
+          .col-md-6
+            label.form-label(for='efectoHeroeTurnosValidos') Turnos Válidos de Efecto para el Héroe:
+            select.form-select(id='efectoHeroeTurnosValidos', name='efectoHeroeTurnosValidos', required)
+              option(value='-1') Turno Permanente
+          .col-md-6
+            label.form-label(for='efectoHeroeValorAfectado') Valor Afectado de Efecto para el Héroe:
+            select.form-select(id='efectoHeroeValorAfectado', name='efectoHeroeValorAfectado', required)
+              option(value='0') 0
+              option(value='1') +1
+              option(value='2') +2
+              option(value='3') +3
+              option(value='4') +4
+
+        // Botón de envío y cancelar
+        .row.mt-3(style="justify-content: center;")
+          .col-md-6
+            div.d-flex.justify-content-between.align-items-center
+              button.btn.btn-secondary(type='button') Cancelar
+              button.btn.btn-primary.ml-auto.top-0(type='submit') Enviar formulario
+
+    // bootstrap js link
+    script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js')
