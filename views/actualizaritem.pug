@@ -3,46 +3,127 @@ html(lang='es')
   head
     meta(charset='UTF-8')
     meta(name='viewport', content='width=device-width,initial-scale=1')
-    title Actualizar Item
-    link(rel='stylesheet', href='/css/crearCarta.css')
+    title Actualizar item
+    link(rel='stylesheet', href='/css/formularios.css')
+    link(rel='stylesheet', href='https://unpkg.com/boxicons@latest/css/boxicons.min.css')
+    link(href='https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css', rel='stylesheet')
+    link(rel='icon', href='/img/favicon/favicon.ico', type='image/x-icon')
   body
-    .banner
-      main
-        img(src='/img/banner.png', alt='banner')
-        h1 ACTUALIZACIÓN DE ITEM
-    .container
-      header
-        h1 Actualizar Item
-      form.card-form(action=`/admin/actualizaritem/${item._id}`, method='post', enctype='multipart/form-data')
-        label(for='urlImagen')
-            span.custom-upload-button Subir imagen:
-            input(type='file', name='urlImagen', id='urlImagen', accept='image/*', required, style='position: absolute; opacity: 0;')
-            span.file-name(id='file-name-span')
-        label(for='nombre') Nombre:
-        input(type='text', name='nombre', id='nombre', required, value=item.nombre)
-        label(for='tipoHeroe') Tipo de Héroe:
-        select(name='tipoHeroe', id='tipoHeroe', required)
-          option(value='Guerrero Tanque', selected=item.tipoHeroe === 'Guerrero Tanque') Guerrero Tanque
-          option(value='Guerrero Armas', selected=item.tipoHeroe === 'Guerrero Armas') Guerrero Armas
-          option(value='Mago Fuego', selected=item.tipoHeroe === 'Mago Fuego') Mago Fuego
-          option(value='Mago Hielo', selected=item.tipoHeroe === 'Mago Hielo') Mago Hielo
-          option(value='Pícaro Veneno', selected=item.tipoHeroe === 'Pícaro Veneno') Pícaro Veneno
-          option(value='Pícaro Machete', selected=item.tipoHeroe === 'Pícaro Machete') Pícaro Machete
-        label(for='efecto.case') Efecto - Case:
-        input(type='number', name='efecto.case', id='efectoCase', required, value=item.efecto.case)
-        label(for='efecto.statEffect') Efecto - Stat Effect:
-        input(type='number', name='efecto.statEffect', id='efectoStatEffect', required, value=item.efecto.statEffect)
-        label(for='efecto.stat') Efecto - Stat:
-        input(type='text', name='efecto.stat', id='efectoStat', required, value=item.efecto.stat)
-        label(for='efecto.target') Efecto - Target:
-        input(type='text', name='efecto.target', id='efectoTarget', required, value=item.efecto.target)
-        label(for='efecto.turnCount') Efecto - Turn Count:
-        input(type='number', name='efecto.turnCount', id='efectoTurnCount', required, value=item.efecto.turnCount)
-        label(for='activo') Activo:
-        select(name='activo', id='activo', required)
-          option(value='true', selected=item.activo) Activo
-          option(value='false', selected=!item.activo) Inactivo
-        label(for='desc') Descripción:
-        textarea(name='desc', id='desc', required)= item.desc
-        button(type='submit') Actualizar Item
-  script(src="/js/scriptImagen.js")
+    // navbar
+    nav.navbar.navbar-expand-lg.navbar-dark.bg-dark.navbar-background
+      .container
+        a.navbar-brand(href='/admin/items')
+          img(src='/img/back.png', alt='Volver', class='back')
+        button.navbar-toggler(type='button', data-bs-toggle='collapse', data-bs-target='#navbarNav', aria-controls='navbarNav', aria-expanded='false', aria-label='Toggle navigation')
+          span
+            img.menu(src='/img/menu.png', alt='')
+        .collapse.navbar-collapse#navbarNav
+          ul.navbar-nav
+            li.nav-item
+              a.nav-link.text-white(href='/admin/heroes') Héroe
+            li.nav-item
+              a.nav-link.text-white(href='/admin/armas') Arma
+            li.nav-item
+              a.nav-link.text-white(href='/admin/armaduras') Armadura
+            li.nav-item
+              a.nav-link.text-white(href='/admin/items') Ítem
+            li.nav-item
+              a.nav-link.text-white(href='/admin/epicas') Épica
+          a.nav-link(href='#', id='toggle-collapse')
+            i.bi.bi-list
+    // form-container
+    .container.form-container
+      h1.mt-5.text-lg-center Formulario de Item
+      form.card-form(action=`/admin/actualizaritem/${item._id}`, method='post')
+        input(type='hidden', name='id', value=item ? item._id : '')
+        // Fila 1
+        .row.mb-3
+          .col-md-6
+            label.form-label(for='nombre') Nombre:
+            input.form-control(type='text', id='nombre', name='nombre', value=item.nombre, required)
+          .col-md-6
+            label.form-label(for='descripcion') Descripción:
+            input.form-control(type='text', id='descripcion', name='descripcion', value=item.descripcion)
+        // Fila 2
+        .row.mb-3
+          .col-md-6
+            label.form-label(for='precio') Precio:
+            input.form-control(type='number', id='precio', name='precio', value=item.precio, required)
+          .col-md-6
+            label.form-label(for='tipo') Tipo:
+            select.form-select(name='tipo', id='tipo', required disabled)
+              option(value='Tanque' selected=item.tipo === 'Tanque') Tanque
+              option(value='Armas' selected=item.tipo === 'Armas') Armas
+              option(value='Fuego' selected=item.tipo === 'Fuego') Fuego
+              option(value='Hielo' selected=item.tipo === 'Hielo') Hielo
+              option(value='Veneno' selected=item.tipo === 'Veneno') Veneno
+              option(value='Machete' selected=item.tipo === 'Machete') Machete
+        // Fila 3
+        .row.mb-3
+          .col-md-6
+            label.form-label(for='clase') Clase:
+            select.form-select(id='clase', name='clase', required disabled)
+              option(value='Guerrero' selected=item.clase === 'Guerrero') Guerrero
+              option(value='Mago' selected=item.clase === 'Mago') Mago
+              option(value='Pícaro' selected=item.clase === 'Pícaro') Pícaro
+          .col-md-6
+            label.form-label(for='estado') Estado:
+            select.form-select(name='estado', id='estado', required)
+              option(value='true' selected=item.estado === true) Activo
+              option(value='false' selected=item.estado === false) Inactivo
+        // Fila 4
+        .row.mb-3
+          .col-md-6
+            label.form-label(for='imagen') Imagen:
+            input.form-control(type='file', id='imagen', name='imagen', accept='image/*')
+        // Fila 5
+        .row.mb-3
+          .col-md-6
+            label.form-label(for='estadistica') Estadística de Efecto:
+            select.form-select(name='estadistica', id='estadistica', required)
+              option(value='Defensa' selected=item.efecto.estadistica === 'Defensa') Defensa
+              option(value='Defensa' selected=item.efecto.estadistica === 'Daño') Daño
+              option(value='Defensa' selected=item.efecto.estadistica === 'Ataque') Ataque
+          .col-md-6
+            label.form-label(for='efectoValorAfectado') Valor Afectado de Efecto:
+            select.form-select(id='efectoValorAfectado', name='efectoValorAfectado', required)
+              option(value='1' selected=item.efecto.valorAfectado === 1) +1
+              option(value='2' selected=item.efecto.valorAfectado === 2) +2
+              option(value='3' selected=item.efecto.valorAfectado === 3) +3
+              option(value='4' selected=item.efecto.valorAfectado === 4) +4
+        // Fila 6
+        .row.mb-3
+          .col-md-6
+            label.form-label(for='efectoIdEstrategia') ID de Estrategia de Efecto:
+            select.form-select(id='efectoIdEstrategia', name='efectoIdEstrategia', required)
+              option(value='0' selected=item.efecto.id_estrategia === 0) AddBuff
+              option(value='1' selected=item.efecto.id_estrategia === 1) AddDebuff
+              option(value='1' selected=item.efecto.id_estrategia === 2) LessAttackMoreDamage
+              option(value='1' selected=item.efecto.id_estrategia === 3) MoreDamageLessLife
+              option(value='1' selected=item.efecto.id_estrategia === 4) LessPowerOnXTurn
+              option(value='1' selected=item.efecto.id_estrategia === 5) MoreDamageOnObjectValid
+          .col-md-6
+            label.form-label(for='efectoTurnosValidos') Turnos Válidos de Efecto:
+            select.form-select(id='efectoTurnosValidos', name='efectoTurnosValidos', required)
+              option(value='-1' selected=item.efecto.turnosValidos === -1) Turno Permanente
+              option(value='1' selected=item.efecto.turnosValidos === 1) +1
+              option(value='2' selected=item.efecto.turnosValidos === 2) +2
+              option(value='3' selected=item.efecto.turnosValidos === 3) +3
+              option(value='4' selected=item.efecto.turnosValidos === 4) +4
+        // Fila 7
+        .row.mb-3
+          .col-md-6
+            label.form-label(for='stock') Stock:
+            input.form-control(type='number', id='stock', name='stock', value=item.stock, required)
+          .col-md-6
+            label.form-label(for='descuento') Descuento:
+            input.form-control(type='number', id='descuento', name='descuento', value=item.descuento, required)
+        // Botón de envío y cancelar
+        .row.mt-3(style="justify-content: center;")
+          .col-md-6
+            div.d-flex.justify-content-between.align-items-center
+              button.btn.btn-secondary(type='button') Cancelar
+              button.btn.btn-primary.ml-auto.top-0(type='submit') Actualizar item
+
+    // bootstrap js link
+    script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js')

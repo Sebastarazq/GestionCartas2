@@ -1,7 +1,7 @@
 import { obtenerHeroesApi,crearHeroeEnAPI,actualizarCartaEnAPI } from '../models/Heroe.js';
 import { obtenerArmadurasApi,crearArmaduraEnAPI,actualizarArmaduraEnAPI,cambiarEstadoArmaduraEnModelo } from '../models/Armadura.js'
-import ArmaModel from '../models/Arma.js';
-import ItemModel from '../models/Item.js';
+import { obtenerArmasApi,crearArmaEnAPI,actualizarArmaEnAPI,cambiarEstadoArmaEnModelo } from '../models/Arma.js'
+import { obtenerItemsApi,crearItemEnAPI,actualizarItemEnAPI,cambiarEstadoItemEnModelo } from '../models/Item.js';
 import {obtenerCartasEpicasApi, crearCartaEpicaEnAPI, actualizarEpicaEnAPI,cambiarEstadoEpicaEnModelo} from '../models/Epica.js';
 import axios from 'axios';
 import fetch from 'node-fetch';
@@ -133,28 +133,13 @@ const mostrarArmas = async (req, res) => {
     const page = parseInt(req.query.page) || 1; // Obtén el número de página de la consulta
     const ITEMS_PER_PAGE = 3; // Define la cantidad de armas por página
 
-    // Realiza una solicitud al API para obtener todas las armas
-    const apiUrl = `https://cards.thenexusbattles2.cloud/api/cartas/?size=1000&page=1&coleccion=Armas&onlyActives=false`;
-    const response = await fetch(apiUrl, {
-      method: 'GET',
-      headers: {
-        'accept': 'application/json',
-      },
-    });
+    // Obtener las armaduras desde el API utilizando la función del modelo
+    const allArmas = await obtenerArmasApi(); // Pasa el número de página como argumento
 
-    if (!response.ok) {
-      throw new Error('Error al consultar el API');
-    }
-
-    const data = await response.json();
-    const allArmas = data;
-
-    // Divide las armas en páginas en el servidor
     const startIndex = (page - 1) * ITEMS_PER_PAGE;
     const endIndex = startIndex + ITEMS_PER_PAGE;
     const currentArmas = allArmas.slice(startIndex, endIndex);
 
-    // Calcula el número total de páginas en función de la cantidad total de armas
     const totalArmas = allArmas.length;
     const totalPages = Math.ceil(totalArmas / ITEMS_PER_PAGE);
 
@@ -176,27 +161,13 @@ const mostrarItems = async (req, res) => {
     const page = parseInt(req.query.page) || 1; // Obtén el número de página de la consulta
     const ITEMS_PER_PAGE = 3; // Define la cantidad de items por página
 
-    // Realiza una solicitud al API para obtener todas las armas
-    const apiUrl = `https://cards.thenexusbattles2.cloud/api/cartas/?size=1000&page=1&coleccion=Items&onlyActives=false`;
-    const response = await fetch(apiUrl, {
-      method: 'GET',
-      headers: {
-        'accept': 'application/json',
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error('Error al consultar el API');
-    }
-
-    const data = await response.json();
-    const allItems = data;
+    // Obtener las armaduras desde el API utilizando la función del modelo
+    const allItems = await obtenerItemsApi(); // Pasa el número de página como argumento
 
     const startIndex = (page - 1) * ITEMS_PER_PAGE;
     const endIndex = startIndex + ITEMS_PER_PAGE;
     const currentItems = allItems.slice(startIndex, endIndex);
 
-    // Calcula el número total de páginas en función de la cantidad total de armas
     const totalItems = allItems.length;
     const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
 
@@ -371,62 +342,57 @@ const mostrarFormularioCreacionArma = (req, res) => {
 
 const crearArma = async (req, res) => {
   try {
-    // Obtén los datos del formulario
     const formData = req.body;
-    const file = req.file; // El archivo subido
+    const file = req.file;
 
-    // Construye la URL de la imagen
-    const urlImagen = `https://store.thenexusbattles2.cloud/imgcards/img/${file.filename}`;
+    const response = await crearArmaEnAPI(formData, file);
 
-    console.log('formData:', formData);
-    console.log('formData.efecto:', formData.efecto);
-
-    // Crea una nueva arma utilizando el modelo
-    const newArma = new ArmaModel({
-      urlImagen,
-      nombre: formData.nombre,
-      tipoHeroe: formData.tipoHeroe,
-      efecto: {
-        case: formData['efecto.case'],
-        statEffect: formData['efecto.statEffect'],
-        stat: formData['efecto.stat'],
-        target: formData['efecto.target'],
-        turnCount: formData['efecto.turnCount'],
-      },
-      activo: formData.activo === 'true',
-      desc: formData.desc,
-    });
-    
-    console.log('Arma creada:', newArma);
-    // Guarda la nueva arma en la base de datos
-    await newArma.save();
-
-    // Redirige al usuario a otra página o muestra un mensaje de éxito
-    res.send('<script>alert("Arma creada exitosamente!"); window.location.href = "/admin/armas";</script>');
+    if (response.ok) {
+      const tituloExitoso = 'Creación de Arma';
+      const mensajeExitoso = 'Creada correctamente.';
+      return res.render('anuncioarma', { armaCreada: true, tituloExitoso, mensajeExitoso });
+    } else {
+      // Hubo un error en la creación del arma
+      const mensajeError = 'Error al crear el arma';
+      return res.render('anuncioarma', { armaCreada: false, errorMessage: mensajeError });
+    }
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Error al crear el Arma' });
+
+    // Renderiza la vista 'anuncioarma' con un mensaje de error
+    const mensajeError = 'Hubo un error al procesar la solicitud. Por favor, inténtalo de nuevo más tarde.';
+    return res.render('anuncioarma', { armaCreada: false, errorMessage: mensajeError });
   }
 };
 
 const mostrarFormularioActualizacionArma = async (req, res) => {
   try {
-    const idArma = req.params.Id; // Obtener el valor del parámetro :id
+    const idArma = req.params.Id; // Obtener el valor del parámetro :Id
 
-    console.log('ID del arma a actualizar:', idArma); // Agregar este registro para verificar el ID
+    // Realizar una solicitud al API para obtener los datos del arma específica por su ID
+    const apiUrl = `https://cards.thenexusbattles2.cloud/api/cartas/${idArma}`;
+    const response = await fetch(apiUrl, {
+      method: 'GET',
+      headers: {
+        'accept': 'application/json',
+      },
+    });
 
-    const arma = await ArmaModel.findById(idArma); // Obtener un arma por su ID
+    if (!response.ok) {
+      throw new Error('Error al consultar el API');
+    }
 
-    console.log('Arma encontrada:', arma); // Agregar este registro para verificar el arma
+    const armaData = await response.json();
 
-    if (!arma) {
+    if (!armaData) {
       // Si no se encontró el arma, puedes manejarlo adecuadamente aquí
       return res.status(404).render('error', { error: 'Arma no encontrada' });
     }
 
+    // Pasar los datos del arma al formulario de actualización
     res.render('actualizararma', {
       pagina: 'Actualizar Arma',
-      arma: arma, // Enviar el arma específico a la vista
+      arma: armaData, // Enviar los datos del arma a la vista
     });
   } catch (error) {
     console.error(error);
@@ -435,82 +401,45 @@ const mostrarFormularioActualizacionArma = async (req, res) => {
 };
 const actualizarArma = async (req, res) => {
   try {
-    const idArma = req.params.Id; // Obtener el valor del parámetro :id
-    const formData = req.body; // Obtener los datos del formulario
+    const formData = req.body;
+    const file = req.file; // Obtener el archivo del formulario si se proporcionó
 
-    // Obtener la URL de la imagen existente (por defecto)
-    let urlImagen = formData.urlImagen;
+    // Llama a la función del modelo para actualizar el arma en el API
+    const response = await actualizarArmaEnAPI(formData, file);
 
-    // Si se proporciona una nueva imagen, guarda la URL de la nueva imagen
-    if (req.file) {
-      // Construye la URL de la imagen actualizada
-      const baseUrl = 'https://store.thenexusbattles2.cloud/imgcards'; // Cambia esto según la configuración de tu servidor
-      urlImagen = `${baseUrl}/img/${req.file.filename}`;
+    if (response.ok) {
+      console.log('Carta actualizada con éxito.');
+      const tituloExitoso = 'Actualización de Arma';
+      const mensajeExitoso = 'Actualizada correctamente.';
+      return res.render('anuncioarma', { armaCreada: true, tituloExitoso, mensajeExitoso });
+    } else {
+      // Hubo un error en la actualización de la arma
+      const mensajeError = 'Error al actualizar la arma';
+      return res.render('anuncioarma', { armaCreada: false, errorMessage: mensajeError });
     }
-
-    // Construye un objeto con los datos actualizados
-    const updatedData = {
-      urlImagen,
-      nombre: formData.nombre,
-      tipoHeroe: formData.tipoHeroe,
-      efecto: {
-        case: formData['efecto.case'],
-        statEffect: formData['efecto.statEffect'],
-        stat: formData['efecto.stat'],
-        target: formData['efecto.target'],
-        turnCount: formData['efecto.turnCount'],
-      },
-      activo: formData.activo === 'true',
-      desc: formData.desc,
-    };
-
-    // Actualiza los datos del arma en la base de datos
-    await ArmaModel.findByIdAndUpdate(idArma, updatedData);
-
-    console.log('Arma actualizada con éxito.');
-
-    // Agregar un script de alert después de la redirección
-    res.send('<script>alert("Arma actualizada con éxito."); window.location.href = "/admin/armas/";</script>');
   } catch (error) {
     console.error(error);
-    res.render('error'); // Renderiza una vista de error en caso de problemas
+
+    // Renderiza la vista 'anuncioarma' con un mensaje de error
+    const mensajeError = 'Hubo un error al procesar la solicitud. Por favor, inténtalo de nuevo más tarde.';
+    return res.render('anuncioarma', { armaCreada: false, errorMessage: mensajeError });
   }
 };
 
 const cambiarEstadoArma = async (req, res) => {
   try {
-    const armaId = req.params.Id; // Obtener el ID del arma de los parámetros
-    console.log('ID del arma:', armaId);
+    const armaId = req.params.Id; // Obtener el ID de la armadura de los parámetros
+    console.log('ID de la armadura:', armaId);
 
     const nuevoEstado = req.query.estado; // Obtener el estado de la consulta
     console.log('Estado recibido:', nuevoEstado);
 
-    // Crear un objeto FormData y agregar los datos a él
-    const formData = new FormData();
-    formData.append('id', armaId); // Agregar el ID al FormData
-    formData.append('estado', nuevoEstado); // Agregar el estado al FormData
+    const cambioExitoso = await cambiarEstadoArmaEnModelo(armaId, nuevoEstado);
 
-    console.log('Datos en FormData:', formData);
-
-    // Construir la URL de la API externa
-    const apiUrl = `https://cards.thenexusbattles2.cloud/api/consumible/`;
-
-    console.log('URL de la API externa:', apiUrl);
-
-    // Realizar la solicitud PATCH a la API externa para cambiar el estado del arma
-    const response = await fetch(apiUrl, {
-      method: 'PATCH',
-      body: formData,
-    });
-
-    console.log('Respuesta del fetch:', response);
-
-    if (response.ok) {
-      // Cambio de estado exitoso en la API externa
-      return res.status(200).json({ message: 'Estado del arma actualizado exitosamente en la API externa' });
+    if (cambioExitoso) {
+      return res.status(200).json({ message: 'Estado del arma actualizado exitosamente en el modelo' });
     } else {
-      // Error en el cambio de estado en la API externa
-      return res.status(500).json({ error: 'Error al cambiar el estado del arma en la API externa' });
+      return res.status(500).json({ error: 'Error al cambiar el estado del arma en el modelo' });
     }
   } catch (error) {
     console.error(error);
@@ -858,62 +787,57 @@ const mostrarFormularioCreacionItem = (req, res) => {
 
 const crearItem = async (req, res) => {
   try {
-    // Obtén los datos del formulario
     const formData = req.body;
-    const file = req.file; // El archivo subido
+    const file = req.file;
 
-    // Construye la URL de la imagen
-    const urlImagen = `https://store.thenexusbattles2.cloud/imgcards/img/${file.filename}`;
+    const response = await crearItemEnAPI(formData, file);
 
-    console.log('formData:', formData);
-    console.log('formData.efecto:', formData.efecto);
-
-    // Crea una nueva item utilizando el modelo
-    const newItem = new ItemModel({
-      urlImagen,
-      heroe: formData.heroe,
-      nombre: formData.nombre,
-      efecto: {
-        case: formData['efecto.case'],
-        statEffect: formData['efecto.statEffect'],
-        stat: [formData['efecto.stat']], // Esto permite una matriz de cadenas
-        target: formData['efecto.target'],
-        turnCount: formData['efecto.turnCount'],
-      },
-      activo: formData.activo === 'true',
-      desc: formData.desc,
-    });
-    
-    console.log('Arma creada:', newItem);
-    // Guarda la nueva arma en la base de datos
-    await newItem.save();
-
-    // Redirige al usuario a otra página o muestra un mensaje de éxito
-    res.send('<script>alert("Item creada exitosamente!"); window.location.href = "/admin/items";</script>');
+    if (response.ok) {
+      const tituloExitoso = 'Creación de Item';
+      const mensajeExitoso = 'Creado correctamente.';
+      return res.render('anuncioitem', { itemCreada: true, tituloExitoso, mensajeExitoso });
+    } else {
+      // Hubo un error en la creación de la armadura
+      const mensajeError = 'Error al crear el item';
+      return res.render('anuncioitem', { itemCreada: false, errorMessage: mensajeError });
+    }
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Error al crear el Item' });
+
+    // Renderiza la vista 'anuncioitem' con un mensaje de error
+    const mensajeError = 'Hubo un error al procesar la solicitud. Por favor, inténtalo de nuevo más tarde.';
+    return res.render('anuncioitem', { itemCreada: false, errorMessage: mensajeError });
   }
 };
 
 const mostrarFormularioActualizacionItem = async (req, res) => {
   try {
-    const idItem = req.params.Id; // Obtener el valor del parámetro :id
+    const idItem = req.params.Id; // Obtener el valor del parámetro :Id
 
-    console.log('ID del item a actualizar:', idItem); // Agregar este registro para verificar el ID
+    // Realizar una solicitud al API para obtener los datos de la armadura específica por su ID
+    const apiUrl = `https://cards.thenexusbattles2.cloud/api/cartas/${idItem}`;
+    const response = await fetch(apiUrl, {
+      method: 'GET',
+      headers: {
+        'accept': 'application/json',
+      },
+    });
 
-    const item = await ItemModel.findById(idItem); // Obtener un item por su ID
-
-    console.log('Item encontrada:', item); // Agregar este registro para verificar el item
-
-    if (!item) {
-      // Si no se encontró el item, puedes manejarlo adecuadamente aquí
-      return res.status(404).render('error', { error: 'item no encontrada' });
+    if (!response.ok) {
+      throw new Error('Error al consultar el API');
     }
 
+    const itemData = await response.json();
+
+    if (!itemData) {
+      // Si no se encontró la item, puedes manejarlo adecuadamente aquí
+      return res.status(404).render('error', { error: 'Item no encontrado' });
+    }
+
+    // Pasar los datos de la item al formulario de actualización
     res.render('actualizaritem', {
       pagina: 'Actualizar Item',
-      item: item, // Enviar el item específico a la vista
+      item: itemData, // Enviar los datos de la item a la vista
     });
   } catch (error) {
     console.error(error);
@@ -924,77 +848,44 @@ const mostrarFormularioActualizacionItem = async (req, res) => {
 
 const actualizarItem = async (req, res) => {
   try {
-    const idItem = req.params.Id; // Obtener el valor del parámetro :id
-    const formData = req.body; // Obtener los datos del formulario
+    const formData = req.body;
+    const file = req.file; // Obtener el archivo del formulario si se proporcionó
 
-    let urlImagen = formData.urlImagen;
+    // Llama a la función del modelo para actualizar la item en el API
+    const response = await actualizarItemEnAPI(formData, file);
 
-    // Si se proporciona una nueva imagen, guarda la URL de la nueva imagen
-    if (req.file) {
-      // Construye la URL de la imagen actualizada
-      const baseUrl = 'https://store.thenexusbattles2.cloud/imgcards'; // Cambia esto según la configuración de tu servidor
-      urlImagen = `${baseUrl}/img/${req.file.filename}`;
+    if (response.ok) {
+      console.log('Carta actualizada con éxito.');
+      const tituloExitoso = 'Actualización de Item';
+      const mensajeExitoso = 'Actualizada correctamente.';
+      return res.render('anuncioitem', { itemCreada: true, tituloExitoso, mensajeExitoso });
+    } else {
+      // Hubo un error en la actualización del item
+      const mensajeError = 'Error al actualizar el item';
+      return res.render('anuncioitem', { itemCreada: false, errorMessage: mensajeError });
     }
-
-    // Buscar el Item por su ID y actualizarla con los nuevos datos del formulario
-    await ItemModel.findByIdAndUpdate(idItem, {
-        urlImagen,
-        heroe: formData.heroe,
-        nombre: formData.nombre,
-        efecto: {
-          case: formData['efecto.case'],
-          statEffect: formData['efecto.statEffect'],
-          stat: formData['efecto.stat'], // Esto permite una matriz de cadenas
-          target: formData['efecto.target'],
-          turnCount: formData['efecto.turnCount'],
-        },
-        activo: formData.activo === 'true',
-        desc: formData.desc,
-      });
-
-    console.log('Item actualizada con éxito.');
-
-    // Agregar un script de alert después de la redirección
-    res.send('<script>alert("Item actualizada con éxito."); window.location.href = "/admin/items/";</script>');
   } catch (error) {
     console.error(error);
-    res.render('error'); // Renderiza una vista de error en caso de problemas
+
+    // Renderiza la vista 'anuncioitem' con un mensaje de error
+    const mensajeError = 'Hubo un error al procesar la solicitud. Por favor, inténtalo de nuevo más tarde.';
+    return res.render('anuncioitem', { itemCreada: false, errorMessage: mensajeError });
   }
 };
 const cambiarEstadoItem = async (req, res) => {
   try {
-    const itemId = req.params.Id; // Obtener el ID del item de los parámetros
-    console.log('ID del item:', itemId);
+    const itemId = req.params.Id; // Obtener el ID de la item de los parámetros
+    console.log('ID de la armadura:', itemId);
 
     const nuevoEstado = req.query.estado; // Obtener el estado de la consulta
     console.log('Estado recibido:', nuevoEstado);
 
-    // Crear un objeto FormData y agregar los datos a él
-    const formData = new FormData();
-    formData.append('id', itemId); // Agregar el ID al FormData
-    formData.append('estado', nuevoEstado); // Agregar el estado al FormData
+    const cambioExitoso = await cambiarEstadoItemEnModelo(itemId, nuevoEstado);
 
-    console.log('Datos en FormData:', formData);
-
-    // Construir la URL de la API externa de acuerdo a tu configuración
-    const apiUrl = `https://cards.thenexusbattles2.cloud/api/consumible/`;
-
-    console.log('URL de la API externa:', apiUrl);
-
-    // Realizar la solicitud PATCH a la API externa para cambiar el estado del item
-    const response = await fetch(apiUrl, {
-      method: 'PATCH',
-      body: formData,
-    });
-
-    console.log('Respuesta del fetch:', response);
-
-    if (response.ok) {
-      // Cambio de estado exitoso en la API externa
-      return res.status(200).json({ message: 'Estado del item actualizado exitosamente en la API externa' });
+    if (cambioExitoso) {
+      return res.status(200).json({ message: 'Estado del item actualizado exitosamente en el modelo' });
     } else {
-      // Error en el cambio de estado en la API externa
-      return res.status(500).json({ error: 'Error al cambiar el estado del item en la API externa' });
+      return res.status(500).json({ error: 'Error al cambiar el estado del item en el modelo' });
     }
   } catch (error) {
     console.error(error);
