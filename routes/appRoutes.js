@@ -6,7 +6,7 @@ mostrarArmas,mostrarFormularioActualizacionArma,mostrarFormularioCreacionEpica,c
 cambiarEstadoArma,crearHeroe, mostrarFormularioCreacion , mostrarFormularioActualizacion,actualizarCarta,cambiarEstadoEpica,
 cambiarEstadoHeroe, mostrarFormularioCreacionArmadura, crearArmadura, mostrarFormularioActualizacionArmadura, actualizarArmadura, 
 cambiarEstadoArmadura, mostrarItems, mostrarFormularioCreacionItem, crearItem, mostrarFormularioActualizacionItem, actualizarItem, cambiarEstadoItem,
-pasarIdaActualizar,mostrarFormularioActualizacionimg} from "../controllers/appController.js";
+pasarIdaActualizar,mostrarFormularioActualizacionimg,pasarIdaActualizarArmadura,mostrarFormularioActualizacionimgArmadura} from "../controllers/appController.js";
 
 const router = express.Router()
 
@@ -24,6 +24,7 @@ router.get('/admin/heroes',jwttoken,mostrarHeroes);
 
 // Ruta para mostrar el formulario de creación de carta y enviarlo
 router.get('/admin/actualizar/:Id',jwttoken,pasarIdaActualizar);
+router.get('/admin/seleccionactualizararmadura/:Id',jwttoken,pasarIdaActualizarArmadura);
 
 //---
 router.get('/admin/crearcarta', jwttoken,mostrarFormularioCreacion);
@@ -47,8 +48,10 @@ router.get('/admin/creararmadura',jwttoken, mostrarFormularioCreacionArmadura);
 router.post('/admin/creararmadura',jwttoken, multerMiddleware.single('imagen'), crearArmadura); // Utiliza el middleware Multer
 
 // Ruta para mostrar el formulario de actualizar armadura y enviarlo
+router.get('/admin/actualizararmaduraimg/:Id',jwttoken, mostrarFormularioActualizacionimgArmadura);
 router.get('/admin/actualizararmadura/:Id',jwttoken, mostrarFormularioActualizacionArmadura);
 router.post('/admin/actualizararmadura/:Id',jwttoken,multerMiddleware.single('imagen'), actualizarArmadura);
+router.post('/admin/actualizararmaduraimg/:Id',jwttoken,multerMiddleware.single('imagen'), actualizarArmadura);
 
 // Ruta para cambiar el estado de la armadura
 router.post('/admin/cambiarestadoarmadura/:Id',jwttoken, cambiarEstadoArmadura);

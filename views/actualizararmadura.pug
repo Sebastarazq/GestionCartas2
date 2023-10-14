@@ -33,7 +33,7 @@ html(lang='es')
             i.bi.bi-list
     // form-container
     .container.form-container
-      h1.mt-5.text-lg-center Formulario de Armadura
+      h1.mt-5.text-lg-center Formulario de Armadura #{armadura ? armadura.nombre : 'Héroe'}
       form.card-form(action=`/admin/actualizararmadura/${armadura._id}`, method='post')
         input(type='hidden', name='id', value=armadura ? armadura._id : '')
         // Fila 1
@@ -72,10 +72,6 @@ html(lang='es')
               option(value='true' selected=armadura.estado === true) Activo
               option(value='false' selected=armadura.estado === false) Inactivo
         // Fila 4
-        .row.mb-3
-          .col-md-6
-            label.form-label(for='imagen') Imagen:
-            input.form-control(type='file', id='imagen', name='imagen', accept='image/*')
         // Fila 5
         .row.mb-3
           .col-md-6

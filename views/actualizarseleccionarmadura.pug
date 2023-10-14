@@ -1,0 +1,17 @@
+doctype html
+html(lang='en')
+  head
+    meta(charset='UTF-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+    title Selección para Actualizar
+    link(rel='stylesheet', type='text/css', href='/css/GestionSesion.css')
+    link(href='https://fonts.googleapis.com/css2?family=Barlow:wght@500;600;800&family=Irish+Grover&family=Playfair+Display:wght@700&family=Raleway:wght@400;700;900&display=swap', rel='stylesheet')
+    link(href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css', rel='stylesheet')
+    link(rel='icon', href='/img/favicon/favicon.ico', type='image/x-icon')
+  body
+    div.loginb
+      div.login
+        h1 Seleccionar para Actualizar:
+        div.btn-container
+          a.btn.btn-primary(href=`/admin/actualizararmadura/${cartaid}`) Actualizar Datos
+          a.btn.btn-secondary(href=`/admin/actualizararmaduraimg/${cartaid}`) Actualizar Imagen

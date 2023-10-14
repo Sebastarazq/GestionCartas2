@@ -35,7 +35,7 @@ html(lang='en')
             div.card(style='width: 18rem;')
               div.card-body
                 h5.card-title #{armadura.nombre}
-              img.card-img-top(src=`https://cards.thenexusbattles2.cloud/${armadura.imagen}`, alt=`Imagen de ${armadura.nombre}`)
+              img.card-img-top(src=`https://cards.thenexusbattles2.cloud/assets/${armadura.imagen}`, alt=`Imagen de ${armadura.nombre}`)
               div.card-body
                 div.row
                   div.col
@@ -57,8 +57,8 @@ html(lang='en')
                       p Descuento: #{armadura.descuento}
               div.row.botones_carta
                   div.col
-                    a(href=`/admin/actualizararmadura/${armadura._id}`)
-                      button.button(href=`/admin/actualizararmadura/${armadura._id}`) Modificar
+                    a(href=`/admin/seleccionactualizararmadura/${armadura._id}`)
+                      button.button(href=`/admin/seleccionactualizararmadura/${armadura._id}`) Modificar
                   div.col
                     button.button(type='button', data-armadura-id=armadura._id, onclick='cambiarEstadoArmadura(event)') #{armadura.estado ? 'Suspender' : 'Activar'}
 

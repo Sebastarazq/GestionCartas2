@@ -725,6 +725,41 @@ const crearArmadura = async (req, res) => {
   }
 };
 
+const mostrarFormularioActualizacionimgArmadura = async (req, res) => {
+  try {
+    const idArmadura = req.params.Id; // Obtener el valor del parámetro :Id
+    console.log(idArmadura)
+
+    // Realizar una solicitud al API para obtener los datos del héroe específico por su ID
+    const apiUrl = `https://cards.thenexusbattles2.cloud/api/cartas/${idArmadura}`;
+    const response = await fetch(apiUrl, {
+      method: 'GET',
+      headers: {
+        'accept': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Error al consultar el API');
+    }
+
+    const armaduraData = await response.json();
+
+    if (!armaduraData) {
+      // Si no se encontró el héroe, puedes manejarlo adecuadamente aquí
+      return res.status(404).render('error', { error: 'Héroe no encontrado' });
+    }
+
+    // Pasar los datos del héroe a la vista
+    res.render('actualizararmaduraimg', {
+      pagina: 'Actualizar Img',
+      armadura: armaduraData, // Enviar los datos del héroe a la vista
+    });
+  } catch (error) {
+    console.error(error);
+    res.render('error'); // Renderizar una vista de error en caso de problemas
+  }
+};
 
 
 const mostrarFormularioActualizacionArmadura = async (req, res) => {
@@ -970,8 +1005,20 @@ const cambiarEstadoItem = async (req, res) => {
 const pasarIdaActualizar = (req, res) => {
   const cartaId = req.params.Id; // Obtener el ID de la Épica de los parámetros
 
+
   res.render('actualizar', {
     pagina: 'Seleccion a actualizar',
+  
+    cartaid: cartaId, // Enviar el ID de la Épica a la vista
+  });
+};
+const pasarIdaActualizarArmadura = (req, res) => {
+  const cartaId = req.params.Id; // Obtener el ID de la Épica de los parámetros
+
+
+  res.render('actualizarseleccionarmadura', {
+    pagina: 'Seleccion a actualizar',
+  
     cartaid: cartaId, // Enviar el ID de la Épica a la vista
   });
 };
@@ -1013,5 +1060,7 @@ export {
   actualizarItem,
   cambiarEstadoItem,
   pasarIdaActualizar,
-  mostrarFormularioActualizacionimg
+  mostrarFormularioActualizacionimg,
+  pasarIdaActualizarArmadura,
+  mostrarFormularioActualizacionimgArmadura
 };

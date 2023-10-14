@@ -41,6 +41,9 @@ html(lang='es')
           .col-md-6
             label.form-label(for='nombre') Nombre:
             input.form-control(type='text', id='nombre', name='nombre', required, value=hero ? hero.nombre : '')
+          .col-md-6
+            label.form-label(for='descuento') Descuento:
+            input.form-control(type='number', id='descuento', name='descuento', required, value=hero ? hero.descuento : '')
         // Fila 2
         .row.mb-3
           .col-md-6
@@ -100,11 +103,6 @@ html(lang='es')
           .col-md-6
             label.form-label(for='stock') Stock:
             input.form-control(type='number', id='stock', name='stock', required, value=hero ? hero.stock : '')
-        // Fila 8
-        .row.mb-3
-          .col-md-6
-            label.form-label(for='descuento') Descuento:
-            input.form-control(type='number', id='descuento', name='descuento', required, value=hero ? hero.descuento : '')
         // Botón de envío y cancelar
         .row.mt-3(style="justify-content: center;")
           .col-md-6
