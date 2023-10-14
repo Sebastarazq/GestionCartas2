@@ -53,11 +53,11 @@ router.get('/admin/armas',jwttoken,mostrarArmas);
 
 // Ruta para mostrar el formulario de arma de carta y enviarlo
 router.get('/admin/creararma',jwttoken, mostrarFormularioCreacionArma);
-router.post('/admin/creararma',jwttoken, multerMiddleware.single('urlImagen'), crearArma); // Utiliza el middleware Multer
+router.post('/admin/creararma',jwttoken, multerMiddleware.single('imagen'), crearArma); // Utiliza el middleware Multer
 
 // Ruta para mostrar el formulario de actualizar arma y enviarlo
 router.get('/admin/actualizararma/:Id',jwttoken, mostrarFormularioActualizacionArma);
-router.post('/admin/actualizararma/:Id', jwttoken, multerMiddleware.single('urlImagen'), actualizarArma);
+router.post('/admin/actualizararma/:Id', jwttoken, multerMiddleware.single('imagen'), actualizarArma);
 
 // Ruta para cambiar el estado de la arma
 router.post('/admin/cambiarestadoarma/:Id',jwttoken, cambiarEstadoArma);
@@ -67,11 +67,11 @@ router.get('/admin/items',jwttoken, mostrarItems);
 
 // Ruta para mostrar el formulario de armadura de carta y enviarlo
 router.get('/admin/crearitem',jwttoken, mostrarFormularioCreacionItem);
-router.post('/admin/crearitem',jwttoken, multerMiddleware.single('urlImagen'), crearItem); // Utiliza el middleware Multer
+router.post('/admin/crearitem',jwttoken, multerMiddleware.single('imagen'), crearItem); // Utiliza el middleware Multer
 
 // Ruta para mostrar el formulario de actualizar Items y enviarlo
 router.get('/admin/actualizaritem/:Id',jwttoken, mostrarFormularioActualizacionItem);
-router.post('/admin/actualizaritem/:Id',jwttoken, multerMiddleware.single('urlImagen'), actualizarItem);
+router.post('/admin/actualizaritem/:Id',jwttoken, multerMiddleware.single('imagen'), actualizarItem);
 
 // Ruta para cambiar el estado de la Items
 router.post('/admin/cambiarestadoitem/:Id',jwttoken, cambiarEstadoItem);

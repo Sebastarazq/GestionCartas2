@@ -1,0 +1,26 @@
+doctype html
+html(lang='en')
+  head
+    meta(charset='UTF-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    title Alerta
+    link(href='https://fonts.googleapis.com/css2?family=Barlow:wght@500;600;800&family=Irish+Grover&family=Playfair+Display:wght@700&family=Raleway:wght@400;700;900&display=swap', rel='stylesheet')
+    link(rel='stylesheet', type='text/CSS', href='/css/alerta.css')
+    
+    body
+    .container
+      .row.justify-content-center.align-items-center(style='height: 70vh;')
+        .col-md-6.text-center
+          if armaCreada
+            .alert.alert-success(role='alert')
+              h1.mb-3= tituloExitoso
+              p.mb-3= mensajeExitoso
+          else
+            .alert.alert-danger(role='alert')
+              h1.mb-3= tituloError
+              p.mb-3 #{errorMessage}
+        .col-12.text-center 
+          div.d-flex.text-center(style='justify-content: center;')
+            a.btn(href='/admin/armas') Ver Gestión de Armas
+            a.btn(href='/') Volver al Inicio
+
