@@ -767,7 +767,7 @@ const mostrarFormularioActualizacionItem = async (req, res) => {
     // Pasar los datos de la item al formulario de actualización
     res.render('actualizaritem', {
       pagina: 'Actualizar Item',
-      armadura: itemData, // Enviar los datos de la item a la vista
+      item: itemData, // Enviar los datos de la item a la vista
     });
   } catch (error) {
     console.error(error);

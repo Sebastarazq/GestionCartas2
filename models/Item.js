@@ -50,7 +50,7 @@ const crearItemEnAPI = async (formData, file) => {
     // Construir el objeto de datos (FormData)
     const data = new FormData();
     data.append('clase', formData.clase);
-    data.append('coleccion', 'Armaduras');
+    data.append('coleccion', 'Items');
     data.append('descripcion', formData.descripcion);
     data.append('descuento', formData.descuento);
     data.append('efecto', JSON.stringify(efecto));
