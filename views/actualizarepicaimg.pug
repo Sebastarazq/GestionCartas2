@@ -12,7 +12,7 @@ html(lang='es')
     // navbar
     nav.navbar.navbar-expand-lg.navbar-dark.bg-dark.navbar-background
       .container
-        a.navbar-brand(href='#')
+        a.navbar-brand(href='/admin/epicas')
           img(src='/img/back.png', alt='Volver', class='back')
         button.navbar-toggler(type='button', data-bs-toggle='collapse', data-bs-target='#navbarNav', aria-controls='navbarNav', aria-expanded='false', aria-label='Toggle navigation')
           span
@@ -45,7 +45,7 @@ html(lang='es')
         .row.mt-3(style="justify-content: center;")
           .col-md-6
             div.d-flex.justify-content-between.align-items-center
-              a.btn.btn-secondary(href=`/admin/epicas`) Cancelar
+              a.aimg.btn.btn-secondary(href=`/admin/epicas`) Cancelar
               button.btn.btn-primary.ml-auto.top-0(type='submit') Actualizar #{epica ? epica.nombre : 'Epica'}
 
     // bootstrap js link
