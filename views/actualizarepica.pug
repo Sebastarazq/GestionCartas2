@@ -42,10 +42,10 @@ html(lang='es')
         .row.mb-3
           .col-md-6
             label.form-label(for='nombre') Nombre:
-            input.form-control(type='text', id='nombre', name='nombre', value=epica.nombre, required)
+            input.form-control(type='text', id='nombre', name='nombre', value=epica.nombre, required, maxlength='19')
           .col-md-6
             label.form-label(for='descripcion') Descripción:
-            input.form-control(type='text', id='descripcion', name='descripcion', value=epica.descripcion)
+            input.form-control(type='text', id='descripcion', name='descripcion', value=epica.descripcion, maxlength='180')
 
         // Fila 2: Precio y Tipo
         .row.mb-3
@@ -149,7 +149,7 @@ html(lang='es')
           .col-md-6
             div.d-flex.justify-content-between.align-items-center
               a.aimg.btn.btn-secondary(href=`/admin/epicas`) Cancelar
-              button.btn.btn-primary.ml-auto.top-0(type='submit') Enviar formulario
+              button.btn.btn-primary.ml-auto.top-0(type='submit') Actualizar #{epica ? epica.nombre : 'Epica'}
 
   // Enlace al script de Bootstrap
   script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js')

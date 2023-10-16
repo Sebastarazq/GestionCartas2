@@ -39,10 +39,10 @@ html(lang='es')
         .row.mb-3
           .col-md-6
             label.form-label(for='nombre') Nombre:
-            input.form-control(type='text', id='nombre', name='nombre', required)
+            input.form-control(type='text', id='nombre', name='nombre', required, maxlength='19')
           .col-md-6
             label.form-label(for='descripcion') Descripción:
-            input.form-control(type='text', id='descripcion', name='descripcion', required)
+            input.form-control(type='text', id='descripcion', name='descripcion', required, maxlength='180')
         // Fila 2
         .row.mb-3
           .col-md-6
@@ -74,7 +74,7 @@ html(lang='es')
         .row.mb-3
           .col-md-6
             label.form-label(for='imagen') Imagen:
-            input.form-control(type='file', id='imagen', name='imagen', accept='image/*')
+            input.form-control(type='file', id='imagen', name='imagen', accept='image/*', required)
         // Fila 5
         .row.mb-3
           .col-md-6
