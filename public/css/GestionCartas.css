@@ -45,6 +45,7 @@ body{
 .button-container {
     display: flex;
     justify-content: center; /* Centra los elementos horizontalmente */
+    margin-top: 20px;
 }
 
 .add-card-button {
