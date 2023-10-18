@@ -11,8 +11,8 @@ import {ObjectId } from 'mongoose';
 import jwt from 'jsonwebtoken';
 
 // Definir un usuario y contraseña de administrador
-//const usuarioAdmin = 'admin';
-//const contrasenaAdmin = 'admin123';
+const usuarioAdmin = 'cartas';
+const contrasenaAdmin = 'Cartas2533@#$';
 
 //inicio
 const inicio = (req,res) =>{
@@ -75,13 +75,32 @@ const autenticarUsuario = async (req, res) => {
         });
       }
     } else {
-      // La solicitud no fue exitosa, muestra un mensaje de error o redirige a la página de inicio de sesión nuevamente
-      const error = 'Error en la autenticación';
-      console.log('Error:', error);
-      res.render('iniciarsesion', {
-        pagina: 'Iniciar Sesion',
-        error: error,
-      });
+      // La solicitud no fue exitosa, utiliza las credenciales locales
+      if (usuario === usuarioAdmin && contrasena === contrasenaAdmin) {
+        // Las credenciales son válidas, genera un token JWT
+        const token = jwt.sign({ usuario: usuarioAdmin }, 'gestioncartasnexubattle2omega', {
+          expiresIn: '1h', // Establece la duración del token como desees
+        });
+        console.log('Token JWT generado:', token);
+
+        // Asigna el token JWT a las cookies
+        res.cookie('jwt', token, {
+          httpOnly: true,
+          maxAge: 3600000, // Duración del token en milisegundos (1 hora en este ejemplo)
+          secure: false, // Cambia a true si usas HTTPS
+        });
+
+        // Redirige al usuario a la página protegida
+        res.redirect('/');
+      } else {
+        // Las credenciales locales tampoco son válidas, muestra un mensaje de error o redirige a la página de inicio de sesión nuevamente
+        const error = 'Credenciales no válidas';
+        console.log('Error:', error);
+        res.render('iniciarsesion', {
+          pagina: 'Iniciar Sesion',
+          error: error,
+        });
+      }
     }
   } catch (error) {
     // Manejar errores de red u otros errores
@@ -94,6 +113,7 @@ const autenticarUsuario = async (req, res) => {
     });
   }
 };
+
 
 
 const mostrarHeroes = async (req, res) => {
