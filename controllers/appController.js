@@ -79,7 +79,7 @@ const autenticarUsuario = async (req, res) => {
       if (usuario === usuarioAdmin && contrasena === contrasenaAdmin) {
         // Las credenciales son válidas, genera un token JWT
         const token = jwt.sign({ usuario: usuarioAdmin }, 'gestioncartasnexubattle2omega', {
-          expiresIn: '1h', // Establece la duración del token como desees
+          expiresIn: '4h', // Establece la duración del token como desees
         });
         console.log('Token JWT generado:', token);
 
