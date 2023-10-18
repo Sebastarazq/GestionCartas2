@@ -11,8 +11,8 @@ import {ObjectId } from 'mongoose';
 import jwt from 'jsonwebtoken';
 
 // Definir un usuario y contraseña de administrador
-const usuarioAdmin = 'admin';
-const contrasenaAdmin = 'admin123';
+//const usuarioAdmin = 'admin';
+//const contrasenaAdmin = 'admin123';
 
 //inicio
 const inicio = (req,res) =>{
@@ -28,47 +28,72 @@ const mostrarFormularioInicioSesion = (req, res) => {
   });
 };
 
-// Controlador para autenticar al usuario
-const autenticarUsuario = (req, res) => {
+const autenticarUsuario = async (req, res) => {
   // Obtiene el usuario y contraseña del cuerpo de la solicitud
   const { usuario, contrasena } = req.body;
+  const data = JSON.stringify({ username: usuario, password: contrasena });
+  console.log('Datos del usuario:', data);
 
-  // Verifica si los campos están vacíos
-  if (!usuario || !contrasena) {
-    // Los campos están vacíos, asigna un mensaje de error
-    const error = 'Por favor, completa todos los campos.';
-    return res.render('iniciarsesion', {
-      pagina: 'Iniciar Sesion',
-      error: error, // Pasa el mensaje de error a la vista
-    });
-  }
-
-  // Verificar si las credenciales coinciden con el usuario y contraseña de administrador
-  if (usuario === usuarioAdmin && contrasena === contrasenaAdmin) {
-    // Las credenciales son válidas, genera un token JWT
-    const token = jwt.sign({ usuario: usuarioAdmin }, 'gestioncartasnexubattle2omega', {
-      expiresIn: '1h', // Establece la duración del token como desees
+  try {
+    // Realizar una solicitud al API para autenticar al usuario
+    const apiUrl = 'https://webserver.thenexusbattles2.cloud/login-gestion';
+    const response = await fetch(apiUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: data,
     });
 
-    // Asigna el token JWT a las cookies
-    res.cookie('jwt', token, {
-      httpOnly: true,
-      maxAge: 3600000, // Duración del token en milisegundos (1 hora en este ejemplo)
-      secure: false, // Cambia a true si usa HTTPS
-    });
+    if (response.status === 200) {
+      const responseData = await response.json();
+      console.log('Respuesta de la API:', responseData);
 
-    // Redirige al usuario a la página protegida
-    res.redirect('/');
-  } else {
-    // Las credenciales son inválidas, muestra un mensaje de error o redirige a la página de inicio de sesión nuevamente
-    const error = 'Credenciales inválidas';
+      if (responseData.admin === true) {
+        // Las credenciales son válidas, genera un token JWT
+        const token = jwt.sign({ usuario: usuario }, 'gestioncartasnexubattle2omega', {
+          expiresIn: '1h', // Establece la duración del token como desees
+        });
+        console.log('Token JWT generado:', token);
+
+        // Asigna el token JWT a las cookies
+        res.cookie('jwt', token, {
+          httpOnly: true,
+          maxAge: 3600000, // Duración del token en milisegundos (1 hora en este ejemplo)
+          secure: false, // Cambia a true si usas HTTPS
+        });
+
+        // Redirige al usuario a la página protegida
+        res.redirect('/');
+      } else {
+        // Las credenciales no son válidas para un administrador, muestra un mensaje de error o redirige a la página de inicio de sesión nuevamente
+        const error = 'Credenciales no válidas para un administrador';
+        console.log('Error:', error);
+        res.render('iniciarsesion', {
+          pagina: 'Iniciar Sesion',
+          error: error,
+        });
+      }
+    } else {
+      // La solicitud no fue exitosa, muestra un mensaje de error o redirige a la página de inicio de sesión nuevamente
+      const error = 'Error en la autenticación';
+      console.log('Error:', error);
+      res.render('iniciarsesion', {
+        pagina: 'Iniciar Sesion',
+        error: error,
+      });
+    }
+  } catch (error) {
+    // Manejar errores de red u otros errores
+    console.error('Error inesperado:', error);
+    const errorMessage = 'Error en la autenticación';
+    console.log('Error:', errorMessage);
     res.render('iniciarsesion', {
       pagina: 'Iniciar Sesion',
-      error: error, // Pasa el mensaje de error a la vista
+      error: errorMessage,
     });
   }
 };
-
 
 
 const mostrarHeroes = async (req, res) => {
