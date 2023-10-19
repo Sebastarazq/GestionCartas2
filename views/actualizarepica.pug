@@ -90,20 +90,20 @@ html(lang='es')
           .col-md-6
             label.form-label(for='efectoValorAfectado') Valor Afectado de Efecto:
             select.form-select(id='efectoValorAfectado', name='efectoValorAfectado', required)
-              option(value='-1', selected=epica.efectoValorAfectado === -1) -1
-              option(value='1', selected=epica.efectoValorAfectado === 1) +1
+              option(value='-1', selected=epica.efecto.valorafectado === -1) -1
+              option(value='1', selected=epica.efecto.valorafectado === 1) +1
 
         // Fila 6: ID de Estrategia de Efecto y Turnos Válidos de Efecto
         .row.mb-3
           .col-md-6
             label.form-label(for='efectoIdEstrategia') ID de Estrategia de Efecto:
             select.form-select(id='efectoIdEstrategia', name='efectoIdEstrategia', required)
-              option(value='0', selected=epica.efectoIdEstrategia === 0) AddBuff
-              option(value='1', selected=epica.efectoIdEstrategia === 1) AddDebuff
+              option(value='0', selected=epica.efecto.id_estrategia === 0) AddBuff
+              option(value='1', selected=epica.efecto.id_estrategia === 1) AddDebuff
           .col-md-6
             label.form-label(for='efectoTurnosValidos') Turnos Válidos de Efecto:
             select.form-select(id='efectoTurnosValidos', name='efectoTurnosValidos', required)
-              option(value='-1', selected=epica.efectoTurnosValidos === -1) Turno Permanente
+              option(value='-1', selected=epica.efecto.turnosvalidos === -1) Turno Permanente
 
         // Fila 7: Stock y Descuento
         .row.mb-3
@@ -119,30 +119,30 @@ html(lang='es')
           .col-md-6
             label.form-label(for='efectoHeroeEstadistica') Estadística de Efecto para el Héroe:
             select.form-select(name='efectoHeroeEstadistica', id='efectoHeroeEstadistica', required)
-              option(value='Vida', selected=epica.efectoHeroeEstadistica === 'Vida') Vida
-              option(value='Poder', selected=epica.efectoHeroeEstadistica === 'Poder') Poder
-              option(value='Daño', selected=epica.efectoHeroeEstadistica === 'Daño') Daño
+              option(value='Vida', selected=epica.efectoHeroe.estadistica === 'Vida') Vida
+              option(value='Poder', selected=epica.efectoHeroe.estadistica === 'Poder') Poder
+              option(value='Daño', selected=epica.efectoHeroe.estadistica === 'Daño') Daño
           .col-md-6
             label.form-label(for='efectoHeroeIdEstrategia') ID de Estrategia de Efecto para el Héroe:
             select.form-select(id='efectoHeroeIdEstrategia', name='efectoHeroeIdEstrategia', required)
-              option(value='6', selected=epica.efectoHeroeIdEstrategia === 6) MoreLifeRnd
-              option(value='7', selected=epica.efectoHeroeIdEstrategia === 7) NullDamage
-              option(value='8', selected=epica.efectoHeroeIdEstrategia === 8) ReflectDamage
+              option(value='6', selected=epica.efectoHeroe.id_estrategia === 6) MoreLifeRnd
+              option(value='7', selected=epica.efectoHeroe.id_estrategia === 7) NullDamage
+              option(value='8', selected=epica.efectoHeroe.id_estrategia === 8) ReflectDamage
 
         // Fila 9: Turnos Válidos de Efecto para el Héroe y Valor Afectado de Efecto para el Héroe
         .row.mb-3
           .col-md-6
             label.form-label(for='efectoHeroeTurnosValidos') Turnos Válidos de Efecto para el Héroe:
             select.form-select(id='efectoHeroeTurnosValidos', name='efectoHeroeTurnosValidos', required)
-              option(value='-1', selected=epica.efectoHeroeTurnosValidos === -1) Turno Permanente
+              option(value='-1', selected=epica.efectoHeroe.turnosvalidos === -1) Turno Permanente
           .col-md-6
             label.form-label(for='efectoHeroeValorAfectado') Valor Afectado de Efecto para el Héroe:
             select.form-select(id='efectoHeroeValorAfectado', name='efectoHeroeValorAfectado', required)
-              option(value='0', selected=epica.efectoHeroeValorAfectado === 0) 0
-              option(value='1', selected=epica.efectoHeroeValorAfectado === 1) +1
-              option(value='2', selected=epica.efectoHeroeValorAfectado === 2) +2
-              option(value='3', selected=epica.efectoHeroeValorAfectado === 3) +3
-              option(value='4', selected=epica.efectoHeroeValorAfectado === 4) +4
+              option(value='0', selected=epica.efectoHeroe.valorafectado === 0) 0
+              option(value='1', selected=epica.efectoHeroe.valorafectado === 1) +1
+              option(value='2', selected=epica.efectoHeroe.valorafectado === 2) +2
+              option(value='3', selected=epica.efectoHeroe.valorafectado === 3) +3
+              option(value='4', selected=epica.efectoHeroe.valorafectado === 4) +4
 
         // Botones de envío y cancelar
         .row.mt-3(style="justify-content: center;")
